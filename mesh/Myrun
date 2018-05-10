@@ -1,0 +1,50 @@
+#!/bin/sh
+cd ${0%/*} || exit 1    # run from this directory
+
+# Source tutorial run functions
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
+
+# Arguments:
+#if [ ! -n "$1" ]
+#then
+#    deg0=0
+#    echo "Reference angle = 0"
+#else
+#    deg0=$1
+#fi
+
+if [ ! -f constant/triSurface/blade0.bkp.stl ]; then
+    echo "Backup of file blade0"
+    cp constant/triSurface/blade0.stl constant/triSurface/blade0.bkp.stl
+fi
+
+if [ ! -f constant/triSurface/blade1.bkp.stl ]; then
+    echo "Backup of file blade1"
+    cp constant/triSurface/blade1.stl constant/triSurface/blade1.bkp.stl
+fi
+
+if [ ! -f constant/triSurface/blade2.bkp.stl ]; then
+    echo "Backup of file blade2"
+    cp constant/triSurface/blade2.stl constant/triSurface/blade2.bkp.stl
+fi
+
+surfaceTransformPoints -scale '(0.001 0.001 0.001)' constant/triSurface/blade0.bkp.stl  constant/triSurface/blade0.stl
+surfaceTransformPoints -scale '(0.001 0.001 0.001)' constant/triSurface/blade1.bkp.stl  constant/triSurface/blade1.stl
+surfaceTransformPoints -scale '(0.001 0.001 0.001)' constant/triSurface/blade2.bkp.stl  constant/triSurface/blade2.stl
+
+blockMesh
+
+snappyHexMesh
+
+#cp -r 0.org 0
+
+#snappyHexMesh -overwrite
+
+#extrudeMesh
+
+#createPatch -overwrite
+
+#paraFoam -touch
+
+
+# ----------------------------------------------------------------- end-of-file
