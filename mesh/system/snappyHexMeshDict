@@ -17,7 +17,7 @@ FoamFile
 // Which of the steps to run
 castellatedMesh true;
 snap            true;
-addLayers       false;
+addLayers       true;
 
 
 // Geometry. Definition of all surfaces. All surfaces are of class
@@ -141,17 +141,29 @@ castellatedMeshControls
         blade0
         {
             level       (4 4);
-            type wall;
+            patchInfo
+            {
+                type wall;
+                inGroups (blades);
+            }
         }
         blade1
         {
             level       (4 4); 
-            type wall;
+            patchInfo
+            {
+                type wall;
+                inGroups (blades);
+            }
         }
         blade2
         {
             level       (4 4);  
-            type wall;
+            patchInfo
+            {
+                type wall;
+                inGroups (blades);
+            }
         }
     }
 
@@ -255,6 +267,10 @@ addLayersControls
     // Per final patch (so not geometry!) the layer information
     layers
     {
+        blades
+        {
+            nSurfaceLayers 3;
+        }
     }
 
     // Expansion factor for layer mesh

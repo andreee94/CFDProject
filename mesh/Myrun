@@ -28,13 +28,18 @@ if [ ! -f constant/triSurface/blade2.bkp.stl ]; then
     cp constant/triSurface/blade2.stl constant/triSurface/blade2.bkp.stl
 fi
 
+# fix m to mm of stl files
 surfaceTransformPoints -scale '(0.001 0.001 0.001)' constant/triSurface/blade0.bkp.stl  constant/triSurface/blade0.stl
 surfaceTransformPoints -scale '(0.001 0.001 0.001)' constant/triSurface/blade1.bkp.stl  constant/triSurface/blade1.stl
 surfaceTransformPoints -scale '(0.001 0.001 0.001)' constant/triSurface/blade2.bkp.stl  constant/triSurface/blade2.stl
 
 blockMesh
 
-snappyHexMesh
+snappyHexMesh -overwrite
+
+refineWallLayer "(blades)" 0.5 -overwrite
+refineWallLayer "(blades)" 0.5 -overwrite
+refineWallLayer "(blades)" 0.5 -overwrite
 
 #cp -r 0.org 0
 
