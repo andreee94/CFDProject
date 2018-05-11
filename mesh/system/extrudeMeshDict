@@ -25,13 +25,13 @@ constructFrom patch;
 
 // If construct from patch/mesh:
 sourceCase "./";
-sourcePatches (back);
+sourcePatches (front);
 
 // If construct from patch: patch to use for back (can be same as sourcePatch)
-exposedPatchName front;
+exposedPatchName back;
 
 // If construct from surface:
-surface "movingWall.stl";
+//# surface "movingWall.stl";
 
 // Flip surface normals before usage. Valid only for extrude from surface or
 // patch.
@@ -76,7 +76,7 @@ sectorCoeffs
 
 linearNormalCoeffs
 {
-    thickness       0.1;
+    thickness       0.02; //# control the thickness of the plate
 }
 
 linearDirectionCoeffs

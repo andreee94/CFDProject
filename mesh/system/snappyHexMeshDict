@@ -57,7 +57,7 @@ castellatedMeshControls
     // If local number of cells is >= maxLocalCells on any processor
     // switches from from refinement followed by balancing
     // (current method) to (weighted) balancing before refinement.
-    maxLocalCells 100000;
+    maxLocalCells 200000;
 
     // Overall cell limit (approximately). Refinement will stop immediately
     // upon reaching this number so a refinement level might not complete.
@@ -82,7 +82,7 @@ castellatedMeshControls
     // Number of buffer layers between different levels.
     // 1 means normal 2:1 refinement restriction, larger means slower
     // refinement.
-    nCellsBetweenLevels 2;
+    nCellsBetweenLevels 3; // 2;
 
 
 
@@ -141,6 +141,7 @@ castellatedMeshControls
         blade0
         {
             level       (4 4);
+            //gapLevelIncrement 1;
             patchInfo
             {
                 type wall;
@@ -150,6 +151,7 @@ castellatedMeshControls
         blade1
         {
             level       (4 4); 
+            //gapLevelIncrement 1;
             patchInfo
             {
                 type wall;
@@ -159,6 +161,7 @@ castellatedMeshControls
         blade2
         {
             level       (4 4);  
+            //gapLevelIncrement 1;
             patchInfo
             {
                 type wall;
@@ -269,23 +272,23 @@ addLayersControls
     {
         blades
         {
-            nSurfaceLayers 3;
+            nSurfaceLayers 1;
         }
     }
 
     // Expansion factor for layer mesh
-    expansionRatio 1.0;
+    expansionRatio 1.0; //1.0;
 
     // Wanted thickness of final added cell layer. If multiple layers
     // is the thickness of the layer furthest away from the wall.
     // Relative to undistorted size of cell outside layer.
     // See relativeSizes parameter.
-    finalLayerThickness 0.3;
+    finalLayerThickness 0.9; // 0.3;
 
     // Minimum thickness of cell layer. If for any reason layer
     // cannot be above minThickness do not add layer.
     // Relative to undistorted size of cell outside layer.
-    minThickness 0.1;
+    minThickness 0.3; // 0.1;
 
     // If points get not extruded do nGrow layers of connected faces that are
     // also not grown. This helps convergence of the layer addition process
@@ -297,14 +300,14 @@ addLayersControls
 
     // When not to extrude surface. 0 is flat surface, 90 is when two faces
     // are perpendicular
-    featureAngle 30;
+    featureAngle 0; //30;
 
     // Maximum number of snapping relaxation iterations. Should stop
     // before upon reaching a correct mesh.
     nRelaxIter 3;
 
     // Number of smoothing iterations of surface normals
-    nSmoothSurfaceNormals 1;
+    nSmoothSurfaceNormals 1;// 1;
 
     // Number of smoothing iterations of interior mesh movement direction
     nSmoothNormals 3;
@@ -313,7 +316,7 @@ addLayersControls
     nSmoothThickness 10;
 
     // Stop layer growth on highly warped cells
-    maxFaceThicknessRatio 0.5;
+    maxFaceThicknessRatio 0.5; //0.5;
 
     // Reduce layer growth where ratio thickness to medial
     // distance is large
@@ -321,17 +324,17 @@ addLayersControls
 
     // Angle used to pick up medial axis points
     // Note: changed(corrected) w.r.t 17x! 90 degrees corresponds to 130 in 17x.
-    minMedianAxisAngle 90;
+    minMedianAxisAngle 90; //90;
 
 
     // Create buffer region for new layer terminations
-    nBufferCellsNoExtrude 0;
+    nBufferCellsNoExtrude 0; //0;
 
 
     // Overall max number of layer addition iterations. The mesher will exit
     // if it reaches this number of iterations; possibly with an illegal
     // mesh.
-    nLayerIter 50;
+    nLayerIter 50; // 50;
 }
 
 
@@ -345,7 +348,7 @@ meshQualityControls
 
     //- Max skewness allowed. Set to <0 to disable.
     maxBoundarySkewness 20;
-    maxInternalSkewness 4;
+    maxInternalSkewness 4; // 4
 
     //- Max concaveness allowed. Is angle (in degrees) below which concavity
     //  is allowed. 0 is straight face, <0 would be convex face.

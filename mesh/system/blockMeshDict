@@ -47,12 +47,12 @@ convertToMeters 1;
 
 vertices
 (
-   //Front points
+   //Back points
    (-0.2   -0.2   0.1) //0
    (0.2   -0.2   0.1) //1
    (0.2   0.2   0.1) //2
    (-0.2   0.2   0.1) //3
-   //Back points
+   //Front points
    (-0.2   -0.2   0.12) //4
    (0.2   -0.2   0.12) //5
    (0.2   0.2   0.12) //6
@@ -65,7 +65,7 @@ edges
 
 boundary
 (
-    front  // added automatically from blocks definition
+    back  // added automatically from blocks definition
     {
         type wall;
         faces
@@ -93,7 +93,7 @@ boundary
         );
     }
 
-    back  // added automatically from blocks definition
+    front  // added automatically from blocks definition
     {
         type wall;
         faces

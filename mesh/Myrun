@@ -37,9 +37,12 @@ blockMesh
 
 snappyHexMesh -overwrite
 
+extrudeMesh
+
 refineWallLayer "(blades)" 0.5 -overwrite
 refineWallLayer "(blades)" 0.5 -overwrite
 refineWallLayer "(blades)" 0.5 -overwrite
+
 
 #cp -r 0.org 0
 
