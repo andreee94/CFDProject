@@ -28,7 +28,7 @@ sourceCase "./";
 sourcePatches (front);
 
 // If construct from patch: patch to use for back (can be same as sourcePatch)
-exposedPatchName back;
+exposedPatchName front;
 
 // If construct from surface:
 //# surface "movingWall.stl";

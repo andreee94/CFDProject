@@ -21,34 +21,34 @@ FoamFile
     {
         type            wall;
         inGroups        1(wall);
-        nFaces          8218;
-        startFace       16418;
+        nFaces          0;
+        startFace       28927;
     }
     walls
     {
         type            wall;
         inGroups        1(wall);
         nFaces          80;
-        startFace       24636;
+        startFace       28927;
     }
     inlet
     {
         type            patch;
         nFaces          40;
-        startFace       24716;
+        startFace       29007;
     }
     front
     {
         type            wall;
         inGroups        1(wall);
-        nFaces          8218;
-        startFace       24756;
+        nFaces          28736;
+        startFace       29047;
     }
     outlet
     {
         type            patch;
         nFaces          40;
-        startFace       32974;
+        startFace       57783;
     }
     blade0
     {
@@ -61,7 +61,7 @@ wall
 )
 ;
         nFaces          199;
-        startFace       33014;
+        startFace       57823;
     }
     blade1
     {
@@ -74,7 +74,7 @@ wall
 )
 ;
         nFaces          229;
-        startFace       33213;
+        startFace       58022;
     }
     blade2
     {
@@ -87,7 +87,7 @@ wall
 )
 ;
         nFaces          199;
-        startFace       33442;
+        startFace       58251;
     }
 )
 

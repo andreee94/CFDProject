@@ -9,41 +9,17 @@ FoamFile
 {
     version     2.0;
     format      ascii;
-    class       regIOobject;
-    location    "constant/polyMesh";
-    object      faceZones;
+    class       faceSet;
+    location    "constant/polyMesh/sets";
+    object      wrongFaces;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-4
+
+2
 (
-rot-ext
-{
-    type faceZone;
-faceLabels      0();
-flipMap         0();
-}
-
-facezone-int0
-{
-    type faceZone;
-faceLabels      0();
-flipMap         0();
-}
-
-facezone-int1
-{
-    type faceZone;
-faceLabels      0();
-flipMap         0();
-}
-
-facezone-int2
-{
-    type faceZone;
-faceLabels      0();
-flipMap         0();
-}
+44113 
+36640 
 )
 
 // ************************************************************************* //

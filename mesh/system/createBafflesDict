@@ -28,28 +28,28 @@ baffles
     {
         //- Use predefined faceZone to select faces and orientation.
         type        faceZone;
-        zoneName    rotating;
+        zoneName    facezone-int0;
 
         patches
         {
             master
             {
                 //- Master side patch
-                name            AMI-master;
+                name            AMI-int0-master;
                 type            cyclicAMI;
                 inGroups        (cyclicAMI);
                 matchTolerance  0.0001;
-                neighbourPatch  AMI-slave;
+                neighbourPatch  AMI-int0-slave;
                 transform       noOrdering;
             }
             slave 
             {
 
-                name            AMI-slave;
+                name            AMI-int0-slave;
                 type            cyclicAMI;
                 inGroups        (cyclicAMI);
                 matchTolerance  0.0001;
-                neighbourPatch  AMI-master;
+                neighbourPatch  AMI-int0-master;
                 transform       noOrdering;
             }
         }

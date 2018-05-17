@@ -43,6 +43,26 @@ geometry
         type        triSurfaceMesh;
         name        blade2;
     }
+    AMI-ext.stl
+    {
+        type        triSurfaceMesh;
+        name        AMI-ext;
+    }
+    AMI-int0.stl
+    {
+        type        triSurfaceMesh;
+        name        AMI-int0;
+    }
+    AMI-int1.stl
+    {
+        type        triSurfaceMesh;
+        name        AMI-int1;
+    }
+    AMI-int2.stl
+    {
+        type        triSurfaceMesh;
+        name        AMI-int2;
+    }
 };
 
 
@@ -82,7 +102,7 @@ castellatedMeshControls
     // Number of buffer layers between different levels.
     // 1 means normal 2:1 refinement restriction, larger means slower
     // refinement.
-    nCellsBetweenLevels 3; // 2;
+    nCellsBetweenLevels 4; // 2;
 
 
 
@@ -168,6 +188,44 @@ castellatedMeshControls
                 inGroups (blades);
             }
         }
+	AMI-ext//"AMI*"
+        {
+            level       (2 2);  
+
+            cellZone    steady;
+            faceZone    rot-ext;
+            cellZoneInside  outside;
+            //gapLevelIncrement 1;
+            patchInfo
+            {
+                type patch;
+                //inGroups (amis-group);
+            }
+        }
+	AMI-int0//"AMI*"
+        {
+            level       (2 2);  
+
+            cellZone    cellzone-int0;
+            faceZone    facezone-int0;
+            cellZoneInside  inside;
+        }
+	AMI-int1//"AMI*"
+        {
+            level       (2 2);  
+
+            cellZone    cellzone-int1;
+            faceZone    facezone-int1;
+            cellZoneInside  inside;
+        }
+	AMI-int2//"AMI*"
+        {
+            level       (2 2);  
+
+            cellZone    cellzone-int2;
+            faceZone    facezone-int2;
+            cellZoneInside  inside;
+        }		
     }
 
     // Resolve sharp angles
@@ -274,6 +332,26 @@ addLayersControls
         {
             nSurfaceLayers 1;
         }
+	AMI-ext
+	{
+            nSurfaceLayers 3;
+	}
+	rot-ext
+	{
+            nSurfaceLayers 3;
+	}
+	AMI-int0
+	{
+            nSurfaceLayers 3;
+	}
+	cellzone-int0
+	{
+            nSurfaceLayers 3;
+	}
+	facezone-int0
+	{
+            nSurfaceLayers 3;
+	}
     }
 
     // Expansion factor for layer mesh

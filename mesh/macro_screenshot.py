@@ -23,8 +23,11 @@ renderView1.InteractionMode = '2D'
 #renderView1.CameraFocalPoint = [-4.991888999938965e-07, 0.0, 0.11000000312924385]
 #renderView1.CameraParallelScale = 0.2830721238096907
 
+width = 1920
+height = 1080
+
 # save screenshot
-SaveScreenshot('/home/andrea/Project/mesh/screenshots/all_mesh.png', renderView1, ImageResolution=[4320, 2270], TransparentBackground=1)
+SaveScreenshot('/home/andrea/Project/mesh/screenshots/all_mesh.png', renderView1, ImageResolution=[width, height], TransparentBackground=1)
 
 ######################################################33
 
@@ -35,7 +38,7 @@ renderView1.CameraFocalPoint = [-0.00010231917086957684, 0.0669569661122999, 0.1
 renderView1.CameraViewUp = [0.009028867782141547, 0.9999592389425545, 0.0]
 renderView1.CameraParallelScale = 0.00353047862165632
 
-SaveScreenshot('/home/andrea/Project/mesh/screenshots/boundary_layer.png', renderView1, ImageResolution=[4320, 2270], TransparentBackground=1)
+SaveScreenshot('/home/andrea/Project/mesh/screenshots/boundary_layer.png', renderView1, ImageResolution=[width, height], TransparentBackground=1)
 
 ######################################################33
 
@@ -45,7 +48,7 @@ renderView1.CameraPosition = [0.05051770430840953, -0.025186858122551763, 1.2235
 renderView1.CameraFocalPoint = [0.05051770430840953, -0.025186858122551763, 0.12999999895691872]
 renderView1.CameraParallelScale = 0.02374687414100329
 
-SaveScreenshot('/home/andrea/Project/mesh/screenshots/blade0.png', renderView1, ImageResolution=[4320, 2270], TransparentBackground=1)
+SaveScreenshot('/home/andrea/Project/mesh/screenshots/blade0.png', renderView1, ImageResolution=[width, height], TransparentBackground=1)
 
 ######################################################33
 
@@ -55,7 +58,7 @@ renderView1.CameraPosition = [-0.07697123832687232, -0.011091462691906548, 1.223
 renderView1.CameraFocalPoint = [-0.07697123832687232, -0.011091462691906548, 0.12999999895691872]
 renderView1.CameraParallelScale = 0.005168011697023971
 
-SaveScreenshot('/home/andrea/Project/mesh/screenshots/blade2_LE.png', renderView1, ImageResolution=[4320, 2270], TransparentBackground=1)
+SaveScreenshot('/home/andrea/Project/mesh/screenshots/blade2_LE.png', renderView1, ImageResolution=[width, height], TransparentBackground=1)
 
 
 
