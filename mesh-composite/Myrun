@@ -1,0 +1,75 @@
+#!/bin/sh
+cd ${0%/*} || exit 1    # run from this directory
+
+# Source tutorial run functions
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
+
+# Arguments:
+#if [ ! -n "$1" ]
+#then
+#    deg0=0
+#    echo "Reference angle = 0"
+#else
+#    deg0=$1
+#fi
+
+steady/Allclean
+circle-ext/Allclean
+blade0/Allclean
+blade1/Allclean
+blade2/Allclean
+main/Allclean
+
+blade0/Myrun
+blade1/Myrun
+blade2/Myrun
+circle-ext/Myrun
+
+blockMesh -case steady
+#blockMesh -case circle-ext
+#blockMesh -case blade0
+#blockMesh -case blade1
+#blockMesh -case blade2
+
+snappyHexMesh -overwrite -case steady
+#snappyHexMesh -overwrite -case circle-ext
+#snappyHexMesh -overwrite -case blade0
+#snappyHexMesh -overwrite -case blade1
+#snappyHexMesh -overwrite -case blade2
+
+mergeMeshes -overwrite circle-ext/ blade0/
+mergeMeshes -overwrite circle-ext/ blade1/
+mergeMeshes -overwrite circle-ext/ blade2/
+mergeMeshes -overwrite steady/ circle-ext/
+
+cp -r steady/constant/polyMesh main/constant/.
+#snappyHexMesh -overwrite -case main
+
+#snappyHexMesh -overwrite
+
+#createBaffles -overwrite
+
+#mergeOrSplitBaffles -split -overwrite
+
+#createPatch -overwrite
+
+#renumberMesh -overwrite 
+
+#refineWallLayer "(blades)" 0.5 -overwrite
+#refineWallLayer "(blades)" 0.5 -overwrite
+#refineWallLayer "(blades)" 0.5 -overwrite
+
+#extrudeMesh
+
+#cp -r 0.org 0
+
+#snappyHexMesh -overwrite
+
+#extrudeMesh
+
+#createPatch -overwrite
+
+#paraFoam -touch
+
+
+# ----------------------------------------------------------------- end-of-file

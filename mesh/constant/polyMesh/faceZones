@@ -15,9 +15,9 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-4
+8
 (
-rot-ext
+facezone-ext
 {
     type faceZone;
 faceLabels      0();
@@ -39,6 +39,34 @@ flipMap         0();
 }
 
 facezone-int2
+{
+    type faceZone;
+faceLabels      0();
+flipMap         0();
+}
+
+AMI-ext
+{
+    type faceZone;
+faceLabels      0();
+flipMap         0();
+}
+
+AMI-int0
+{
+    type faceZone;
+faceLabels      0();
+flipMap         0();
+}
+
+AMI-int1
+{
+    type faceZone;
+faceLabels      0();
+flipMap         0();
+}
+
+AMI-int2
 {
     type faceZone;
 faceLabels      0();

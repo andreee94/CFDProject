@@ -15,40 +15,40 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-8
+16
 (
     back
     {
         type            wall;
         inGroups        1(wall);
-        nFaces          0;
-        startFace       28927;
+        nFaces          13711;
+        startFace       306740;
     }
     walls
     {
         type            wall;
         inGroups        1(wall);
         nFaces          80;
-        startFace       28927;
+        startFace       320451;
     }
     inlet
     {
         type            patch;
         nFaces          40;
-        startFace       29007;
+        startFace       320531;
     }
     front
     {
         type            wall;
         inGroups        1(wall);
-        nFaces          28736;
-        startFace       29047;
+        nFaces          13711;
+        startFace       320571;
     }
     outlet
     {
         type            patch;
         nFaces          40;
-        startFace       57783;
+        startFace       334282;
     }
     blade0
     {
@@ -60,8 +60,8 @@ blades
 wall
 )
 ;
-        nFaces          199;
-        startFace       57823;
+        nFaces          3184;
+        startFace       334322;
     }
     blade1
     {
@@ -73,8 +73,8 @@ blades
 wall
 )
 ;
-        nFaces          229;
-        startFace       58022;
+        nFaces          3648;
+        startFace       337506;
     }
     blade2
     {
@@ -86,8 +86,136 @@ blades
 wall
 )
 ;
-        nFaces          199;
-        startFace       58251;
+        nFaces          3184;
+        startFace       341154;
+    }
+    AMI-ext-master
+    {
+        type            cyclicAMI;
+        inGroups        
+2
+(
+cyclicAMI
+AMI-ext
+)
+;
+        nFaces          0;
+        startFace       344338;
+        matchTolerance  0.0001;
+        transform       noOrdering;
+        neighbourPatch  AMI-ext-slave;
+    }
+    AMI-ext-slave
+    {
+        type            cyclicAMI;
+        inGroups        
+2
+(
+cyclicAMI
+AMI-ext
+)
+;
+        nFaces          0;
+        startFace       344338;
+        matchTolerance  0.0001;
+        transform       noOrdering;
+        neighbourPatch  AMI-ext-master;
+    }
+    AMI-int0-master
+    {
+        type            cyclicAMI;
+        inGroups        
+2
+(
+cyclicAMI
+AMI-int0
+)
+;
+        nFaces          0;
+        startFace       344338;
+        matchTolerance  0.0001;
+        transform       noOrdering;
+        neighbourPatch  AMI-int0-slave;
+    }
+    AMI-int0-slave
+    {
+        type            cyclicAMI;
+        inGroups        
+2
+(
+cyclicAMI
+AMI-int0
+)
+;
+        nFaces          0;
+        startFace       344338;
+        matchTolerance  0.0001;
+        transform       noOrdering;
+        neighbourPatch  AMI-int0-master;
+    }
+    AMI-int1-master
+    {
+        type            cyclicAMI;
+        inGroups        
+2
+(
+cyclicAMI
+AMI-int1
+)
+;
+        nFaces          0;
+        startFace       344338;
+        matchTolerance  0.0001;
+        transform       noOrdering;
+        neighbourPatch  AMI-int1-slave;
+    }
+    AMI-int1-slave
+    {
+        type            cyclicAMI;
+        inGroups        
+2
+(
+cyclicAMI
+AMI-int1
+)
+;
+        nFaces          0;
+        startFace       344338;
+        matchTolerance  0.0001;
+        transform       noOrdering;
+        neighbourPatch  AMI-int1-master;
+    }
+    AMI-int2-master
+    {
+        type            cyclicAMI;
+        inGroups        
+2
+(
+cyclicAMI
+AMI-int2
+)
+;
+        nFaces          0;
+        startFace       344338;
+        matchTolerance  0.0001;
+        transform       noOrdering;
+        neighbourPatch  AMI-int2-slave;
+    }
+    AMI-int2-slave
+    {
+        type            cyclicAMI;
+        inGroups        
+2
+(
+cyclicAMI
+AMI-int2
+)
+;
+        nFaces          0;
+        startFace       344338;
+        matchTolerance  0.0001;
+        transform       noOrdering;
+        neighbourPatch  AMI-int2-master;
     }
 )
 

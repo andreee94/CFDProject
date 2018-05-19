@@ -102,7 +102,7 @@ castellatedMeshControls
     // Number of buffer layers between different levels.
     // 1 means normal 2:1 refinement restriction, larger means slower
     // refinement.
-    nCellsBetweenLevels 4; // 2;
+    nCellsBetweenLevels 2; // 2;
 
 
 
@@ -188,39 +188,39 @@ castellatedMeshControls
                 inGroups (blades);
             }
         }
-	AMI-ext//"AMI*"
+		AMI-ext//"AMI*"
         {
-            level       (2 2);  
+            level       (3 3);  
 
             cellZone    steady;
-            faceZone    rot-ext;
+            faceZone    facezone-ext;
             cellZoneInside  outside;
             //gapLevelIncrement 1;
-            patchInfo
-            {
-                type patch;
-                //inGroups (amis-group);
-            }
+            //patchInfo
+            //{
+            //    type wall;
+            //    //inGroups (amis-group);
+            //}
         }
-	AMI-int0//"AMI*"
+		AMI-int0//"AMI*"
         {
-            level       (2 2);  
+            level       (3 3);  
 
             cellZone    cellzone-int0;
             faceZone    facezone-int0;
             cellZoneInside  inside;
         }
-	AMI-int1//"AMI*"
+		AMI-int1//"AMI*"
         {
-            level       (2 2);  
+            level       (3 3);  
 
             cellZone    cellzone-int1;
             faceZone    facezone-int1;
             cellZoneInside  inside;
         }
-	AMI-int2//"AMI*"
+		AMI-int2//"AMI*"
         {
-            level       (2 2);  
+            level       (3 3);  
 
             cellZone    cellzone-int2;
             faceZone    facezone-int2;
@@ -268,7 +268,7 @@ castellatedMeshControls
     // section reachable from the locationInMesh is kept.
     // NOTE: This point should never be on a face, always inside a cell, even
     // after refinement.
-    locationInMesh (-0.1 -0.1 0.11);
+    locationInMesh (-0.19 -0.19 0.11);
 
 
     // Whether any faceZones (as specified in the refinementSurfaces)
@@ -332,26 +332,34 @@ addLayersControls
         {
             nSurfaceLayers 1;
         }
-	AMI-ext
-	{
-            nSurfaceLayers 3;
-	}
-	rot-ext
-	{
-            nSurfaceLayers 3;
-	}
-	AMI-int0
-	{
-            nSurfaceLayers 3;
-	}
-	cellzone-int0
-	{
-            nSurfaceLayers 3;
-	}
-	facezone-int0
-	{
-            nSurfaceLayers 3;
-	}
+/*		AMI-ext*/
+/*		{*/
+/*		        nSurfaceLayers 3;*/
+/*		}*/
+/*		rot-ext*/
+/*		{*/
+/*		        nSurfaceLayers 3;*/
+/*		}*/
+/*		AMI-int0*/
+/*		{*/
+/*		        nSurfaceLayers 3;*/
+/*		}*/
+/*		cellzone-int0*/
+/*		{*/
+/*		        nSurfaceLayers 3;*/
+/*		}*/
+/*		AMI-ext_slave*/
+/*		{*/
+/*			nSurfaceLayers 2;*/
+/*		}*/
+/*		AMI-ext-master*/
+/*		{*/
+/*			nSurfaceLayers 2;*/
+/*		}*/
+/*		AMI-ext*/
+/*		{*/
+/*			nSurfaceLayers 2;*/
+/*		}*/
     }
 
     // Expansion factor for layer mesh

@@ -1,0 +1,154 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  5.x                                   |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       polyBoundaryMesh;
+    location    "constant/polyMesh";
+    object      boundary;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+14
+(
+    back
+    {
+        type            wall;
+        inGroups        1(wall);
+        nFaces          14315;
+        startFace       295212;
+    }
+    walls
+    {
+        type            wall;
+        inGroups        1(wall);
+        nFaces          80;
+        startFace       309527;
+    }
+    inlet
+    {
+        type            patch;
+        nFaces          40;
+        startFace       309607;
+    }
+    front
+    {
+        type            wall;
+        inGroups        1(wall);
+        nFaces          14315;
+        startFace       309647;
+    }
+    outlet
+    {
+        type            patch;
+        nFaces          40;
+        startFace       323962;
+    }
+    AMI-ext
+    {
+        type            wall;
+        inGroups        1(wall);
+        nFaces          2000;
+        startFace       324002;
+    }
+    AMI-int1
+    {
+        type            wall;
+        inGroups        1(wall);
+        nFaces          2912;
+        startFace       326002;
+    }
+    AMI-int2
+    {
+        type            wall;
+        inGroups        1(wall);
+        nFaces          2912;
+        startFace       328914;
+    }
+    blade0
+    {
+        type            wall;
+        inGroups        
+2
+(
+blades
+wall
+)
+;
+        nFaces          3184;
+        startFace       331826;
+    }
+    AMI-int0_blade0
+    {
+        type            patch;
+        inGroups        1(blades);
+        nFaces          1440;
+        startFace       335010;
+    }
+    blade1
+    {
+        type            wall;
+        inGroups        
+2
+(
+blades
+wall
+)
+;
+        nFaces          3648;
+        startFace       336450;
+    }
+    blade2
+    {
+        type            wall;
+        inGroups        
+2
+(
+blades
+wall
+)
+;
+        nFaces          3184;
+        startFace       340098;
+    }
+    AMI-int0-master
+    {
+        type            cyclicAMI;
+        inGroups        
+2
+(
+cyclicAMI
+AMI-int0-buffle
+)
+;
+        nFaces          1472;
+        startFace       343282;
+        matchTolerance  0.0001;
+        transform       noOrdering;
+        neighbourPatch  AMI-int0-slave;
+    }
+    AMI-int0-slave
+    {
+        type            cyclicAMI;
+        inGroups        
+2
+(
+cyclicAMI
+AMI-int0-buffle
+)
+;
+        nFaces          0;
+        startFace       344754;
+        matchTolerance  0.0001;
+        transform       noOrdering;
+        neighbourPatch  AMI-int0-master;
+    }
+)
+
+// ************************************************************************* //
