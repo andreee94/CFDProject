@@ -84,6 +84,60 @@ renderView1.CameraParallelScale = 0.283019438231667
 # RenderAllViews()
 # alternatively, if you want to write images, you can use SaveScreenshot(...).
 
+
+########################################################################################
+########################################################################################
+########################################################################################
+########################################################################################
+########################################################################################
+########################################################################################
+
+paraview.simple._DisableFirstRenderCameraReset()
+
+# get active source.
+meshOpenFOAM = GetActiveSource()
+
+# get active view
+renderView1 = GetActiveViewOrCreate('RenderView')
+# uncomment following to set a specific view size
+# renderView1.ViewSize = [1608, 1141]
+
+# get display properties
+meshOpenFOAMDisplay = GetDisplayProperties(meshOpenFOAM, view=renderView1)
+
+# change representation type
+meshOpenFOAMDisplay.SetRepresentationType('Surface With Edges')
+
+# Properties modified on meshOpenFOAM
+meshOpenFOAM.UseVTKPolyhedron = 1
+
+# update the view to ensure updated data information
+renderView1.Update()
+
+# reset view to fit data
+renderView1.ResetCamera()
+
+#change interaction mode for render view
+renderView1.InteractionMode = '2D'
+
+# current camera placement for renderView1
+renderView1.InteractionMode = '2D'
+renderView1.CameraPosition = [0.07252627736877078, -0.01385295843377476, 1.2235031378760821]
+renderView1.CameraFocalPoint = [0.07252627736877078, -0.01385295843377476, 0.12999999895691872]
+renderView1.CameraParallelScale = 0.01962551581901098
+
+# save screenshot
+SaveScreenshot('/home/andrea/OpenFOAM/andrea-5.0/run/CFDProject/mesh/screenshots-week2/detail_blade_ami.png', renderView1, ImageResolution=[1920, 1080],
+    TransparentBackground=1)
+
+#### saving camera placements for all active views
+
+# current camera placement for renderView1
+renderView1.InteractionMode = '2D'
+renderView1.CameraPosition = [0.07252627736877078, -0.01385295843377476, 1.2235031378760821]
+renderView1.CameraFocalPoint = [0.07252627736877078, -0.01385295843377476, 0.12999999895691872]
+renderView1.CameraParallelScale = 0.01962551581901098
+
 ########################################################################################
 ########################################################################################
 ########################################################################################

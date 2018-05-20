@@ -204,7 +204,7 @@ castellatedMeshControls
         }
 		AMI-int0//"AMI*"
         {
-            level       (3 3);  
+            level       (4 4);  
 
             cellZone    cellzone-int0;
             faceZone    facezone-int0;
@@ -212,7 +212,7 @@ castellatedMeshControls
         }
 		AMI-int1//"AMI*"
         {
-            level       (3 3);  
+            level       (4 4);  
 
             cellZone    cellzone-int1;
             faceZone    facezone-int1;
@@ -220,7 +220,7 @@ castellatedMeshControls
         }
 		AMI-int2//"AMI*"
         {
-            level       (3 3);  
+            level       (4 4);  
 
             cellZone    cellzone-int2;
             faceZone    facezone-int2;
