@@ -1,0 +1,128 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  5.x                                   |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+Build  : 5.x-197d9d3bf20a
+Exec   : mergeMeshes -overwrite circle-ext/ blade0/
+Date   : May 20 2018
+Time   : 20:47:52
+Host   : "andrea-CM6870"
+PID    : 18239
+I/O    : uncollated
+Case   : /home/andrea/OpenFOAM/andrea-5.0/run/CFDProject/mesh-composite
+nProcs : 1
+sigFpe : Enabling floating point exception trapping (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 10)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Master:      "circle-ext"  region region0
+mesh to add: "blade0"  region region0
+
+Create Times
+Reading master mesh for time = 0
+Create mesh
+
+Reading mesh to add for time = 0
+Create mesh
+
+Writing combined mesh to 0
+patch names: 
+8
+(
+back
+front
+AMI-ext-in
+AMI-int0-out
+AMI-int1-out
+AMI-int2-out
+blade0
+AMI-int0-in
+)
+
+patch dicts: 
+8
+(
+
+{
+    type            wall;
+    inGroups        1 ( wall );
+    nFaces          6672;
+    startFace       129940;
+}
+
+
+{
+    type            wall;
+    inGroups        1 ( wall );
+    nFaces          6672;
+    startFace       136612;
+}
+
+
+{
+    type            wall;
+    inGroups        1 ( wall );
+    nFaces          3968;
+    startFace       143284;
+}
+
+
+{
+    type            wall;
+    inGroups        1 ( wall );
+    nFaces          1472;
+    startFace       147252;
+}
+
+
+{
+    type            wall;
+    inGroups        1 ( wall );
+    nFaces          1472;
+    startFace       148724;
+}
+
+
+{
+    type            wall;
+    inGroups        1 ( wall );
+    nFaces          1472;
+    startFace       150196;
+}
+
+
+{
+    type            wall;
+    inGroups        2 ( blades wall );
+    nFaces          3184;
+    startFace       69479;
+}
+
+
+{
+    type            wall;
+    inGroups        1 ( wall );
+    nFaces          1440;
+    startFace       72663;
+}
+
+)
+
+point zone names: 0()
+face zone names: 0()
+cell zone names: 
+2
+(
+cellZone-circle-ext
+cellZone-blade0
+)
+
+Copying old patches
+Adding new patches. 
+Adding new cellZones. 
+End
+

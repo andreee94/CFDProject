@@ -15,61 +15,40 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-14
+16
 (
     back
     {
         type            wall;
         inGroups        1(wall);
-        nFaces          14315;
-        startFace       295212;
+        nFaces          0;
+        startFace       35236;
     }
     walls
     {
         type            wall;
         inGroups        1(wall);
         nFaces          80;
-        startFace       309527;
+        startFace       35236;
     }
     inlet
     {
         type            patch;
         nFaces          40;
-        startFace       309607;
+        startFace       35316;
     }
     front
     {
         type            wall;
         inGroups        1(wall);
-        nFaces          14315;
-        startFace       309647;
+        nFaces          35774;
+        startFace       35356;
     }
     outlet
     {
         type            patch;
         nFaces          40;
-        startFace       323962;
-    }
-    AMI-ext
-    {
-        type            wall;
-        inGroups        1(wall);
-        nFaces          2000;
-        startFace       324002;
-    }
-    AMI-int1
-    {
-        type            wall;
-        inGroups        1(wall);
-        nFaces          2912;
-        startFace       326002;
-    }
-    AMI-int2
-    {
-        type            wall;
-        inGroups        1(wall);
-        nFaces          2912;
-        startFace       328914;
+        startFace       71130;
     }
     blade0
     {
@@ -81,15 +60,8 @@ blades
 wall
 )
 ;
-        nFaces          3184;
-        startFace       331826;
-    }
-    AMI-int0_blade0
-    {
-        type            patch;
-        inGroups        1(blades);
-        nFaces          1440;
-        startFace       335010;
+        nFaces          199;
+        startFace       71170;
     }
     blade1
     {
@@ -101,8 +73,8 @@ blades
 wall
 )
 ;
-        nFaces          3648;
-        startFace       336450;
+        nFaces          229;
+        startFace       71369;
     }
     blade2
     {
@@ -114,21 +86,15 @@ blades
 wall
 )
 ;
-        nFaces          3184;
-        startFace       340098;
+        nFaces          199;
+        startFace       71598;
     }
     AMI-int0-master
     {
         type            cyclicAMI;
-        inGroups        
-2
-(
-cyclicAMI
-AMI-int0-buffle
-)
-;
-        nFaces          1472;
-        startFace       343282;
+        inGroups        1(cyclicAMI);
+        nFaces          180;
+        startFace       71797;
         matchTolerance  0.0001;
         transform       noOrdering;
         neighbourPatch  AMI-int0-slave;
@@ -136,18 +102,72 @@ AMI-int0-buffle
     AMI-int0-slave
     {
         type            cyclicAMI;
-        inGroups        
-2
-(
-cyclicAMI
-AMI-int0-buffle
-)
-;
-        nFaces          0;
-        startFace       344754;
+        inGroups        1(cyclicAMI);
+        nFaces          184;
+        startFace       71977;
         matchTolerance  0.0001;
         transform       noOrdering;
         neighbourPatch  AMI-int0-master;
+    }
+    AMI-int1-master
+    {
+        type            cyclicAMI;
+        inGroups        1(cyclicAMI);
+        nFaces          180;
+        startFace       72161;
+        matchTolerance  0.0001;
+        transform       noOrdering;
+        neighbourPatch  AMI-int1-slave;
+    }
+    AMI-int1-slave
+    {
+        type            cyclicAMI;
+        inGroups        1(cyclicAMI);
+        nFaces          184;
+        startFace       72341;
+        matchTolerance  0.0001;
+        transform       noOrdering;
+        neighbourPatch  AMI-int1-master;
+    }
+    AMI-int2-master
+    {
+        type            cyclicAMI;
+        inGroups        1(cyclicAMI);
+        nFaces          180;
+        startFace       72525;
+        matchTolerance  0.0001;
+        transform       noOrdering;
+        neighbourPatch  AMI-int2-slave;
+    }
+    AMI-int2-slave
+    {
+        type            cyclicAMI;
+        inGroups        1(cyclicAMI);
+        nFaces          184;
+        startFace       72705;
+        matchTolerance  0.0001;
+        transform       noOrdering;
+        neighbourPatch  AMI-int2-master;
+    }
+    AMI-ext-master
+    {
+        type            cyclicAMI;
+        inGroups        1(cyclicAMI);
+        nFaces          496;
+        startFace       72889;
+        matchTolerance  0.0001;
+        transform       noOrdering;
+        neighbourPatch  AMI-ext-slave;
+    }
+    AMI-ext-slave
+    {
+        type            cyclicAMI;
+        inGroups        1(cyclicAMI);
+        nFaces          500;
+        startFace       73385;
+        matchTolerance  0.0001;
+        transform       noOrdering;
+        neighbourPatch  AMI-ext-master;
     }
 )
 

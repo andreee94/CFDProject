@@ -57,13 +57,24 @@ surfaceTransformPoints -scale '(0.001 0.001 0.001)' constant/triSurface/AMI-int0
 surfaceTransformPoints -scale '(0.001 0.001 0.001)' constant/triSurface/AMI-int1.bkp.stl  constant/triSurface/AMI-int1.stl
 surfaceTransformPoints -scale '(0.001 0.001 0.001)' constant/triSurface/AMI-int2.bkp.stl  constant/triSurface/AMI-int2.stl
 
-blockMesh
+echo "Running blockMesh for blade0..."
+blockMesh > log/log.blockMesh
 
-snappyHexMesh -overwrite
+echo "Running snappyHexMesh for blade0..."
+snappyHexMesh -overwrite > log/log.snappyHexMesh
 
-createBaffles -overwrite
+# setSet commands
 
-mergeOrSplitBaffles -split -overwrite
+#setSet -batch setSetDict
+
+#faceSet AMI-int0-faceSet new patchToFace AMI-int0
+#faceZoneSet AMI-int0-faceZoneSet new setToFaceZone AMI-int0-faceSet
+
+#################
+
+#createBaffles -overwrite
+
+#mergeOrSplitBaffles -split -overwrite
 
 #createPatch -overwrite
 

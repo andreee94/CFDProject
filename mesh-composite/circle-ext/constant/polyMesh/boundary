@@ -15,49 +15,49 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-10
+12
 (
     back
     {
         type            wall;
         inGroups        1(wall);
-        nFaces          11667;
-        startFace       278124;
+        nFaces          13375;
+        startFace       324932;
     }
     front
     {
         type            wall;
         inGroups        1(wall);
-        nFaces          11667;
-        startFace       289791;
+        nFaces          13375;
+        startFace       338307;
     }
-    AMI-ext
+    AMI-ext-in
     {
         type            wall;
         inGroups        1(wall);
-        nFaces          992;
-        startFace       301458;
+        nFaces          3968;
+        startFace       351682;
     }
-    AMI-int0
+    AMI-int0-out
     {
         type            wall;
         inGroups        1(wall);
         nFaces          1472;
-        startFace       302450;
+        startFace       355650;
     }
-    AMI-int1
+    AMI-int1-out
     {
         type            wall;
         inGroups        1(wall);
-        nFaces          2912;
-        startFace       303922;
+        nFaces          1472;
+        startFace       357122;
     }
-    AMI-int2
+    AMI-int2-out
     {
         type            wall;
         inGroups        1(wall);
-        nFaces          2912;
-        startFace       306834;
+        nFaces          1472;
+        startFace       358594;
     }
     blade0
     {
@@ -70,14 +70,14 @@ wall
 )
 ;
         nFaces          3184;
-        startFace       309746;
+        startFace       360066;
     }
-    AMI-int0_blade0
+    AMI-int0-in
     {
-        type            patch;
-        inGroups        1(blades);
+        type            wall;
+        inGroups        1(wall);
         nFaces          1440;
-        startFace       312930;
+        startFace       363250;
     }
     blade1
     {
@@ -90,7 +90,14 @@ wall
 )
 ;
         nFaces          3648;
-        startFace       314370;
+        startFace       364690;
+    }
+    AMI-int1-in
+    {
+        type            wall;
+        inGroups        1(wall);
+        nFaces          1440;
+        startFace       368338;
     }
     blade2
     {
@@ -103,7 +110,14 @@ wall
 )
 ;
         nFaces          3184;
-        startFace       318018;
+        startFace       369778;
+    }
+    AMI-int2-in
+    {
+        type            wall;
+        inGroups        1(wall);
+        nFaces          1440;
+        startFace       372962;
     }
 )
 

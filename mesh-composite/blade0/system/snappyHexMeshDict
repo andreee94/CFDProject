@@ -51,7 +51,7 @@ geometry
     AMI-int0.stl
     {
         type        triSurfaceMesh;
-        name        AMI-int0;
+        name        AMI-int0-in;
     }
 /*    AMI-int1.stl*/
 /*    {*/
@@ -202,15 +202,15 @@ castellatedMeshControls
 /*                //inGroups (amis-group);*/
 /*            }*/
 /*        }*/
-		AMI-int0//"AMI*"
+		AMI-int0-in//"AMI*"
         {
             level       (3 3);  
 			
-			patchInfo
-            {
-                type patch;
-                inGroups (blades);
-            }
+			//patchInfo
+            //{
+            //    type patch;
+            //    inGroups (blades);
+            //}
             //cellZone    cellzone-int0;
             //faceZone    facezone-int0;
             //cellZoneInside  none;
@@ -345,7 +345,7 @@ addLayersControls
 /*		{*/
 /*		        nSurfaceLayers 3;*/
 /*		}*/
-		AMI-int0
+		AMI-int0-in
 		{
 			nSurfaceLayers 2;
 		}

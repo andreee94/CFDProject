@@ -46,22 +46,22 @@ geometry
     AMI-ext.stl
     {
         type        triSurfaceMesh;
-        name        AMI-ext;
+        name        AMI-ext-in;
     }
     AMI-int0.stl
     {
         type        triSurfaceMesh;
-        name        AMI-int0;
+        name        AMI-int0-out;
     }
     AMI-int1.stl
     {
         type        triSurfaceMesh;
-        name        AMI-int1;
+        name        AMI-int1-out;
     }
     AMI-int2.stl
     {
         type        triSurfaceMesh;
-        name        AMI-int2;
+        name        AMI-int2-out;
     }
 };
 
@@ -188,21 +188,21 @@ castellatedMeshControls
 /*                inGroups (blades);*/
 /*            }*/
 /*        }*/
-		AMI-ext//"AMI*"
+		AMI-ext-in//"AMI*"
         {
-            level       (2 3);  
+            level       (3 3);  
 
             //cellZone    steady;
             //faceZone    facezone-ext;
             //cellZoneInside  outside;
             //gapLevelIncrement 1;
-            patchInfo
-            {
-                type wall;
-                //inGroups (amis-group);
-            }
+/*            patchInfo*/
+/*            {*/
+/*                type wall;*/
+/*                //inGroups (amis-group);*/
+/*            }*/
         }
-		AMI-int0//"AMI*"
+		AMI-int0-out//"AMI*"
         {
             level       (3 3);  
 
@@ -210,7 +210,7 @@ castellatedMeshControls
             //faceZone    facezone-int0;
             //cellZoneInside  none;
         }
-		AMI-int1//"AMI*"
+		AMI-int1-out//"AMI*"
         {
             level       (3 3);  
 
@@ -218,7 +218,7 @@ castellatedMeshControls
             //faceZone    facezone-int1;
             //cellZoneInside  none;
         }
-		AMI-int2//"AMI*"
+		AMI-int2-out//"AMI*"
         {
             level       (3 3);  
 
@@ -328,10 +328,10 @@ addLayersControls
     // Per final patch (so not geometry!) the layer information
     layers
     {
-        blades
-        {
-            nSurfaceLayers 1;
-        }
+/*        blades*/
+/*        {*/
+/*            nSurfaceLayers 1;*/
+/*        }*/
 /*		AMI-ext*/
 /*		{*/
 /*		        nSurfaceLayers 3;*/
@@ -340,15 +340,15 @@ addLayersControls
 /*		{*/
 /*		        nSurfaceLayers 3;*/
 /*		}*/
-		AMI-int0
+		AMI-int0-out
 		{
 		        nSurfaceLayers 2;
 		}
-		AMI-int1
+		AMI-int1-out
 		{
 		        nSurfaceLayers 2;
 		}
-		AMI-int2
+		AMI-int2-out
 		{
 		        nSurfaceLayers 2;
 		}
@@ -364,7 +364,7 @@ addLayersControls
 /*		{*/
 /*			nSurfaceLayers 2;*/
 /*		}*/
-		AMI-ext
+		AMI-ext-in
 		{
 			nSurfaceLayers 2;
 		}

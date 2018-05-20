@@ -44,7 +44,7 @@ wall
         nFaces          3648;
         startFace       69489;
     }
-    AMI-int1
+    AMI-int1-in
     {
         type            wall;
         inGroups        1(wall);

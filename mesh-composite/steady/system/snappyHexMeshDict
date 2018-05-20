@@ -31,7 +31,7 @@ geometry
     AMI-ext.stl
     {
         type        triSurfaceMesh;
-        name        AMI-ext;
+        name        AMI-ext-out;
     }
 };
 
@@ -129,15 +129,15 @@ castellatedMeshControls
         //    level       (2 2);
         //}
 
-		AMI-ext//"AMI*"
+		AMI-ext-out//"AMI*"
         {
-            level       (2 3);  
+            level       (3 3);  
             //gapLevelIncrement 1;
-            patchInfo
-            {
-                type wall;
-                //inGroups (amis-group);
-            }
+/*            patchInfo*/
+/*            {*/
+/*                //type wall;*/
+/*                //inGroups (amis-group);*/
+/*            }*/
         }
     }
 
@@ -269,7 +269,7 @@ addLayersControls
 /*		{*/
 /*			nSurfaceLayers 2;*/
 /*		}*/
-		AMI-ext
+		AMI-ext-out
 		{
 			nSurfaceLayers 2;
 		}

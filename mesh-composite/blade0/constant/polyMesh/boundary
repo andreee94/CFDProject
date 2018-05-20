@@ -44,10 +44,10 @@ wall
         nFaces          3184;
         startFace       69479;
     }
-    AMI-int0
+    AMI-int0-in
     {
-        type            patch;
-        inGroups        1(blades);
+        type            wall;
+        inGroups        1(wall);
         nFaces          1440;
         startFace       72663;
     }

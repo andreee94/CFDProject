@@ -1,0 +1,166 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  5.x                                   |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+Build  : 5.x-197d9d3bf20a
+Exec   : mergeMeshes -overwrite circle-ext/ blade2/
+Date   : May 20 2018
+Time   : 20:47:54
+Host   : "andrea-CM6870"
+PID    : 18241
+I/O    : uncollated
+Case   : /home/andrea/OpenFOAM/andrea-5.0/run/CFDProject/mesh-composite
+nProcs : 1
+sigFpe : Enabling floating point exception trapping (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 10)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Master:      "circle-ext"  region region0
+mesh to add: "blade2"  region region0
+
+Create Times
+Reading master mesh for time = 0
+Create mesh
+
+Reading mesh to add for time = 0
+Create mesh
+
+Writing combined mesh to 0
+patch names: 
+12
+(
+back
+front
+AMI-ext-in
+AMI-int0-out
+AMI-int1-out
+AMI-int2-out
+blade0
+AMI-int0-in
+blade1
+AMI-int1-in
+blade2
+AMI-int2-in
+)
+
+patch dicts: 
+12
+(
+
+{
+    type            wall;
+    inGroups        1 ( wall );
+    nFaces          11145;
+    startFace       259962;
+}
+
+
+{
+    type            wall;
+    inGroups        1 ( wall );
+    nFaces          11145;
+    startFace       271107;
+}
+
+
+{
+    type            wall;
+    inGroups        1 ( wall );
+    nFaces          3968;
+    startFace       282252;
+}
+
+
+{
+    type            wall;
+    inGroups        1 ( wall );
+    nFaces          1472;
+    startFace       286220;
+}
+
+
+{
+    type            wall;
+    inGroups        1 ( wall );
+    nFaces          1472;
+    startFace       287692;
+}
+
+
+{
+    type            wall;
+    inGroups        1 ( wall );
+    nFaces          1472;
+    startFace       289164;
+}
+
+
+{
+    type            wall;
+    inGroups        2 ( blades wall );
+    nFaces          3184;
+    startFace       290636;
+}
+
+
+{
+    type            wall;
+    inGroups        1 ( wall );
+    nFaces          1440;
+    startFace       293820;
+}
+
+
+{
+    type            wall;
+    inGroups        2 ( blades wall );
+    nFaces          3648;
+    startFace       295260;
+}
+
+
+{
+    type            wall;
+    inGroups        1 ( wall );
+    nFaces          1440;
+    startFace       298908;
+}
+
+
+{
+    type            wall;
+    inGroups        2 ( blades wall );
+    nFaces          3184;
+    startFace       69430;
+}
+
+
+{
+    type            wall;
+    inGroups        1 ( wall );
+    nFaces          1440;
+    startFace       72614;
+}
+
+)
+
+point zone names: 0()
+face zone names: 0()
+cell zone names: 
+4
+(
+cellZone-circle-ext
+cellZone-blade0
+cellZone-blade1
+cellZone-blade2
+)
+
+Copying old patches
+Adding new patches. 
+Adding new cellZones. 
+End
+

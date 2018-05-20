@@ -61,7 +61,7 @@ geometry
     AMI-int2.stl
     {
         type        triSurfaceMesh;
-        name        AMI-int2;
+        name        AMI-int2-in;
     }
 };
 
@@ -202,7 +202,7 @@ castellatedMeshControls
 /*                //inGroups (amis-group);*/
 /*            }*/
 /*        }*/
-		AMI-int2//"AMI*"
+		AMI-int2-in//"AMI*"
         {
             level       (3 3);  
 
@@ -340,7 +340,7 @@ addLayersControls
 /*		{*/
 /*		        nSurfaceLayers 3;*/
 /*		}*/
-		AMI-int2
+		AMI-int2-in
 		{
 			nSurfaceLayers 2;
 		}

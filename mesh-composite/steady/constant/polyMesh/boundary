@@ -15,68 +15,75 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-13
+16
 (
     back
     {
         type            wall;
         inGroups        1(wall);
-        nFaces          14315;
-        startFace       295212;
+        nFaces          17887;
+        startFace       391012;
     }
     walls
     {
         type            wall;
         inGroups        1(wall);
         nFaces          80;
-        startFace       309527;
+        startFace       408899;
     }
     inlet
     {
         type            patch;
         nFaces          40;
-        startFace       309607;
+        startFace       408979;
     }
     front
     {
         type            wall;
         inGroups        1(wall);
-        nFaces          14315;
-        startFace       309647;
+        nFaces          17887;
+        startFace       409019;
     }
     outlet
     {
         type            patch;
         nFaces          40;
-        startFace       323962;
+        startFace       426906;
     }
-    AMI-ext
+    AMI-ext-out
     {
         type            wall;
         inGroups        1(wall);
-        nFaces          2000;
-        startFace       324002;
+        nFaces          4000;
+        startFace       426946;
     }
-    AMI-int0
+    AMI-ext-in
+    {
+        type            wall;
+        inGroups        1(wall);
+        nFaces          3968;
+        startFace       430946;
+    }
+    AMI-int0-out
     {
         type            wall;
         inGroups        1(wall);
         nFaces          1472;
-        startFace       326002;
+        startFace       434914;
     }
-    AMI-int1
+    AMI-int1-out
     {
         type            wall;
         inGroups        1(wall);
-        nFaces          2912;
-        startFace       327474;
+        nFaces          1472;
+        startFace       436386;
     }
-    AMI-int2
+    AMI-int2-out
     {
         type            wall;
         inGroups        1(wall);
-        nFaces          2912;
-        startFace       330386;
+        nFaces          1472;
+        startFace       437858;
     }
     blade0
     {
@@ -89,14 +96,14 @@ wall
 )
 ;
         nFaces          3184;
-        startFace       333298;
+        startFace       439330;
     }
-    AMI-int0_blade0
+    AMI-int0-in
     {
-        type            patch;
-        inGroups        1(blades);
+        type            wall;
+        inGroups        1(wall);
         nFaces          1440;
-        startFace       336482;
+        startFace       442514;
     }
     blade1
     {
@@ -109,7 +116,14 @@ wall
 )
 ;
         nFaces          3648;
-        startFace       337922;
+        startFace       443954;
+    }
+    AMI-int1-in
+    {
+        type            wall;
+        inGroups        1(wall);
+        nFaces          1440;
+        startFace       447602;
     }
     blade2
     {
@@ -122,7 +136,14 @@ wall
 )
 ;
         nFaces          3184;
-        startFace       341570;
+        startFace       449042;
+    }
+    AMI-int2-in
+    {
+        type            wall;
+        inGroups        1(wall);
+        nFaces          1440;
+        startFace       452226;
     }
 )
 

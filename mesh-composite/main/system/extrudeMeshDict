@@ -35,7 +35,7 @@ exposedPatchName front;
 
 // Flip surface normals before usage. Valid only for extrude from surface or
 // patch.
-flipNormals false;
+flipNormals true; // IMPORTANT
 
 //- Linear extrusion in point-normal direction
 extrudeModel        linearNormal;

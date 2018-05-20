@@ -1,0 +1,136 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  5.x                                   |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+Build  : 5.x-197d9d3bf20a
+Exec   : createPatch -overwrite -case main
+Date   : May 20 2018
+Time   : 20:47:56
+Host   : "andrea-CM6870"
+PID    : 18244
+I/O    : uncollated
+Case   : ./main
+nProcs : 1
+sigFpe : Enabling floating point exception trapping (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 10)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Create polyMesh for time = 0
+
+Reading createPatchDict
+
+Adding new patch AMI-int0-master as patch 16 from 
+{
+    name            AMI-int0-master;
+    type            cyclicAMI;
+    inGroups        ( cyclicAMI );
+    matchTolerance  0.0001;
+    neighbourPatch  AMI-int0-slave;
+    transform       noOrdering;
+}
+
+Adding new patch AMI-int0-slave as patch 17 from 
+{
+    name            AMI-int0-slave;
+    type            cyclicAMI;
+    inGroups        ( cyclicAMI );
+    matchTolerance  0.0001;
+    neighbourPatch  AMI-int0-master;
+    transform       noOrdering;
+}
+
+Adding new patch AMI-int1-master as patch 18 from 
+{
+    name            AMI-int1-master;
+    type            cyclicAMI;
+    inGroups        ( cyclicAMI );
+    matchTolerance  0.0001;
+    neighbourPatch  AMI-int1-slave;
+    transform       noOrdering;
+}
+
+Adding new patch AMI-int1-slave as patch 19 from 
+{
+    name            AMI-int1-slave;
+    type            cyclicAMI;
+    inGroups        ( cyclicAMI );
+    matchTolerance  0.0001;
+    neighbourPatch  AMI-int1-master;
+    transform       noOrdering;
+}
+
+Adding new patch AMI-int2-master as patch 20 from 
+{
+    name            AMI-int2-master;
+    type            cyclicAMI;
+    inGroups        ( cyclicAMI );
+    matchTolerance  0.0001;
+    neighbourPatch  AMI-int2-slave;
+    transform       noOrdering;
+}
+
+Adding new patch AMI-int2-slave as patch 21 from 
+{
+    name            AMI-int2-slave;
+    type            cyclicAMI;
+    inGroups        ( cyclicAMI );
+    matchTolerance  0.0001;
+    neighbourPatch  AMI-int2-master;
+    transform       noOrdering;
+}
+
+Adding new patch AMI-ext-master as patch 22 from 
+{
+    name            AMI-ext-master;
+    type            cyclicAMI;
+    inGroups        ( cyclicAMI );
+    matchTolerance  0.0001;
+    neighbourPatch  AMI-ext-slave;
+    transform       noOrdering;
+}
+
+Adding new patch AMI-ext-slave as patch 23 from 
+{
+    name            AMI-ext-slave;
+    type            cyclicAMI;
+    inGroups        ( cyclicAMI );
+    matchTolerance  0.0001;
+    neighbourPatch  AMI-ext-master;
+    transform       noOrdering;
+}
+
+
+Moving faces from patch AMI-int0-in to patch 16
+Moving faces from patch AMI-int0-out to patch 17
+Moving faces from patch AMI-int1-in to patch 18
+Moving faces from patch AMI-int1-out to patch 19
+Moving faces from patch AMI-int2-in to patch 20
+Moving faces from patch AMI-int2-out to patch 21
+Moving faces from patch AMI-ext-in to patch 22
+Moving faces from patch AMI-ext-out to patch 23
+
+Doing topology modification to order faces.
+
+Not synchronising points.
+
+Removing patches with no faces in them.
+
+Removing zero-sized patch AMI-ext-out type wall at position 5
+Removing zero-sized patch AMI-ext-in type wall at position 6
+Removing zero-sized patch AMI-int0-out type wall at position 7
+Removing zero-sized patch AMI-int1-out type wall at position 8
+Removing zero-sized patch AMI-int2-out type wall at position 9
+Removing zero-sized patch AMI-int0-in type wall at position 11
+Removing zero-sized patch AMI-int1-in type wall at position 13
+Removing zero-sized patch AMI-int2-in type wall at position 15
+Removing patches.
+Writing repatched mesh to 0
+
+End
+

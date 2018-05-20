@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 cd ${0%/*} || exit 1    # run from this directory
 
 # Source tutorial run functions
@@ -13,6 +13,14 @@ cd ${0%/*} || exit 1    # run from this directory
 #    deg0=$1
 #fi
 
+start_time="$(date -u +%s.%N)"
+
+# use when modify blade0/Myrun
+#cp blade0/Myrun blade1/Myrun
+#cp blade0/Myrun blade2/Myrun
+#cp blade0/Myrun circle-ext/Myrun
+#cp blade0/Myrun steady/Myrun
+
 steady/Allclean
 circle-ext/Allclean
 blade0/Allclean
@@ -20,29 +28,62 @@ blade1/Allclean
 blade2/Allclean
 main/Allclean
 
-blade0/Myrun
-blade1/Myrun
-blade2/Myrun
-circle-ext/Myrun
+bash Myscale
 
-blockMesh -case steady
+mkdir steady/log
+mkdir circle-ext/log
+mkdir blade0/log
+mkdir blade1/log
+mkdir blade2/log
+mkdir main/log
+
+# Parallel computation
+blade0/Myrun &
+blade1/Myrun &
+blade2/Myrun &
+circle-ext/Myrun &
+steady/Myrun &
+wait # required for syncronization
+
+#blockMesh -case steady
 #blockMesh -case circle-ext
 #blockMesh -case blade0
 #blockMesh -case blade1
 #blockMesh -case blade2
 
-snappyHexMesh -overwrite -case steady
+#snappyHexMesh -overwrite -case steady
 #snappyHexMesh -overwrite -case circle-ext
 #snappyHexMesh -overwrite -case blade0
 #snappyHexMesh -overwrite -case blade1
 #snappyHexMesh -overwrite -case blade2
 
-mergeMeshes -overwrite circle-ext/ blade0/
-mergeMeshes -overwrite circle-ext/ blade1/
-mergeMeshes -overwrite circle-ext/ blade2/
-mergeMeshes -overwrite steady/ circle-ext/
+echo "Merging..."
+mergeMeshes -overwrite circle-ext/ blade0/ > main/log/log.mergeMeshes-blade0 
+mergeMeshes -overwrite circle-ext/ blade1/ > main/log/log.mergeMeshes-blade1 
+mergeMeshes -overwrite circle-ext/ blade2/ > main/log/log.mergeMeshes-blade2 
+mergeMeshes -overwrite steady/ circle-ext/ > main/log/log.mergeMeshes-alltogether
 
+echo "Copying mesh in main folder..."
 cp -r steady/constant/polyMesh main/constant/.
+
+echo "Creating patches..."
+createPatch -overwrite -case main > main/log/log.createPatch
+
+echo "Extruding the mesh..."
+cd main
+# extrudeMesh -case main # doesn't work ????
+extrudeMesh > log/log.extrudeMesh
+cd ..
+
+end_time="$(date -u +%s.%N)"
+elapsed="$(bc <<<"$end_time-$start_time")"
+echo "<--> DONE --> Total duration = $elapsed seconds"
+
+#checkMesh -case main/
+
+#paraFoam -case main
+
+
 #snappyHexMesh -overwrite -case main
 
 #snappyHexMesh -overwrite
