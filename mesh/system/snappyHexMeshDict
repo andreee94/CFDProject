@@ -193,8 +193,8 @@ castellatedMeshControls
             level       (3 3);  
 
             cellZone    steady;
-            faceZone    facezone-ext;
             cellZoneInside  outside;
+            faceZone    facezone-ext;
             //gapLevelIncrement 1;
             //patchInfo
             //{

@@ -1,0 +1,32 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  5.x                                   |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+Build  : 5.x-197d9d3bf20a
+Exec   : mergeOrSplitBaffles -split -overwrite
+Date   : May 20 2018
+Time   : 11:17:44
+Host   : "andrea-CM6870"
+PID    : 18585
+I/O    : uncollated
+Case   : /home/andrea/OpenFOAM/andrea-5.0/run/CFDProject/mesh
+nProcs : 1
+sigFpe : Enabling floating point exception trapping (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 10)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Create mesh for time = 0
+
+Topologically splitting duplicate surfaces, i.e. duplicating points internal to duplicate surfaces.
+
+Writing mesh to time 0
+Writing 26496 duplicated points to pointSet "/home/andrea/OpenFOAM/andrea-5.0/run/CFDProject/mesh/constant/polyMesh/sets/duplicatedPoints"
+
+End
+
