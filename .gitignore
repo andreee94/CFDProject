@@ -1,0 +1,15 @@
+#logs
+blade0/log
+blade1/log
+blade2/log
+steady/log
+main/log
+circle-ext/log
+#meshes
+blade0/constant/polyMesh
+blade1/constant/polyMesh
+blade2/constant/polyMesh
+steady/constant/polyMesh
+main/constant/polyMesh
+circle-ext/constant/polyMesh
+# maybe add also files that contains old in the name
