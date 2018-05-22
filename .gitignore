@@ -29,3 +29,4 @@ mesh-composite/circle-ext/constant/triSurface/*.stl
 mesh/constant/triSurface/*.stl
 ## CAD FILES
 CAD-scaled
+*.pdf
