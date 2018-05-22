@@ -13,49 +13,54 @@ cd ${0%/*} || exit 1    # run from this directory
 #    deg0=$1
 #fi
 
-if [ ! -f constant/triSurface/blade0.bkp.stl ]; then
-    echo "Backup of file blade0"
-    cp constant/triSurface/blade0.stl constant/triSurface/blade0.bkp.stl
-fi
+# if [ ! -f constant/triSurface/blade0.bkp.stl ]; then
+#     echo "Backup of file blade0"
+#     cp constant/triSurface/blade0.stl constant/triSurface/blade0.bkp.stl
+# fi
+# 
+# if [ ! -f constant/triSurface/blade1.bkp.stl ]; then
+#     echo "Backup of file blade1"
+#     cp constant/triSurface/blade1.stl constant/triSurface/blade1.bkp.stl
+# fi
+# 
+# if [ ! -f constant/triSurface/blade2.bkp.stl ]; then
+#     echo "Backup of file blade2"
+#     cp constant/triSurface/blade2.stl constant/triSurface/blade2.bkp.stl
+# fi
+# 
+# if [ ! -f constant/triSurface/AMI-ext.bkp.stl ]; then
+#     echo "Backup of file AMI-ext"
+#     cp constant/triSurface/AMI-ext.stl constant/triSurface/AMI-ext.bkp.stl
+# fi
+# 
+# if [ ! -f constant/triSurface/AMI-int0.bkp.stl ]; then
+#     echo "Backup of file AMI-int0"
+#     cp constant/triSurface/AMI-int0.stl constant/triSurface/AMI-int0.bkp.stl
+# fi
+# 
+# if [ ! -f constant/triSurface/AMI-int1.bkp.stl ]; then
+#     echo "Backup of file AMI-int1"
+#     cp constant/triSurface/AMI-int1.stl constant/triSurface/AMI-int1.bkp.stl
+# fi
+# 
+# if [ ! -f constant/triSurface/AMI-int2.bkp.stl ]; then
+#     echo "Backup of file AMI-int2"
+#     cp constant/triSurface/AMI-int2.stl constant/triSurface/AMI-int2.bkp.stl
+# fi
+# 
+# # fix m to mm of stl files
+# surfaceTransformPoints -scale '(0.001 0.001 0.001)' constant/triSurface/blade0.bkp.stl  constant/triSurface/blade0.stl
+# surfaceTransformPoints -scale '(0.001 0.001 0.001)' constant/triSurface/blade1.bkp.stl  constant/triSurface/blade1.stl
+# surfaceTransformPoints -scale '(0.001 0.001 0.001)' constant/triSurface/blade2.bkp.stl  constant/triSurface/blade2.stl
+# surfaceTransformPoints -scale '(0.001 0.001 0.001)' constant/triSurface/AMI-ext.bkp.stl  constant/triSurface/AMI-ext.stl
+# surfaceTransformPoints -scale '(0.001 0.001 0.001)' constant/triSurface/AMI-int0.bkp.stl  constant/triSurface/AMI-int0.stl
+# surfaceTransformPoints -scale '(0.001 0.001 0.001)' constant/triSurface/AMI-int1.bkp.stl  constant/triSurface/AMI-int1.stl
+# surfaceTransformPoints -scale '(0.001 0.001 0.001)' constant/triSurface/AMI-int2.bkp.stl  constant/triSurface/AMI-int2.stl
 
-if [ ! -f constant/triSurface/blade1.bkp.stl ]; then
-    echo "Backup of file blade1"
-    cp constant/triSurface/blade1.stl constant/triSurface/blade1.bkp.stl
-fi
 
-if [ ! -f constant/triSurface/blade2.bkp.stl ]; then
-    echo "Backup of file blade2"
-    cp constant/triSurface/blade2.stl constant/triSurface/blade2.bkp.stl
-fi
+bash Myscale
 
-if [ ! -f constant/triSurface/AMI-ext.bkp.stl ]; then
-    echo "Backup of file AMI-ext"
-    cp constant/triSurface/AMI-ext.stl constant/triSurface/AMI-ext.bkp.stl
-fi
-
-if [ ! -f constant/triSurface/AMI-int0.bkp.stl ]; then
-    echo "Backup of file AMI-int0"
-    cp constant/triSurface/AMI-int0.stl constant/triSurface/AMI-int0.bkp.stl
-fi
-
-if [ ! -f constant/triSurface/AMI-int1.bkp.stl ]; then
-    echo "Backup of file AMI-int1"
-    cp constant/triSurface/AMI-int1.stl constant/triSurface/AMI-int1.bkp.stl
-fi
-
-if [ ! -f constant/triSurface/AMI-int2.bkp.stl ]; then
-    echo "Backup of file AMI-int2"
-    cp constant/triSurface/AMI-int2.stl constant/triSurface/AMI-int2.bkp.stl
-fi
-
-# fix m to mm of stl files
-surfaceTransformPoints -scale '(0.001 0.001 0.001)' constant/triSurface/blade0.bkp.stl  constant/triSurface/blade0.stl
-surfaceTransformPoints -scale '(0.001 0.001 0.001)' constant/triSurface/blade1.bkp.stl  constant/triSurface/blade1.stl
-surfaceTransformPoints -scale '(0.001 0.001 0.001)' constant/triSurface/blade2.bkp.stl  constant/triSurface/blade2.stl
-surfaceTransformPoints -scale '(0.001 0.001 0.001)' constant/triSurface/AMI-ext.bkp.stl  constant/triSurface/AMI-ext.stl
-surfaceTransformPoints -scale '(0.001 0.001 0.001)' constant/triSurface/AMI-int0.bkp.stl  constant/triSurface/AMI-int0.stl
-surfaceTransformPoints -scale '(0.001 0.001 0.001)' constant/triSurface/AMI-int1.bkp.stl  constant/triSurface/AMI-int1.stl
-surfaceTransformPoints -scale '(0.001 0.001 0.001)' constant/triSurface/AMI-int2.bkp.stl  constant/triSurface/AMI-int2.stl
+mkdir log
 
 blockMesh | tee log/log.blockMesh #| tee | grep "FOAM FATAL ERROR" > log.blockMesh
 

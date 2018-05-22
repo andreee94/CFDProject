@@ -1,15 +1,29 @@
+## MESH-COMPOSITE
 #logs
-blade0/log
-blade1/log
-blade2/log
-steady/log
-main/log
-circle-ext/log
+mesh-composite/blade0/log
+mesh-composite/blade1/log
+mesh-composite/blade2/log
+mesh-composite/steady/log
+mesh-composite/main/log
+mesh-composite/circle-ext/log
 #meshes
-blade0/constant/polyMesh
-blade1/constant/polyMesh
-blade2/constant/polyMesh
-steady/constant/polyMesh
-main/constant/polyMesh
-circle-ext/constant/polyMesh
+mesh-composite/blade0/constant/polyMesh
+mesh-composite/blade1/constant/polyMesh
+mesh-composite/blade2/constant/polyMesh
+mesh-composite/steady/constant/polyMesh
+mesh-composite/main/constant/polyMesh
+mesh-composite/circle-ext/constant/polyMesh
+#stl files
+mesh-composite/blade0/constant/triSurface/*
+mesh-composite/blade1/constant/triSurface/*
+mesh-composite/blade2/constant/triSurface/*
+mesh-composite/steady/constant/triSurface/*
+mesh-composite/main/constant/triSurface/*
+mesh-composite/circle-ext/constant/triSurface/*
 # maybe add also files that contains old in the name
+## MESH
+mesh/constant/polyMesh
+mesh/log
+mesh/constant/triSurface/*
+## CAD FILES
+CAD-scaled
