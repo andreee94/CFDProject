@@ -15,7 +15,11 @@ cd ${0%/*} || exit 1    # run from this directory
 
 #name="blade0"
 # get the name of the current directory
+
 name=${PWD##*/}  
+
+mkdir log > /dev/null 2>&1
+mkdir constant/triSurface > /dev/null 2>&1
 
 #echo "--------------------------------"
 echo "Running blockMesh for $name..."

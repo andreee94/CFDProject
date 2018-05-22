@@ -28,14 +28,21 @@ blade1/Allclean
 blade2/Allclean
 main/Allclean
 
-bash Myscale
+mkdir steady/log > /dev/null 2>&1
+mkdir circle-ext/log > /dev/null 2>&1
+mkdir blade0/log > /dev/null 2>&1
+mkdir blade1/log > /dev/null 2>&1
+mkdir blade2/log > /dev/null 2>&1
+mkdir main/log > /dev/null 2>&1
 
-mkdir steady/log
-mkdir circle-ext/log
-mkdir blade0/log
-mkdir blade1/log
-mkdir blade2/log
-mkdir main/log
+mkdir steady/constant/triSurface > /dev/null 2>&1
+mkdir circle-ext/constant/triSurface > /dev/null 2>&1
+mkdir blade0/constant/triSurface > /dev/null 2>&1
+mkdir blade1/constant/triSurface > /dev/null 2>&1
+mkdir blade2/constant/triSurface > /dev/null 2>&1
+mkdir main/constant/triSurface > /dev/null 2>&1
+
+bash Myscale
 
 # Parallel computation
 blade0/Myrun &
@@ -45,17 +52,17 @@ circle-ext/Myrun &
 steady/Myrun &
 wait # required for syncronization
 
-#blockMesh -case steady
-#blockMesh -case circle-ext
-#blockMesh -case blade0
-#blockMesh -case blade1
-#blockMesh -case blade2
+# blockMesh -case steady
+# blockMesh -case circle-ext
+# blockMesh -case blade0
+# blockMesh -case blade1
+# blockMesh -case blade2
 
-#snappyHexMesh -overwrite -case steady
-#snappyHexMesh -overwrite -case circle-ext
-#snappyHexMesh -overwrite -case blade0
-#snappyHexMesh -overwrite -case blade1
-#snappyHexMesh -overwrite -case blade2
+# snappyHexMesh -overwrite -case steady
+# snappyHexMesh -overwrite -case circle-ext
+# snappyHexMesh -overwrite -case blade0
+# snappyHexMesh -overwrite -case blade1
+# snappyHexMesh -overwrite -case blade2
 
 echo "Merging..."
 mergeMeshes -overwrite circle-ext/ blade0/ > main/log/log.mergeMeshes-blade0 

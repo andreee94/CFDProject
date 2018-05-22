@@ -57,10 +57,10 @@ cd ${0%/*} || exit 1    # run from this directory
 # surfaceTransformPoints -scale '(0.001 0.001 0.001)' constant/triSurface/AMI-int1.bkp.stl  constant/triSurface/AMI-int1.stl
 # surfaceTransformPoints -scale '(0.001 0.001 0.001)' constant/triSurface/AMI-int2.bkp.stl  constant/triSurface/AMI-int2.stl
 
+mkdir log
+mkdir constant/triSurface
 
 bash Myscale
-
-mkdir log
 
 blockMesh | tee log/log.blockMesh #| tee | grep "FOAM FATAL ERROR" > log.blockMesh
 

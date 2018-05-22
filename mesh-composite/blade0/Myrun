@@ -18,6 +18,9 @@ cd ${0%/*} || exit 1    # run from this directory
 
 name=${PWD##*/}  
 
+mkdir log > /dev/null 2>&1
+mkdir constant/triSurface > /dev/null 2>&1
+
 #echo "--------------------------------"
 echo "Running blockMesh for $name..."
 start_time="$(date -u +%s.%N)"
