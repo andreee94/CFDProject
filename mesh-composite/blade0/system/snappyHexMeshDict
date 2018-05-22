@@ -33,36 +33,11 @@ geometry
         type        triSurfaceMesh;
         name        blade0;
     }
-/*    blade1.stl*/
-/*    {*/
-/*        type        triSurfaceMesh;*/
-/*        name        blade1;*/
-/*    }*/
-/*    blade2.stl*/
-/*    {*/
-/*        type        triSurfaceMesh;*/
-/*        name        blade2;*/
-/*    }*/
-/*    AMI-ext.stl*/
-/*    {*/
-/*        type        triSurfaceMesh;*/
-/*        name        AMI-ext;*/
-/*    }*/
     AMI-int0.stl
     {
         type        triSurfaceMesh;
         name        AMI-int0-in;
     }
-/*    AMI-int1.stl*/
-/*    {*/
-/*        type        triSurfaceMesh;*/
-/*        name        AMI-int1;*/
-/*    }*/
-/*    AMI-int2.stl*/
-/*    {*/
-/*        type        triSurfaceMesh;*/
-/*        name        AMI-int2;*/
-/*    }*/
 };
 
 
@@ -140,24 +115,6 @@ castellatedMeshControls
 
     refinementSurfaces
     {
-        //rotating
-        //{
-        //    level       (2 2);
-        //
-        //    //faceType    boundary;
-        //
-        //    cellZone    rotating;
-        //    faceZone    rotating;
-        //    cellZoneInside  inside;
-        //}
-        //fan
-        //{
-        //    level       (4 4);
-        //}
-        //pipe
-        //{
-        //    level       (2 2);
-        //}
         blade0
         {
             level       (4 4);
@@ -168,40 +125,6 @@ castellatedMeshControls
                 inGroups (blades);
             }
         }
-/*        blade1*/
-/*        {*/
-/*            level       (4 4); */
-/*            //gapLevelIncrement 1;*/
-/*            patchInfo*/
-/*            {*/
-/*                type wall;*/
-/*                inGroups (blades);*/
-/*            }*/
-/*        }*/
-/*        blade2*/
-/*        {*/
-/*            level       (4 4);  */
-/*            //gapLevelIncrement 1;*/
-/*            patchInfo*/
-/*            {*/
-/*                type wall;*/
-/*                inGroups (blades);*/
-/*            }*/
-/*        }*/
-/*		AMI-ext//"AMI*"*/
-/*        {*/
-/*            level       (2 3);  */
-
-/*            //cellZone    steady;*/
-/*            //faceZone    facezone-ext;*/
-/*            //cellZoneInside  outside;*/
-/*            //gapLevelIncrement 1;*/
-/*            patchInfo*/
-/*            {*/
-/*                type wall;*/
-/*                //inGroups (amis-group);*/
-/*            }*/
-/*        }*/
 		AMI-int0-in//"AMI*"
         {
             level       (3 3);  
@@ -215,22 +138,6 @@ castellatedMeshControls
             //faceZone    facezone-int0;
             //cellZoneInside  none;
         }
-/*		AMI-int1//"AMI*"*/
-/*        {*/
-/*            level       (2 3);  */
-
-/*            cellZone    cellzone-int1;*/
-/*            faceZone    facezone-int1;*/
-/*            cellZoneInside  none;*/
-/*        }*/
-/*		AMI-int2//"AMI*"*/
-/*        {*/
-/*            level       (2 3);  */
-
-/*            cellZone    cellzone-int2;*/
-/*            faceZone    facezone-int2;*/
-/*            cellZoneInside  inside;*/
-/*        }		*/
     }
 
     // Resolve sharp angles
@@ -252,11 +159,16 @@ castellatedMeshControls
 
     refinementRegions
     {
-        //innerCylinder
-        //{
-        //    mode        inside;
-        //    levels      ((1E15 3));
-        //}
+/*        blades*/
+/*        {*/
+/*            mode        distance;*/
+/*            levels      ((0.003 4));*/
+/*        }*/
+        blade0
+        {
+            mode        distance;
+            levels      ((0.002 4));
+        }
         //innerCylinderSmall
         //{
         //    mode        inside;
@@ -335,36 +247,25 @@ addLayersControls
     {
         blades
         {
+    		//relativeSizes false;
             nSurfaceLayers 1;
+			finalLayerThickness 1.2;//0.0008;
+    		//finalLayerThickness 0.0002; // 0.3;
+    		//minThickness 0.001
+   			//maxThicknessToMedialRatio 1;//0.3;
+    		//maxFaceThicknessRatio 0.1; //0.5;
+			finalLayerThickness 1.2;//0.0008;
+    		//maxThicknessToMedialRatio 1;//0.3;
+			//minThickness 0.01;
         }
-/*		AMI-ext*/
-/*		{*/
-/*		        nSurfaceLayers 3;*/
-/*		}*/
-/*		rot-ext*/
-/*		{*/
-/*		        nSurfaceLayers 3;*/
-/*		}*/
 		AMI-int0-in
 		{
+			// GOOD PARAMETERS	
+		    //relativeSizes true;
 			nSurfaceLayers 2;
+    		finalLayerThickness 1; //0.001//;1; // 0.3;
+    		//maxThicknessToMedialRatio 1;//0.3;
 		}
-/*		cellzone-int0*/
-/*		{*/
-/*		        nSurfaceLayers 3;*/
-/*		}*/
-/*		AMI-ext_slave*/
-/*		{*/
-/*			nSurfaceLayers 2;*/
-/*		}*/
-/*		AMI-ext-master*/
-/*		{*/
-/*			nSurfaceLayers 2;*/
-/*		}*/
-/*		AMI-ext*/
-/*		{*/
-/*			nSurfaceLayers 2;*/
-/*		}*/
     }
 
     // Expansion factor for layer mesh
@@ -374,12 +275,12 @@ addLayersControls
     // is the thickness of the layer furthest away from the wall.
     // Relative to undistorted size of cell outside layer.
     // See relativeSizes parameter.
-    finalLayerThickness 0.5; // 0.3;
+    finalLayerThickness 0.8; // 0.3;
 
     // Minimum thickness of cell layer. If for any reason layer
     // cannot be above minThickness do not add layer.
     // Relative to undistorted size of cell outside layer.
-    minThickness 0.1; // 0.1;
+    minThickness 0.1;//0.0001; // 0.1;
 
     // If points get not extruded do nGrow layers of connected faces that are
     // also not grown. This helps convergence of the layer addition process
@@ -411,7 +312,7 @@ addLayersControls
 
     // Reduce layer growth where ratio thickness to medial
     // distance is large
-    maxThicknessToMedialRatio 0.3;
+    maxThicknessToMedialRatio 0.1;//0.3;
 
     // Angle used to pick up medial axis points
     // Note: changed(corrected) w.r.t 17x! 90 degrees corresponds to 130 in 17x.

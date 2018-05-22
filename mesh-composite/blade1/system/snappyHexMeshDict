@@ -247,6 +247,11 @@ castellatedMeshControls
 
     refinementRegions
     {
+        blade1
+        {
+            mode        distance;
+            levels      ((0.002 4));
+        }
         //innerCylinder
         //{
         //    mode        inside;
@@ -331,6 +336,7 @@ addLayersControls
         blades
         {
             nSurfaceLayers 1;
+			finalLayerThickness 1.2;//0.0008;
         }
 /*		AMI-ext*/
 /*		{*/
@@ -343,6 +349,7 @@ addLayersControls
 		AMI-int1-in
 		{
 			nSurfaceLayers 2;
+    		finalLayerThickness 1; //0.001//;1; // 0.3;
 		}
 /*		cellzone-int0*/
 /*		{*/
@@ -406,7 +413,7 @@ addLayersControls
 
     // Reduce layer growth where ratio thickness to medial
     // distance is large
-    maxThicknessToMedialRatio 0.3;
+    maxThicknessToMedialRatio 0.1;//0.3;
 
     // Angle used to pick up medial axis points
     // Note: changed(corrected) w.r.t 17x! 90 degrees corresponds to 130 in 17x.

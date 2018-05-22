@@ -75,6 +75,17 @@ cd main
 extrudeMesh > log/log.extrudeMesh
 cd ..
 
+echo "Refining the wall layers..."
+refineWallLayer "(blades)" 0.5 -overwrite -case main > main/log/log.refineWallLayer1
+refineWallLayer "(blades)" 0.5 -overwrite -case main > main/log/log.refineWallLayer2
+refineWallLayer "(blades)" 0.5 -overwrite -case main > main/log/log.refineWallLayer3
+refineWallLayer "(blades)" 0.5 -overwrite -case main > main/log/log.refineWallLayer4
+
+echo "Renumbering the mesh..."
+renumberMesh -overwrite -case main/ > main/log/log.renumberMesh
+
+
+
 end_time="$(date -u +%s.%N)"
 elapsed="$(bc <<<"$end_time-$start_time")"
 echo "<--> DONE --> Total duration = $elapsed seconds"
