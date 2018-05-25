@@ -1,0 +1,11 @@
+
+level       (3 3);  
+
+//patchInfo
+//{
+//    type patch;
+//    inGroups (blades);
+//}
+//cellZone    cellzone-int0;
+//faceZone    facezone-int0;
+//cellZoneInside  none;

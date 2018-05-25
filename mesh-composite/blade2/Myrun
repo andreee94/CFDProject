@@ -28,9 +28,15 @@ blockMesh > log/log.blockMesh
 
 echo "Running snappyHexMesh for $name..."
 snappyHexMesh -overwrite > log/log.snappyHexMesh
+
+if [ -f system/snappyHexMeshDict-blade ]; then
+    echo "Running snappyHexMesh for $name, layering the blade..."
+    snappyHexMesh -overwrite -dict system/snappyHexMeshDict-blade > log/log.snappyHexMesh-blade
+fi
+
 end_time="$(date -u +%s.%N)"
 elapsed="$(bc <<<"$end_time-$start_time")"
-echo "$name Duration = $elapsed seconds"
+echo "    $name Duration = $elapsed seconds"
 
 # setSet commands
 

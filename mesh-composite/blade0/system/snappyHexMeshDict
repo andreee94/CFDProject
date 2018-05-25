@@ -45,64 +45,7 @@ geometry
 // Settings for the castellatedMesh generation.
 castellatedMeshControls
 {
-
-    // Refinement parameters
-    // ~~~~~~~~~~~~~~~~~~~~~
-
-    // If local number of cells is >= maxLocalCells on any processor
-    // switches from from refinement followed by balancing
-    // (current method) to (weighted) balancing before refinement.
-    maxLocalCells 200000;
-
-    // Overall cell limit (approximately). Refinement will stop immediately
-    // upon reaching this number so a refinement level might not complete.
-    // Note that this is the number of cells before removing the part which
-    // is not 'visible' from the keepPoint. The final number of cells might
-    // actually be a lot less.
-    maxGlobalCells 2000000;
-
-    // The surface refinement loop might spend lots of iterations refining just a
-    // few cells. This setting will cause refinement to stop if <= minimumRefine
-    // are selected for refinement. Note: it will at least do one iteration
-    // (unless the number of cells to refine is 0)
-    minRefinementCells 0;
-
-    // Allow a certain level of imbalance during refining
-    // (since balancing is quite expensive)
-    // Expressed as fraction of perfect balance (= overall number of cells /
-    // nProcs). 0=balance always.
-    maxLoadUnbalance 0.10;
-
-
-    // Number of buffer layers between different levels.
-    // 1 means normal 2:1 refinement restriction, larger means slower
-    // refinement.
-    nCellsBetweenLevels 2; // 2;
-
-
-
-    // Explicit feature edge refinement
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-    // Specifies a level for any cell intersected by its edges.
-    // This is a featureEdgeMesh, read from constant/triSurface for now.
-    features
-    (
-        //{
-        //    file        "rotating.eMesh";
-        //    level       2;
-        //}
-        //{
-        //    file        "pipe.eMesh";
-        //    level       2;
-        //}
-        //{
-        //    file        "fan.eMesh";
-        //    level       4;
-        //}
-    );
-
-
+	#include "../include/castelleted-prop"
 
     // Surface based refinement
     // ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -117,31 +60,16 @@ castellatedMeshControls
     {
         blade0
         {
-            level       (4 4);
-            //gapLevelIncrement 1;
-            patchInfo
-            {
-                type wall;
-                inGroups (blades);
-            }
+			#include "../include/refinement-blade"
         }
 		AMI-int0-in//"AMI*"
         {
-            level       (3 3);  
-			
-			//patchInfo
-            //{
-            //    type patch;
-            //    inGroups (blades);
-            //}
-            //cellZone    cellzone-int0;
-            //faceZone    facezone-int0;
-            //cellZoneInside  none;
+			#include "../include/refinement-ami-int"
         }
     }
 
     // Resolve sharp angles
-    resolveFeatureAngle 30;
+    //resolveFeatureAngle 30;
 
 
     // Region-wise refinement
@@ -159,15 +87,9 @@ castellatedMeshControls
 
     refinementRegions
     {
-/*        blades*/
-/*        {*/
-/*            mode        distance;*/
-/*            levels      ((0.003 4));*/
-/*        }*/
         blade0
         {
-            mode        distance;
-            levels      ((0.002 4));
+			#include "../include/refinement-region-blade"
         }
         //innerCylinderSmall
         //{
@@ -186,12 +108,6 @@ castellatedMeshControls
     // NOTE: This point should never be on a face, always inside a cell, even
     // after refinement.
     locationInMesh (0.060 -0.040 0.11);
-
-
-    // Whether any faceZones (as specified in the refinementSurfaces)
-    // are only on the boundary of corresponding cellZones or also allow
-    // free-standing zone faces. Not used if there are no faceZones.
-    allowFreeStandingZoneFaces false;
 }
 
 
@@ -199,38 +115,7 @@ castellatedMeshControls
 // Settings for the snapping.
 snapControls
 {
-    //- Number of patch smoothing iterations before finding correspondence
-    //  to surface
-    nSmoothPatch 3;
-
-    //- Relative distance for points to be attracted by surface feature point
-    //  or edge. True distance is this factor times local
-    //  maximum edge length.
-    tolerance 1.0;
-
-    //- Number of mesh displacement relaxation iterations.
-    nSolveIter 100;
-
-    //- Maximum number of snapping relaxation iterations. Should stop
-    //  before upon reaching a correct mesh.
-    nRelaxIter 5;
-
-    // Feature snapping
-
-        // Number of feature edge snapping iterations.
-        // Leave out altogether to disable.
-        nFeatureSnapIter 10;
-
-        // Detect (geometric only) features by sampling the surface
-        // (default=false).
-        implicitFeatureSnap true;
-
-        // Use castellatedMeshControls::features (default = true)
-        explicitFeatureSnap false;
-
-        // Detect features between multiple surfaces
-        // (only for explicitFeatureSnap, default = false)
-        multiRegionFeatureSnap true;
+	#include "../include/snap-prop"
 }
 
 
@@ -238,95 +123,16 @@ snapControls
 // Settings for the layer addition.
 addLayersControls
 {
-    // Are the thickness parameters below relative to the undistorted
-    // size of the refined cell outside layer (true) or absolute sizes (false).
-    relativeSizes true;
 
     // Per final patch (so not geometry!) the layer information
     layers
     {
-        blades
-        {
-    		//relativeSizes false;
-            nSurfaceLayers 1;
-			finalLayerThickness 1.2;//0.0008;
-    		//finalLayerThickness 0.0002; // 0.3;
-    		//minThickness 0.001
-   			//maxThicknessToMedialRatio 1;//0.3;
-    		//maxFaceThicknessRatio 0.1; //0.5;
-			finalLayerThickness 1.2;//0.0008;
-    		//maxThicknessToMedialRatio 1;//0.3;
-			//minThickness 0.01;
-        }
 		AMI-int0-in
 		{
-			// GOOD PARAMETERS	
-		    //relativeSizes true;
 			nSurfaceLayers 2;
-    		finalLayerThickness 1; //0.001//;1; // 0.3;
-    		//maxThicknessToMedialRatio 1;//0.3;
 		}
     }
-
-    // Expansion factor for layer mesh
-    expansionRatio 1.0; //1.0;
-
-    // Wanted thickness of final added cell layer. If multiple layers
-    // is the thickness of the layer furthest away from the wall.
-    // Relative to undistorted size of cell outside layer.
-    // See relativeSizes parameter.
-    finalLayerThickness 0.8; // 0.3;
-
-    // Minimum thickness of cell layer. If for any reason layer
-    // cannot be above minThickness do not add layer.
-    // Relative to undistorted size of cell outside layer.
-    minThickness 0.1;//0.0001; // 0.1;
-
-    // If points get not extruded do nGrow layers of connected faces that are
-    // also not grown. This helps convergence of the layer addition process
-    // close to features.
-    // Note: changed(corrected) w.r.t 17x! (didn't do anything in 17x)
-    nGrow 0;
-
-    // Advanced settings
-
-    // When not to extrude surface. 0 is flat surface, 90 is when two faces
-    // are perpendicular
-    featureAngle 150; //30;
-
-    // Maximum number of snapping relaxation iterations. Should stop
-    // before upon reaching a correct mesh.
-    nRelaxIter 3;
-
-    // Number of smoothing iterations of surface normals
-    nSmoothSurfaceNormals 1;// 1;
-
-    // Number of smoothing iterations of interior mesh movement direction
-    nSmoothNormals 3;
-
-    // Smooth layer thickness over surface patches
-    nSmoothThickness 10;
-
-    // Stop layer growth on highly warped cells
-    maxFaceThicknessRatio 0.5; //0.5;
-
-    // Reduce layer growth where ratio thickness to medial
-    // distance is large
-    maxThicknessToMedialRatio 0.1;//0.3;
-
-    // Angle used to pick up medial axis points
-    // Note: changed(corrected) w.r.t 17x! 90 degrees corresponds to 130 in 17x.
-    minMedianAxisAngle 90; //90;
-
-
-    // Create buffer region for new layer terminations
-    nBufferCellsNoExtrude 0; //0;
-
-
-    // Overall max number of layer addition iterations. The mesher will exit
-    // if it reaches this number of iterations; possibly with an illegal
-    // mesh.
-    nLayerIter 50; // 50;
+	#include "../include/layers-prop"
 }
 
 
@@ -335,70 +141,8 @@ addLayersControls
 // where to undo.
 meshQualityControls
 {
-    //- Maximum non-orthogonality allowed. Set to 180 to disable.
-    maxNonOrtho 65;
-
-    //- Max skewness allowed. Set to <0 to disable.
-    maxBoundarySkewness 20;
-    maxInternalSkewness 4; // 4
-
-    //- Max concaveness allowed. Is angle (in degrees) below which concavity
-    //  is allowed. 0 is straight face, <0 would be convex face.
-    //  Set to 180 to disable.
-    maxConcave 80;
-
-    //- Minimum pyramid volume. Is absolute volume of cell pyramid.
-    //  Set to a sensible fraction of the smallest cell volume expected.
-    //  Set to very negative number (e.g. -1E30) to disable.
-    minVol 1e-13;
-
-    //- Minimum quality of the tet formed by the face-centre
-    //  and variable base point minimum decomposition triangles and
-    //  the cell centre. This has to be a positive number for tracking
-    //  to work. Set to very negative number (e.g. -1E30) to
-    //  disable.
-    //     <0 = inside out tet,
-    //      0 = flat tet
-    //      1 = regular tet
-    minTetQuality -1; // 1e-30;
-
-    //- Minimum face area. Set to <0 to disable.
-    minArea -1;
-
-    //- Minimum face twist. Set to <-1 to disable. dot product of face normal
-    //- and face centre triangles normal
-    minTwist 0.01;
-
-    //- minimum normalised cell determinant
-    //- 1 = hex, <= 0 = folded or flattened illegal cell
-    minDeterminant 0.001;
-
-    //- minFaceWeight (0 -> 0.5)
-    minFaceWeight 0.05;
-
-    //- minVolRatio (0 -> 1)
-    minVolRatio 0.01;
-
-    //must be >0 for Fluent compatibility
-    minTriangleTwist -1;
-
-
-    // Advanced
-
-    //- Number of error distribution iterations
-    nSmoothScale 4;
-    //- amount to scale back displacement at error points
-    errorReduction 0.75;
-
-    // Optional : some meshing phases allow usage of relaxed rules.
-    // See e.g. addLayersControls::nRelaxedIter.
-    relaxed
-    {
-        //- Maximum non-orthogonality allowed. Set to 180 to disable.
-        maxNonOrtho 75;
-    }
+	#include "../include/mesh-quality-prop"
 }
-
 
 
 // Merge tolerance. Is fraction of overall bounding box of initial mesh.

@@ -1,8 +1,25 @@
 #!/bin/bash
+#!/bin/bash
 cd ${0%/*} || exit 1    # run from this directory
 
 # Source tutorial run functions
 . $WM_PROJECT_DIR/bin/tools/RunFunctions
+
+
+function runAndTime() 
+{   
+    #set -x
+    arg1="$1"
+    shift 1
+    #pwd >$(tty);
+    start_time_merging="$(date -u +%s.%N)";
+    cd ${0%/*} || exit 1 ;
+	"$@";
+    end_time_merging="$(date -u +%s.%N)";
+    elapsed_merging="$(bc <<<"$end_time_merging-$start_time_merging")";
+    echo "$arg1 Duration = $elapsed_merging seconds" >$(tty);
+    #set +x
+}
 
 # Arguments:
 #if [ ! -n "$1" ]
@@ -16,10 +33,10 @@ cd ${0%/*} || exit 1    # run from this directory
 start_time="$(date -u +%s.%N)"
 
 # use when modify blade0/Myrun
-#cp blade0/Myrun blade1/Myrun
-#cp blade0/Myrun blade2/Myrun
-#cp blade0/Myrun circle-ext/Myrun
-#cp blade0/Myrun steady/Myrun
+# cp blade0/Myrun blade1/Myrun
+# cp blade0/Myrun blade2/Myrun
+# cp blade0/Myrun circle-ext/Myrun
+# cp blade0/Myrun steady/Myrun
 
 steady/Allclean
 circle-ext/Allclean
@@ -41,6 +58,12 @@ mkdir blade0/constant/triSurface > /dev/null 2>&1
 mkdir blade1/constant/triSurface > /dev/null 2>&1
 mkdir blade2/constant/triSurface > /dev/null 2>&1
 mkdir main/constant/triSurface > /dev/null 2>&1
+
+cp -r include blade0/
+cp -r include blade1/
+cp -r include blade2/
+cp -r include circle-ext/
+cp -r include steady/
 
 bash Myscale
 
@@ -65,32 +88,34 @@ wait # required for syncronization
 # snappyHexMesh -overwrite -case blade2
 
 echo "Merging..."
-mergeMeshes -overwrite circle-ext/ blade0/ > main/log/log.mergeMeshes-blade0 
-mergeMeshes -overwrite circle-ext/ blade1/ > main/log/log.mergeMeshes-blade1 
-mergeMeshes -overwrite circle-ext/ blade2/ > main/log/log.mergeMeshes-blade2 
-mergeMeshes -overwrite steady/ circle-ext/ > main/log/log.mergeMeshes-alltogether
+runAndTime "    blade0 -> circle-ext" "mergeMeshes" "-overwrite" "circle-ext/" "blade0/" > main/log/log.mergeMeshes-blade0 
+runAndTime "    blade1 -> circle-ext" "mergeMeshes" "-overwrite" "circle-ext/" "blade1/" > main/log/log.mergeMeshes-blade1 
+runAndTime "    blade2 -> circle-ext" "mergeMeshes" "-overwrite" "circle-ext/" "blade2/" > main/log/log.mergeMeshes-blade2
+runAndTime "    circle-ext -> steady" "mergeMeshes" "-overwrite" "steady/" "circle-ext/" > main/log/log.mergeMeshes-alltogether 
 
 echo "Copying mesh in main folder..."
 cp -r steady/constant/polyMesh main/constant/.
 
 echo "Creating patches..."
-createPatch -overwrite -case main > main/log/log.createPatch
+runAndTime "    " "createPatch" "-case" "main/" > main/log/log.createPatch
 
 echo "Extruding the mesh..."
 cd main
 # extrudeMesh -case main # doesn't work ????
-extrudeMesh > log/log.extrudeMesh
+runAndTime "    " "extrudeMesh" > log/log.extrudeMesh
 cd ..
 
 echo "Refining the wall layers..."
-refineWallLayer "(blades)" 0.5 -overwrite -case main > main/log/log.refineWallLayer1
-refineWallLayer "(blades)" 0.5 -overwrite -case main > main/log/log.refineWallLayer2
-refineWallLayer "(blades)" 0.5 -overwrite -case main > main/log/log.refineWallLayer3
-refineWallLayer "(blades)" 0.5 -overwrite -case main > main/log/log.refineWallLayer4
+runAndTime "    refinement 1" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-case" "main" > main/log/log.refineWallLayer1
+runAndTime "    refinement 2" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-case" "main" > main/log/log.refineWallLayer2
+runAndTime "    refinement 3" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-case" "main" > main/log/log.refineWallLayer3
+runAndTime "    refinement 4" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-case" "main" > main/log/log.refineWallLayer4
 
 echo "Renumbering the mesh..."
-renumberMesh -overwrite -case main/ > main/log/log.renumberMesh
+runAndTime "    " "renumberMesh" "-case" "main/" > main/log/log.renumberMesh
 
+echo "Dynamic mesh creation..."
+runAndTime "    " "moveDynamicMesh" "-case" "main/" > main/log/log.moveDynamicMesh
 
 
 end_time="$(date -u +%s.%N)"
@@ -129,6 +154,19 @@ echo "<--> DONE --> Total duration = $elapsed seconds"
 #createPatch -overwrite
 
 #paraFoam -touch
+
+function runAndTime() {
+
+    start_time_merging="$(date -u +%s.%N)"
+    
+    mergeMeshes -overwrite steady/ circle-ext/ > main/log/log.mergeMeshes-alltogether
+    
+    end_time_merging="$(date -u +%s.%N)"
+    elapsed_merging="$(bc <<<"$end_time_merging-$start_time_merging")"
+    echo "      Duration = $elapsed_merging seconds"
+
+   echo "Parameter #1 is $1"
+}
 
 
 # ----------------------------------------------------------------- end-of-file

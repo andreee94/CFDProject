@@ -15,8 +15,8 @@ FoamFile
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 // Which of the steps to run
-castellatedMesh true;
-snap            true;
+castellatedMesh false;
+snap            false;
 addLayers       true;
 
 
@@ -41,64 +41,13 @@ geometry
 };
 
 
-
 // Settings for the castellatedMesh generation.
 castellatedMeshControls
 {
 	#include "../include/castelleted-prop"
-
-    // Surface based refinement
-    // ~~~~~~~~~~~~~~~~~~~~~~~~
-
-    // Specifies two levels for every surface. The first is the minimum level,
-    // every cell intersecting a surface gets refined up to the minimum level.
-    // The second level is the maximum level. Cells that 'see' multiple
-    // intersections where the intersections make an
-    // angle > resolveFeatureAngle get refined up to the maximum level.
-
-    refinementSurfaces
-    {
-        blade1
-        {
-			#include "../include/refinement-blade"
-        }
-		AMI-int1-in//"AMI*"
-        {
-			#include "../include/refinement-ami-int"
-        }
-    }
-
-    // Resolve sharp angles
-    //resolveFeatureAngle 30;
-
-
-    // Region-wise refinement
-    // ~~~~~~~~~~~~~~~~~~~~~~
-
-    // Specifies refinement level for cells in relation to a surface. One of
-    // three modes
-    // - distance. 'levels' specifies per distance to the surface the
-    //   wanted refinement level. The distances need to be specified in
-    //   descending order.
-    // - inside. 'levels' is only one entry and only the level is used. All
-    //   cells inside the surface get refined up to the level. The surface
-    //   needs to be closed for this to be possible.
-    // - outside. Same but cells outside.
-
-    refinementRegions
-    {
-        blade1
-        {
-			#include "../include/refinement-region-blade"
-        }
-        //innerCylinderSmall
-        //{
-        //    mode        inside;
-        //    levels      ((1E15 4));
-        //}
-    }
-
-
+	refinementSurfaces {}
+    refinementRegions {}
+    features ();
     // Mesh selection
     // ~~~~~~~~~~~~~~
 
@@ -109,6 +58,7 @@ castellatedMeshControls
     // after refinement.
     locationInMesh (0.028 0.056 0.11);
 }
+
 
 
 // Settings for the snapping.
@@ -122,16 +72,19 @@ snapControls
 // Settings for the layer addition.
 addLayersControls
 {
+
     // Per final patch (so not geometry!) the layer information
     layers
     {
-		AMI-int1-in
-		{
-			nSurfaceLayers 2;
-		}
+        blades
+        {
+            nSurfaceLayers 1;
+        }
     }
-	#include "../include/layers-prop"
+    
+	#include "../include/layers-blade-prop"
 }
+
 
 
 // Generic mesh quality settings. At any undoable phase these determine
@@ -140,6 +93,7 @@ meshQualityControls
 {
 	#include "../include/mesh-quality-prop"
 }
+
 
 
 // Merge tolerance. Is fraction of overall bounding box of initial mesh.
