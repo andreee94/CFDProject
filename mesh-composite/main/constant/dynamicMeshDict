@@ -48,19 +48,18 @@ rot-int0
     rotating0-blade0
     {
     	solidBodyMotionFunction  rotatingMotion;
-	origin    (0 0 0);
-	omega     100;
-	axis      (0 0 1);
-    }
-    rotating1-blade0
-    {
-        solidBodyMotionFunction  rotatingMotion;
-        origin    (0.0476313972 -0.0275 0);
-        axis      (0 0 1);
-        omega     constant -50;
-    }
-
-}
+		origin    (0 0 0);
+		omega     100;
+		axis      (0 0 1);
+		}
+		rotating1-blade0
+		{
+		    solidBodyMotionFunction  rotatingMotion;
+		    origin    (0.0476313972 -0.0275 0);
+		    axis      (0 0 1);
+		    omega     constant -50;
+		}
+	}
 
 rot-int1
 {

@@ -33,10 +33,10 @@ function runAndTime()
 start_time="$(date -u +%s.%N)"
 
 # use when modify blade0/Myrun
-# cp blade0/Myrun blade1/Myrun
-# cp blade0/Myrun blade2/Myrun
-# cp blade0/Myrun circle-ext/Myrun
-# cp blade0/Myrun steady/Myrun
+cp blade0/Myrun blade1/Myrun
+cp blade0/Myrun blade2/Myrun
+cp blade0/Myrun circle-ext/Myrun
+cp blade0/Myrun steady/Myrun
 
 steady/Allclean
 circle-ext/Allclean
@@ -97,7 +97,7 @@ echo "Copying mesh in main folder..."
 cp -r steady/constant/polyMesh main/constant/.
 
 echo "Creating patches..."
-runAndTime "    " "createPatch" "-case" "main/" > main/log/log.createPatch
+runAndTime "    " "createPatch" "-case" "main/" "-overwrite" > main/log/log.createPatch
 
 echo "Extruding the mesh..."
 cd main
@@ -111,16 +111,32 @@ runAndTime "    refinement 2" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-
 runAndTime "    refinement 3" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-case" "main" > main/log/log.refineWallLayer3
 runAndTime "    refinement 4" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-case" "main" > main/log/log.refineWallLayer4
 
+# delete useless files
+#rm -r main/0
+#rm -r main/constant/polyMesh/sets/
+
 echo "Renumbering the mesh..."
-runAndTime "    " "renumberMesh" "-case" "main/" > main/log/log.renumberMesh
+runAndTime "    " "renumberMesh" "-overwrite" "-case" "main/" "-constant" > main/log/log.renumberMesh #-before
 
 echo "Dynamic mesh creation..."
 runAndTime "    " "moveDynamicMesh" "-case" "main/" > main/log/log.moveDynamicMesh
 
+# echo "Renumbering the mesh after dynamic..."
+# runAndTime "    " "renumberMesh" "-overwrite" "-case" "main/" > main/log/log.renumberMesh-after
+
+echo "Check mesh..."
+runAndTime "    " "checkMesh" "-case" "main/" > main/log/log.checkMesh
 
 end_time="$(date -u +%s.%N)"
 elapsed="$(bc <<<"$end_time-$start_time")"
 echo "<--> DONE --> Total duration = $elapsed seconds"
+
+
+# plotting residuals
+# foamMonitor -l -r 1 postProcessing/residuals/0/residuals.dat
+# python plot.py -x 1 -y 4 --update 1 postProcessing/residuals/0/residuals.dat --ylog
+
+
 
 #checkMesh -case main/
 
@@ -155,18 +171,18 @@ echo "<--> DONE --> Total duration = $elapsed seconds"
 
 #paraFoam -touch
 
-function runAndTime() {
-
-    start_time_merging="$(date -u +%s.%N)"
-    
-    mergeMeshes -overwrite steady/ circle-ext/ > main/log/log.mergeMeshes-alltogether
-    
-    end_time_merging="$(date -u +%s.%N)"
-    elapsed_merging="$(bc <<<"$end_time_merging-$start_time_merging")"
-    echo "      Duration = $elapsed_merging seconds"
-
-   echo "Parameter #1 is $1"
-}
+# function runAndTime() {
+# 
+#     start_time_merging="$(date -u +%s.%N)"
+#     
+#     mergeMeshes -overwrite steady/ circle-ext/ > main/log/log.mergeMeshes-alltogether
+#     
+#     end_time_merging="$(date -u +%s.%N)"
+#     elapsed_merging="$(bc <<<"$end_time_merging-$start_time_merging")"
+#     echo "      Duration = $elapsed_merging seconds"
+# 
+#    echo "Parameter #1 is $1"
+# }
 
 
 # ----------------------------------------------------------------- end-of-file

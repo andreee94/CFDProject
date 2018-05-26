@@ -192,9 +192,10 @@ castellatedMeshControls
         {
             level       (3 3);  
 
-            cellZone    steady;
+            cellZone    cellZone-ext;
             cellZoneInside  outside;
             faceZone    facezone-ext;
+            faceType boundary;
             //gapLevelIncrement 1;
             //patchInfo
             //{
@@ -206,25 +207,28 @@ castellatedMeshControls
         {
             level       (4 4);  
 
-            cellZone    cellzone-int0;
+            cellZone    cellZone-int0;
             faceZone    facezone-int0;
             cellZoneInside  inside;
+            faceType boundary;
         }
 		AMI-int1//"AMI*"
         {
             level       (4 4);  
 
-            cellZone    cellzone-int1;
+            cellZone    cellZone-int1;
             faceZone    facezone-int1;
             cellZoneInside  inside;
+            faceType boundary;
         }
 		AMI-int2//"AMI*"
         {
             level       (4 4);  
 
-            cellZone    cellzone-int2;
+            cellZone    cellZone-int2;
             faceZone    facezone-int2;
             cellZoneInside  inside;
+            faceType boundary;
         }		
     }
 
@@ -332,34 +336,22 @@ addLayersControls
         {
             nSurfaceLayers 1;
         }
-/*		AMI-ext*/
-/*		{*/
-/*		        nSurfaceLayers 3;*/
-/*		}*/
-/*		rot-ext*/
-/*		{*/
-/*		        nSurfaceLayers 3;*/
-/*		}*/
-/*		AMI-int0*/
-/*		{*/
-/*		        nSurfaceLayers 3;*/
-/*		}*/
-/*		cellzone-int0*/
-/*		{*/
-/*		        nSurfaceLayers 3;*/
-/*		}*/
-/*		AMI-ext_slave*/
-/*		{*/
-/*			nSurfaceLayers 2;*/
-/*		}*/
-/*		AMI-ext-master*/
-/*		{*/
-/*			nSurfaceLayers 2;*/
-/*		}*/
-/*		AMI-ext*/
-/*		{*/
-/*			nSurfaceLayers 2;*/
-/*		}*/
+		AMI-int0
+		{
+		    nSurfaceLayers 2;
+		}
+		AMI-int1
+		{
+		    nSurfaceLayers 2;
+		}
+		AMI-int2
+		{
+		    nSurfaceLayers 2;
+		}
+		AMI-ext
+		{
+			nSurfaceLayers 2;
+		}
     }
 
     // Expansion factor for layer mesh

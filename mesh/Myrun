@@ -78,6 +78,8 @@ refineWallLayer "(blades)" 0.5 -overwrite | tee log/log.refineWallLayer3
 
 createPatch -overwrite | tee log/log.createPatch
 
+moveDynamicMesh | tee log/log.moveDynamicMesh
+
 #renumberMesh -overwrite 
 
 #cp -r 0.org 0
