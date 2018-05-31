@@ -23,6 +23,24 @@ pointSync false;
 patches
 (
 
+	/*{
+		name front;
+		patchInfo
+		{
+			type empty;
+		}
+        constructFrom patches;
+	}
+
+	{
+		name back;
+		patchInfo
+		{
+			type empty;
+		}
+        constructFrom patches;
+	}*/
+
 //////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
 	{

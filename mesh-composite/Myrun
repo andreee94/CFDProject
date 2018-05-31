@@ -127,6 +127,11 @@ runAndTime "    " "moveDynamicMesh" "-case" "main/" > main/log/log.moveDynamicMe
 echo "Check mesh..."
 runAndTime "    " "checkMesh" "-case" "main/" > main/log/log.checkMesh
 
+
+cp main/0.org main/0 -r
+
+
+
 end_time="$(date -u +%s.%N)"
 elapsed="$(bc <<<"$end_time-$start_time")"
 echo "<--> DONE --> Total duration = $elapsed seconds"

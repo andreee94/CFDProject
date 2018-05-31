@@ -9,45 +9,55 @@ FoamFile
 {
     version     2.0;
     format      ascii;
-    class       dictionary;
-    location    "system";
-    object      controlDict;
+    class       volScalarField;
+    location    "0";
+    object      p;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-application     snappyHexMesh;
+dimensions      [0 2 -2 0 0 0 0];
 
-startFrom       startTime;
+internalField   uniform 0;
 
-startTime       0;
-
-stopAt          endTime;
-
-endTime         1.2;
-
-deltaT          0.02;
-
-writeControl    timeStep;
-
-writeInterval   1;
-
-purgeWrite      0;
-
-writeFormat     ascii;
-
-writePrecision  6;
-
-writeCompression off;
-
-timeFormat      general;
-
-timePrecision   6;
-
-runTimeModifiable true;
-
-functions
+boundaryField
 {
-    #includeFunc  residuals
+	#include "empty-front-back"
+    
+    inlet
+    {
+        //type            totalPressure;
+        //gamma           1;
+        //p0              uniform 0;  
+        type            zeroGradient;
+    }
+
+    outlet
+    {
+        type            fixedValue;
+        value           uniform 0;
+    }
+
+    walls
+    {
+        type            zeroGradient;
+    }
+
+    blades
+    {
+        type            zeroGradient;
+    }
+
+    AMI-master    
+    {
+        type            cyclicAMI;
+        value           $internalField;
+    }
+
+    AMI-slave 
+    {
+        type            cyclicAMI;
+        value           $internalField;
+    }
 }
 
 
