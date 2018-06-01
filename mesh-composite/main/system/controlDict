@@ -23,13 +23,13 @@ startTime       0;
 
 stopAt          endTime;
 
-endTime         1.2;
+endTime         1.8;
 
-deltaT          0.02;
+deltaT          0.005;
 
 writeControl    timeStep;
 
-writeInterval   1;
+writeInterval   10;
 
 purgeWrite      0;
 
@@ -47,7 +47,114 @@ runTimeModifiable true;
 
 functions
 {
+    readFields
+    {
+        type            readFields;
+        libs ("libfieldFunctionObjects.so");
+        enabled         true;
+        writeControl    timeStep;
+        writeInterval   1;
+
+        fields
+        (
+            p T U phi
+        );
+    }
+    
     #includeFunc  residuals
+    
+    // Calculation yPlus
+    // See: src/functionObjects/field/yPlus
+    yPlus
+    {
+        type        yPlus;
+        functionObjectLibs ("libfieldFunctionObjects.so");
+
+        rho rhoInf;
+        rhoInf      1;           // Redundant for incompressible
+        enabled         true;
+        writeControl   outputTime; //timeStep; 
+        writeInterval  1;
+    }
+
+
+    // Calculation CourantNo
+    // See: src/functionObjects/utilities/CourantNo
+    CourantNo
+    {
+        type        CourantNo;
+        functionObjectLibs ("libfieldFunctionObjects.so");
+
+        enabled         true;
+        writeControl   outputTime; //timeStep;
+        writeInterval  1;
+
+    }
+
+
+    forces-blade0
+    {
+        type        forces;
+
+        functionObjectLibs ( "libforces.so" );
+
+        writeControl   timeStep;
+        writeInterval  1;
+
+        log         yes;
+
+        // Reference pressure [Pa]
+        pRef            100000;
+        patches     (blade0);
+        rho         rhoInf;
+        rhoInf      10000;
+        p       p;
+        U       U;
+        log         true;
+        CofR        (0 0 0.11);  // Axle midpoint on ground
+    }
+    forces-blade1
+    {
+        type        forces;
+
+        functionObjectLibs ( "libforces.so" );
+
+        writeControl   timeStep;
+        writeInterval  1;
+
+        log         yes;
+
+        // Reference pressure [Pa]
+        pRef            100000;
+        patches     (blade1);
+        p       p;
+        U       U;
+        rho         rhoInf;
+        rhoInf      10000;
+        log         true;
+        CofR        (0 0 0.11);  // Axle midpoint on ground
+    }
+    forces-blade2
+    {
+        type        forces;
+
+        functionObjectLibs ( "libforces.so" );
+
+        writeControl   timeStep;
+        writeInterval  1;
+
+        log         yes;
+
+        // Reference pressure [Pa]
+        pRef            100000;
+        patches     (blade2);
+        p       p;
+        U       U;
+        rho         rhoInf;
+        rhoInf      10000;
+        log         true;
+        CofR        (0 0 0.11);  // Axle midpoint on ground
+    }
 }
 
 

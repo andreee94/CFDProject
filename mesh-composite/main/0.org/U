@@ -17,16 +17,17 @@ FoamFile
 
 dimensions      [0 1 -1 0 0 0 0];
 
-internalField   uniform (0 0 0);
+internalField   uniform (1 0 0);
 
 boundaryField
 {
 	#include "empty-front-back"
+	#include "cyclic-ami"
     
     inlet
     {
-        type            pressureInletVelocity;
-        value           uniform (0 0 0);
+        type            fixedValue;
+        value           uniform (1 0 0);
     }
 
     outlet
@@ -36,8 +37,14 @@ boundaryField
         value           uniform (0 0 0);
     }
 
-    walls
+    upperWall
     {
+        type            zeroGradient;
+    }
+    
+    lowerWall
+    {
+        //type noSlip;
         type            fixedValue;
         value           uniform (0 0 0);
     }
@@ -46,18 +53,6 @@ boundaryField
     {
         type            movingWallVelocity;
         value           uniform (0 0 0);
-    }
-
-    AMI-master    
-    {
-        type            cyclicAMI;
-        value           $internalField;
-    }
-
-    AMI-slave 
-    {
-        type            cyclicAMI;
-        value           $internalField;
     }
 }
 

@@ -1,0 +1,57 @@
+#!/bin/bash
+#!/bin/bash
+cd ${0%/*} || exit 1    # run from this directory
+
+# Source tutorial run functions
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
+
+
+function runAndTime() 
+{   
+    #set -x
+    arg1="$1"
+    shift 1
+    #pwd >$(tty);
+    start_time_merging="$(date -u +%s.%N)";
+    cd ${0%/*} || exit 1 ;
+	"$@";
+    end_time_merging="$(date -u +%s.%N)";
+    elapsed_merging="$(bc <<<"$end_time_merging-$start_time_merging")";
+    echo "$arg1 Duration = $elapsed_merging seconds" >$(tty);
+    #set +x
+}
+
+if [ ! -n "$1" ]
+then
+   caseName="latest"
+   echo "caseName = latest"
+else
+   caseName=$1
+fi
+
+if [ ! -n "$2" ]
+then
+   comment="No comment added"
+   echo "No comment added"
+else
+   comment=$2
+fi
+
+if [ -f ../tests/$caseName ]; then
+    echo "Case already exists, rename the old or choose another name."
+    exit
+fi
+
+mkdir tests/$caseName
+mkdir tests/$caseName/main
+
+cp -r main/* tests/$caseName/main/
+cp Myrun tests/$caseName/
+cp Myscale tests/$caseName/
+cp -r include/ tests/$caseName/.
+cp -r tests/$caseName/main/fig tests/$caseName/
+cp -r tests/$caseName/main/postProcessing tests/$caseName/
+cp tests/$caseName/main/system/fvSolution tests/$caseName/
+cp tests/$caseName/main/system/controlDict tests/$caseName/
+
+echo $comment >> tests/$caseName/INFO

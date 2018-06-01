@@ -22,6 +22,7 @@ internalField   uniform 0.006;
 boundaryField
 {
 	#include "empty-front-back"
+	#include "cyclic-ami"
 
     inlet
     {
@@ -37,7 +38,12 @@ boundaryField
         value           $internalField;
     }
 
-    walls
+    upperWall
+    {
+        type            zeroGradient;
+    }
+    
+    lowerWall
     {
         type            epsilonWallFunction;
         value           $internalField;
@@ -46,18 +52,6 @@ boundaryField
     blades
     {
         type            epsilonWallFunction;
-        value           $internalField;
-    }
-
-    AMI-master    
-    {
-        type            cyclicAMI;
-        value           $internalField;
-    }
-
-    AMI-slave 
-    {
-        type            cyclicAMI;
         value           $internalField;
     }
 }

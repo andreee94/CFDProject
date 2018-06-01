@@ -63,55 +63,7 @@ edges
 (
 );
 
-boundary
-(
-    back  // added automatically from blocks definition
-    {
-        type wall;
-        faces
-        (
-            (0    1    2    3)
-        );
-    }
-
-    walls
-    {
-        type wall;
-        faces
-        (
-            (1    0    4    5)
-            (3    2    6    7)
-        );
-    }
-
-    inlet
-    {
-        type patch;
-        faces
-        (
-            (0    3    7    4)
-        );
-    }
-
-    front  // added automatically from blocks definition
-    {
-        type wall;
-        faces
-        (
-            (7    6    5    4)
-        );
-    }
-
-    outlet
-    {
-        type patch;
-        faces
-        (
-            (2    1    5    6)
-        );
-    }
-
-);
+#include "../include/boundary"
 
 blocks
 (

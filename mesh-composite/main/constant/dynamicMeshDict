@@ -32,7 +32,7 @@ rot-ext
     solidBodyMotionFunction  rotatingMotion;
 
     origin    (0 0 0);
-    omega     100;
+    omega     -10.471975512;
     axis      (0 0 1);
     //amplitude (0 0 180);
 }
@@ -49,7 +49,7 @@ rot-int0
     {
     	solidBodyMotionFunction  rotatingMotion;
 		origin    (0 0 0);
-		omega     100;
+		omega     -10.471975512;
 		axis      (0 0 1);
 		}
 		rotating1-blade0
@@ -57,7 +57,7 @@ rot-int0
 		    solidBodyMotionFunction  rotatingMotion;
 		    origin    (0.0476313972 -0.0275 0);
 		    axis      (0 0 1);
-		    omega     constant -50;
+		    omega     constant 5.235987756;
 		}
 	}
 
@@ -73,7 +73,7 @@ rot-int1
     {
     	solidBodyMotionFunction  rotatingMotion;
 		origin    (0 0 0);
-		omega     100;
+		omega     -10.471975512;
 		axis      (0 0 1);
     }
     rotating1-blade1
@@ -81,7 +81,7 @@ rot-int1
         solidBodyMotionFunction  rotatingMotion;
         origin    (0 0.055 0);
         axis      (0 0 1);
-        omega     constant -50;
+        omega     constant 5.235987756;
     }
 
 }
@@ -98,7 +98,7 @@ rot-int2
     {
     	solidBodyMotionFunction  rotatingMotion;
 	origin    (0 0 0);
-	omega     100;
+	omega     -10.471975512;
 	axis      (0 0 1);
     }
     rotating1-blade2
@@ -106,7 +106,7 @@ rot-int2
         solidBodyMotionFunction  rotatingMotion;
         origin    (-0.0476313972 -0.0275 0);
         axis      (0 0 1);
-        omega     constant -50;
+        omega     constant 5.235987756;
     }
 
 }

@@ -21,14 +21,25 @@ function runAndTime()
     #set +x
 }
 
+function cleanTime()
+{
+    rm -r main/[0-9].[0-9]*  > /dev/null 2>&1
+    rm -r main/[0-9][0-9][0-9][0-9]  > /dev/null 2>&1
+    rm -r main/[0-9][0-9][0-9]  > /dev/null 2>&1
+    rm -r main/[0-9][0-9]  > /dev/null 2>&1
+    rm -r main/[0-9]  > /dev/null 2>&1
+}
+
 # Arguments:
-#if [ ! -n "$1" ]
-#then
-#    deg0=0
-#    echo "Reference angle = 0"
-#else
-#    deg0=$1
-#fi
+if [ ! -n "$1" ]
+then
+    commandname="full"
+else
+    commandname=$1
+    if [[ $commandname = "full" ]]; then
+        commandname="clean mesh move run post"
+    fi
+fi
 
 start_time="$(date -u +%s.%N)"
 
@@ -38,99 +49,130 @@ cp blade0/Myrun blade2/Myrun
 cp blade0/Myrun circle-ext/Myrun
 cp blade0/Myrun steady/Myrun
 
-steady/Allclean
-circle-ext/Allclean
-blade0/Allclean
-blade1/Allclean
-blade2/Allclean
-main/Allclean
-
-mkdir steady/log > /dev/null 2>&1
-mkdir circle-ext/log > /dev/null 2>&1
-mkdir blade0/log > /dev/null 2>&1
-mkdir blade1/log > /dev/null 2>&1
-mkdir blade2/log > /dev/null 2>&1
-mkdir main/log > /dev/null 2>&1
-
-mkdir steady/constant/triSurface > /dev/null 2>&1
-mkdir circle-ext/constant/triSurface > /dev/null 2>&1
-mkdir blade0/constant/triSurface > /dev/null 2>&1
-mkdir blade1/constant/triSurface > /dev/null 2>&1
-mkdir blade2/constant/triSurface > /dev/null 2>&1
-mkdir main/constant/triSurface > /dev/null 2>&1
-
-cp -r include blade0/
-cp -r include blade1/
-cp -r include blade2/
-cp -r include circle-ext/
-cp -r include steady/
-
-bash Myscale
-
-# Parallel computation
-blade0/Myrun &
-blade1/Myrun &
-blade2/Myrun &
-circle-ext/Myrun &
-steady/Myrun &
-wait # required for syncronization
-
-# blockMesh -case steady
-# blockMesh -case circle-ext
-# blockMesh -case blade0
-# blockMesh -case blade1
-# blockMesh -case blade2
-
-# snappyHexMesh -overwrite -case steady
-# snappyHexMesh -overwrite -case circle-ext
-# snappyHexMesh -overwrite -case blade0
-# snappyHexMesh -overwrite -case blade1
-# snappyHexMesh -overwrite -case blade2
-
-echo "Merging..."
-runAndTime "    blade0 -> circle-ext" "mergeMeshes" "-overwrite" "circle-ext/" "blade0/" > main/log/log.mergeMeshes-blade0 
-runAndTime "    blade1 -> circle-ext" "mergeMeshes" "-overwrite" "circle-ext/" "blade1/" > main/log/log.mergeMeshes-blade1 
-runAndTime "    blade2 -> circle-ext" "mergeMeshes" "-overwrite" "circle-ext/" "blade2/" > main/log/log.mergeMeshes-blade2
-runAndTime "    circle-ext -> steady" "mergeMeshes" "-overwrite" "steady/" "circle-ext/" > main/log/log.mergeMeshes-alltogether 
-
-echo "Copying mesh in main folder..."
-cp -r steady/constant/polyMesh main/constant/.
-
-echo "Creating patches..."
-runAndTime "    " "createPatch" "-case" "main/" "-overwrite" > main/log/log.createPatch
-
-echo "Extruding the mesh..."
-cd main
-# extrudeMesh -case main # doesn't work ????
-runAndTime "    " "extrudeMesh" > log/log.extrudeMesh
-cd ..
-
-echo "Refining the wall layers..."
-runAndTime "    refinement 1" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-case" "main" > main/log/log.refineWallLayer1
-runAndTime "    refinement 2" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-case" "main" > main/log/log.refineWallLayer2
-runAndTime "    refinement 3" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-case" "main" > main/log/log.refineWallLayer3
-runAndTime "    refinement 4" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-case" "main" > main/log/log.refineWallLayer4
-
-# delete useless files
-#rm -r main/0
-#rm -r main/constant/polyMesh/sets/
-
-echo "Renumbering the mesh..."
-runAndTime "    " "renumberMesh" "-overwrite" "-case" "main/" "-constant" > main/log/log.renumberMesh #-before
-
-echo "Dynamic mesh creation..."
-runAndTime "    " "moveDynamicMesh" "-case" "main/" > main/log/log.moveDynamicMesh
-
-# echo "Renumbering the mesh after dynamic..."
-# runAndTime "    " "renumberMesh" "-overwrite" "-case" "main/" > main/log/log.renumberMesh-after
-
-echo "Check mesh..."
-runAndTime "    " "checkMesh" "-case" "main/" > main/log/log.checkMesh
+if [[ $commandname = *"clean"* ]]; then
+    steady/Allclean
+    circle-ext/Allclean
+    blade0/Allclean
+    blade1/Allclean
+    blade2/Allclean
+    main/Allclean
+    cleanTime 
+    
+    mkdir steady/log > /dev/null 2>&1
+    mkdir circle-ext/log > /dev/null 2>&1
+    mkdir blade0/log > /dev/null 2>&1
+    mkdir blade1/log > /dev/null 2>&1
+    mkdir blade2/log > /dev/null 2>&1
+    mkdir main/log > /dev/null 2>&1
+fi
 
 
-cp main/0.org main/0 -r
+
+if [[ $commandname = *"mesh"* ]]; then
+    mkdir steady/constant/triSurface > /dev/null 2>&1
+    mkdir circle-ext/constant/triSurface > /dev/null 2>&1
+    mkdir blade0/constant/triSurface > /dev/null 2>&1
+    mkdir blade1/constant/triSurface > /dev/null 2>&1
+    mkdir blade2/constant/triSurface > /dev/null 2>&1
+    mkdir main/constant/triSurface > /dev/null 2>&1
+
+    cp -r include blade0/
+    cp -r include blade1/
+    cp -r include blade2/
+    cp -r include circle-ext/
+    cp -r include steady/
+
+    bash Myscale
+
+    # Parallel computation
+    blade0/Myrun &
+    blade1/Myrun &
+    blade2/Myrun &
+    circle-ext/Myrun &
+    steady/Myrun &
+    wait # required for syncronization
+
+    # blockMesh -case steady
+    # blockMesh -case circle-ext
+    # blockMesh -case blade0
+    # blockMesh -case blade1
+    # blockMesh -case blade2
+
+    # snappyHexMesh -overwrite -case steady
+    # snappyHexMesh -overwrite -case circle-ext
+    # snappyHexMesh -overwrite -case blade0
+    # snappyHexMesh -overwrite -case blade1
+    # snappyHexMesh -overwrite -case blade2
+
+    echo "Merging..."
+    runAndTime "    blade0 -> circle-ext" "mergeMeshes" "-overwrite" "circle-ext/" "blade0/" > main/log/log.mergeMeshes-blade0 
+    runAndTime "    blade1 -> circle-ext" "mergeMeshes" "-overwrite" "circle-ext/" "blade1/" > main/log/log.mergeMeshes-blade1 
+    runAndTime "    blade2 -> circle-ext" "mergeMeshes" "-overwrite" "circle-ext/" "blade2/" > main/log/log.mergeMeshes-blade2
+    runAndTime "    circle-ext -> steady" "mergeMeshes" "-overwrite" "steady/" "circle-ext/" > main/log/log.mergeMeshes-alltogether 
+
+    echo "Copying mesh in main folder..."
+    cp -r steady/constant/polyMesh main/constant/.
+
+    echo "Creating patches..."
+    runAndTime "    " "createPatch" "-case" "main/" "-overwrite" > main/log/log.createPatch
+
+    echo "Extruding the mesh..."
+    cd main
+    # extrudeMesh -case main # doesn't work ????
+    runAndTime "    " "extrudeMesh" > log/log.extrudeMesh
+    cd ..
+
+    echo "Refining the wall layers..."
+    runAndTime "    refinement 1" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-case" "main" > main/log/log.refineWallLayer1
+    runAndTime "    refinement 2" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-case" "main" > main/log/log.refineWallLayer2
+    #runAndTime "    refinement 3" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-case" "main" > main/log/log.refineWallLayer3
+    #runAndTime "    refinement 4" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-case" "main" > main/log/log.refineWallLayer4
+
+    runAndTime "    refinement lowerWall 1" "refineWallLayer" "(lowerWall)" "0.5" "-overwrite" "-case" "main" > main/log/log.refineWallLayerlowerWall1
+    runAndTime "    refinement lowerWall 2" "refineWallLayer" "(lowerWall)" "0.5" "-overwrite" "-case" "main" > main/log/log.refineWallLayerlowerWall2
+    runAndTime "    refinement lowerWall 3" "refineWallLayer" "(lowerWall)" "0.5" "-overwrite" "-case" "main" > main/log/log.refineWallLayerlowerWall3
+    runAndTime "    refinement lowerWall 4" "refineWallLayer" "(lowerWall)" "0.5" "-overwrite" "-case" "main" > main/log/log.refineWallLayerlowerWall4
+
+    # delete useless files
+    #rm -r main/0
+    #rm -r main/constant/polyMesh/sets/
+
+    echo "Renumbering the mesh..."
+    runAndTime "    " "renumberMesh" "-overwrite" "-case" "main/" "-constant" > main/log/log.renumberMesh #-before
+
+    echo "Dynamic mesh creation..."
+    runAndTime "    " "moveDynamicMesh" "-case" "main/" "-noFunctionObjects" > main/log/log.moveDynamicMesh
+
+    # echo "Renumbering the mesh after dynamic..."
+    # runAndTime "    " "renumberMesh" "-overwrite" "-case" "main/" > main/log/log.renumberMesh-after
+
+    echo "Check mesh..."
+    runAndTime "    " "checkMesh" "-case" "main/" > main/log/log.checkMesh
+
+    echo "Change patches types..."
+    runAndTime "    " "changeDictionary" "-case" "main/" > main/log/log.checkMesh
+fi
 
 
+if [[ $commandname = *"run"* ]]; then
+    rm -r main/postProcessing
+    cleanTime 
+    mkdir main/0 > /dev/null 2>&1
+    cp main/0.org/* main/0/ -r
+
+    echo "Running pimpleDyMFoam..."
+    runAndTime "    " "pimpleDyMFoam" "-case" "main/" > main/log/log.pimpleDyMFoam 
+fi
+
+
+if [[ $commandname = *"post"* ]]; then
+    echo "Saving figures..."
+    mkdir main/fig > /dev/null 2>&1
+    python plotForces.py "main/postProcessing" "forces-blade0" --save --savepath "main/fig/" &
+    python plotForces.py "main/postProcessing" "forces-blade1" --save --savepath "main/fig/" &
+    python plotForces.py "main/postProcessing" "forces-blade2" --save --savepath "main/fig/" &
+    wait
+fi
 
 end_time="$(date -u +%s.%N)"
 elapsed="$(bc <<<"$end_time-$start_time")"

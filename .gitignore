@@ -36,3 +36,4 @@ CAD-scaled
 #times
 [0-9]*
 !0.org
+**/tests
