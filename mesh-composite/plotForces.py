@@ -131,6 +131,7 @@ legendStrings = ["Fx - pressure", "Fy - pressure", "Fz - pressure"]
 box = ax.get_position()
 ax.set_position([box.x0+box.width*0.1, box.y0+box.height*0.05, box.width*0.9, box.height])
 ax.legend(legendStrings, loc='best')
+ax.set_ylim(-20, 25)
 plt.xlabel(r'Time \, [s]')
 plt.ylabel(r'Forces \, [N]')
 
@@ -158,6 +159,7 @@ legendStrings = ["Mx - pressure", "My - pressure", "Mz - pressure"]
 box = ax.get_position()
 ax.set_position([box.x0+box.width*0.1, box.y0+box.height*0.05, box.width*0.9, box.height])
 ax.legend(legendStrings, loc='best')
+ax.set_ylim(-0.8, 1)
 plt.xlabel(r'Time \, [s]')
 plt.ylabel(r'Momentum \, [Nm]')
 

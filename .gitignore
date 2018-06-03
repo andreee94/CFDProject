@@ -33,6 +33,10 @@ mesh/constant/triSurface/*.stl
 CAD-scaled
 *.pdf
 *.foam
+*.png
+**/postProcessing
+**/fig
+log.*
 #times
 [0-9]*
 !0.org

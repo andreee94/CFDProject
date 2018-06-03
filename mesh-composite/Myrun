@@ -5,6 +5,11 @@ cd ${0%/*} || exit 1    # run from this directory
 # Source tutorial run functions
 . $WM_PROJECT_DIR/bin/tools/RunFunctions
 
+#################
+# PARAMETERS ####
+corenum=6
+log_file=main/log.run
+echo "Log of timings" > $log_file
 
 function runAndTime() 
 {   
@@ -17,7 +22,8 @@ function runAndTime()
 	"$@";
     end_time_merging="$(date -u +%s.%N)";
     elapsed_merging="$(bc <<<"$end_time_merging-$start_time_merging")";
-    echo "$arg1 Duration = $elapsed_merging seconds" >$(tty);
+    echo "$arg1 Duration = $elapsed_merging seconds" >$(tty); # force print to console
+    echo "$arg1 Duration = $elapsed_merging seconds" >> $log_file; # print also to log file
     #set +x
 }
 
@@ -34,6 +40,7 @@ function cleanTime()
 if [ ! -n "$1" ]
 then
     commandname="full"
+    commandname="clean mesh move run post"
 else
     commandname=$1
     if [[ $commandname = "full" ]]; then
@@ -50,12 +57,12 @@ cp blade0/Myrun circle-ext/Myrun
 cp blade0/Myrun steady/Myrun
 
 if [[ $commandname = *"clean"* ]]; then
-    steady/Allclean
-    circle-ext/Allclean
-    blade0/Allclean
-    blade1/Allclean
-    blade2/Allclean
-    main/Allclean
+    steady/Allclean | tee -a "$log_file"
+    circle-ext/Allclean | tee -a "$log_file"
+    blade0/Allclean | tee -a "$log_file"
+    blade1/Allclean | tee -a "$log_file"
+    blade2/Allclean | tee -a "$log_file"
+    main/Allclean | tee -a "$log_file"
     cleanTime 
     
     mkdir steady/log > /dev/null 2>&1
@@ -85,11 +92,11 @@ if [[ $commandname = *"mesh"* ]]; then
     bash Myscale
 
     # Parallel computation
-    blade0/Myrun &
-    blade1/Myrun &
-    blade2/Myrun &
-    circle-ext/Myrun &
-    steady/Myrun &
+    blade0/Myrun | tee -a "$log_file" &
+    blade1/Myrun | tee -a "$log_file" &
+    blade2/Myrun | tee -a "$log_file" &
+    circle-ext/Myrun | tee -a "$log_file" &
+    steady/Myrun | tee -a "$log_file" &
     wait # required for syncronization
 
     # blockMesh -case steady
@@ -104,79 +111,87 @@ if [[ $commandname = *"mesh"* ]]; then
     # snappyHexMesh -overwrite -case blade1
     # snappyHexMesh -overwrite -case blade2
 
-    echo "Merging..."
-    runAndTime "    blade0 -> circle-ext" "mergeMeshes" "-overwrite" "circle-ext/" "blade0/" > main/log/log.mergeMeshes-blade0 
-    runAndTime "    blade1 -> circle-ext" "mergeMeshes" "-overwrite" "circle-ext/" "blade1/" > main/log/log.mergeMeshes-blade1 
-    runAndTime "    blade2 -> circle-ext" "mergeMeshes" "-overwrite" "circle-ext/" "blade2/" > main/log/log.mergeMeshes-blade2
-    runAndTime "    circle-ext -> steady" "mergeMeshes" "-overwrite" "steady/" "circle-ext/" > main/log/log.mergeMeshes-alltogether 
+    echo "Merging..." | tee -a "$log_file"
+    (runAndTime "    blade0 -> circle-ext" "mergeMeshes" "-overwrite" "circle-ext/" "blade0/" > main/log/log.mergeMeshes-blade0) 3>&1 1>&2 2>&3 | tee -a $log_file
+    (runAndTime "    blade1 -> circle-ext" "mergeMeshes" "-overwrite" "circle-ext/" "blade1/" > main/log/log.mergeMeshes-blade1) 3>&1 1>&2 2>&3 | tee -a $log_file
+    (runAndTime "    blade2 -> circle-ext" "mergeMeshes" "-overwrite" "circle-ext/" "blade2/" > main/log/log.mergeMeshes-blade2) 3>&1 1>&2 2>&3 | tee -a $log_file
+    (runAndTime "    circle-ext -> steady" "mergeMeshes" "-overwrite" "steady/" "circle-ext/" > main/log/log.mergeMeshes-alltogether) 3>&1 1>&2 2>&3 | tee -a $log_file
 
-    echo "Copying mesh in main folder..."
+    echo "Copying mesh in main folder..." | tee -a "$log_file"
     cp -r steady/constant/polyMesh main/constant/.
 
-    echo "Creating patches..."
-    runAndTime "    " "createPatch" "-case" "main/" "-overwrite" > main/log/log.createPatch
+    echo "Creating patches..." | tee -a "$log_file"
+    (runAndTime "    " "createPatch" "-case" "main/" "-overwrite" > main/log/log.createPatch) 3>&1 1>&2 2>&3 | tee -a $log_file
 
-    echo "Extruding the mesh..."
+    echo "Extruding the mesh..." | tee -a "$log_file"
     cd main
     # extrudeMesh -case main # doesn't work ????
-    runAndTime "    " "extrudeMesh" > log/log.extrudeMesh
+    (runAndTime "    " "extrudeMesh" > log/log.extrudeMesh) 3>&1 1>&2 2>&3 | tee -a $log_file
     cd ..
 
-    echo "Refining the wall layers..."
-    runAndTime "    refinement 1" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-case" "main" > main/log/log.refineWallLayer1
-    runAndTime "    refinement 2" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-case" "main" > main/log/log.refineWallLayer2
+    echo "Refining the wall layers..." | tee -a "$log_file"
+    (runAndTime "    refinement 1" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-case" "main" > main/log/log.refineWallLayer1) 3>&1 1>&2 2>&3 | tee -a $log_file
+    (runAndTime "    refinement 2" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-case" "main" > main/log/log.refineWallLayer2) 3>&1 1>&2 2>&3 | tee -a $log_file
     #runAndTime "    refinement 3" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-case" "main" > main/log/log.refineWallLayer3
     #runAndTime "    refinement 4" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-case" "main" > main/log/log.refineWallLayer4
 
-    runAndTime "    refinement lowerWall 1" "refineWallLayer" "(lowerWall)" "0.5" "-overwrite" "-case" "main" > main/log/log.refineWallLayerlowerWall1
-    runAndTime "    refinement lowerWall 2" "refineWallLayer" "(lowerWall)" "0.5" "-overwrite" "-case" "main" > main/log/log.refineWallLayerlowerWall2
-    runAndTime "    refinement lowerWall 3" "refineWallLayer" "(lowerWall)" "0.5" "-overwrite" "-case" "main" > main/log/log.refineWallLayerlowerWall3
-    runAndTime "    refinement lowerWall 4" "refineWallLayer" "(lowerWall)" "0.5" "-overwrite" "-case" "main" > main/log/log.refineWallLayerlowerWall4
+    (runAndTime "    refinement lowerWall 1" "refineWallLayer" "(lowerWall)" "0.5" "-overwrite" "-case" "main" > main/log/log.refineWallLayerlowerWall1) 3>&1 1>&2 2>&3 | tee -a $log_file
+    (runAndTime "    refinement lowerWall 2" "refineWallLayer" "(lowerWall)" "0.5" "-overwrite" "-case" "main" > main/log/log.refineWallLayerlowerWall2) 3>&1 1>&2 2>&3 | tee -a $log_file
+    (runAndTime "    refinement lowerWall 3" "refineWallLayer" "(lowerWall)" "0.5" "-overwrite" "-case" "main" > main/log/log.refineWallLayerlowerWall3) 3>&1 1>&2 2>&3 | tee -a $log_file
+    (runAndTime "    refinement lowerWall 4" "refineWallLayer" "(lowerWall)" "0.5" "-overwrite" "-case" "main" > main/log/log.refineWallLayerlowerWall4) 3>&1 1>&2 2>&3 | tee -a $log_file
 
     # delete useless files
     #rm -r main/0
     #rm -r main/constant/polyMesh/sets/
 
-    echo "Renumbering the mesh..."
-    runAndTime "    " "renumberMesh" "-overwrite" "-case" "main/" "-constant" > main/log/log.renumberMesh #-before
+    echo "Renumbering the mesh..." | tee -a "$log_file"
+    (runAndTime "    " "renumberMesh" "-overwrite" "-case" "main/" "-constant" > main/log/log.renumberMesh) 3>&1 1>&2 2>&3 | tee -a $log_file
 
-    echo "Dynamic mesh creation..."
-    runAndTime "    " "moveDynamicMesh" "-case" "main/" "-noFunctionObjects" > main/log/log.moveDynamicMesh
+    #echo "Dynamic mesh creation..." | tee -a "$log_file"
+    #(runAndTime "    " "mpirun" "-np" "$corenum" "moveDynamicMesh" "-case" "main/" "-noFunctionObjects" "-parallel" > main/log/log.moveDynamicMesh) 3>&1 1>&2 2>&3 | tee -a $log_file
+    #(runAndTime "    " "moveDynamicMesh" "-case" "main/" "-noFunctionObjects" > main/log/log.moveDynamicMesh) 3>&1 1>&2 2>&3 | tee -a $log_file
+ 
+    echo "Check mesh..." | tee -a "$log_file"
+    (runAndTime "    " "checkMesh" "-case" "main/" > main/log/log.checkMesh) 3>&1 1>&2 2>&3 | tee -a $log_file
 
-    # echo "Renumbering the mesh after dynamic..."
-    # runAndTime "    " "renumberMesh" "-overwrite" "-case" "main/" > main/log/log.renumberMesh-after
-
-    echo "Check mesh..."
-    runAndTime "    " "checkMesh" "-case" "main/" > main/log/log.checkMesh
-
-    echo "Change patches types..."
-    runAndTime "    " "changeDictionary" "-case" "main/" > main/log/log.checkMesh
+    echo "Change patches types..." | tee -a "$log_file"
+    (runAndTime "    " "changeDictionary" "-case" "main/" > main/log/log.checkMesh) 3>&1 1>&2 2>&3 | tee -a $log_file
 fi
 
 
 if [[ $commandname = *"run"* ]]; then
-    rm -r main/postProcessing
-    cleanTime 
+
+    rm -r main/postProcessing > /dev/null 2>&1
+    #cleanTime 
     mkdir main/0 > /dev/null 2>&1
     cp main/0.org/* main/0/ -r
+    
+    echo "Running decomposePar..." | tee -a "$log_file"
+    (runAndTime "    " "decomposePar" "-case" "main/" "-force" > main/log/log.decomposePar) 3>&1 1>&2 2>&3 | tee -a $log_file
 
-    echo "Running pimpleDyMFoam..."
-    runAndTime "    " "pimpleDyMFoam" "-case" "main/" > main/log/log.pimpleDyMFoam 
+    sleep 10 && ./MyfoamMonitor -logscale -refresh 1 -idle 10 "main/postProcessing/residuals/0/residuals.dat" "main/fig/residuals.png" &
+    
+    echo "Running pimpleDyMFoam..." | tee -a "$log_file"
+    (runAndTime "    " "mpirun" "-np" "$corenum" "pimpleDyMFoam" "-case" "main/" "-parallel" > main/log/log.pimpleDyMFoam) 3>&1 1>&2 2>&3 | tee -a $log_file
+    
+    echo "Running reconstructPar..." | tee -a "$log_file"
+    (runAndTime "    " "reconstructPar" "-case" "main/" > main/log/log.reconstructPar) 3>&1 1>&2 2>&3 | tee -a $log_file
 fi
 
 
 if [[ $commandname = *"post"* ]]; then
-    echo "Saving figures..."
+    echo "Saving figures..." | tee -a "$log_file"
     mkdir main/fig > /dev/null 2>&1
-    python plotForces.py "main/postProcessing" "forces-blade0" --save --savepath "main/fig/" &
-    python plotForces.py "main/postProcessing" "forces-blade1" --save --savepath "main/fig/" &
-    python plotForces.py "main/postProcessing" "forces-blade2" --save --savepath "main/fig/" &
+    (python plotForces.py "main/postProcessing" "forces-blade0" --save --savepath "main/fig/" ) 3>&1 1>&2 2>&3 | tee -a $log_file &
+    (python plotForces.py "main/postProcessing" "forces-blade1" --save --savepath "main/fig/" ) 3>&1 1>&2 2>&3 | tee -a $log_file &
+    (python plotForces.py "main/postProcessing" "forces-blade2" --save --savepath "main/fig/" ) 3>&1 1>&2 2>&3 | tee -a $log_file &
+    (python extractForces.py -case "main" --save --show --savepath "main/fig/") 3>&1 1>&2 2>&3 | tee -a $log_file &
     wait
 fi
 
 end_time="$(date -u +%s.%N)"
 elapsed="$(bc <<<"$end_time-$start_time")"
-echo "<--> DONE --> Total duration = $elapsed seconds"
+echo "<--> DONE --> Total duration = $elapsed seconds" | tee -a "$log_file"
 
 
 # plotting residuals
