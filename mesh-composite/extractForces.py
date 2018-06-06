@@ -71,9 +71,9 @@ def getValues(filename, indexes):
 def saveValues(filename, matrix, forces=False):  #, indexes):
     with open(filename, 'w') as f:
         if forces:
-        f.write("# time | Fpx-blade0 | Fpx-blade1 | Fpx-blade2 | Fpx-sum | Ftaux-blade0 | Ftaux-blade1 | Ftaux-blade2 | Ftaux-sum | | Fpy-blade0 | Fpy-blade1 | Fpy-blade2 | Fpy-sum | Ftauy-blade0 | Ftauy-blade1 | Ftauy-blade2 | Ftauy-sum | FX-sum | FY-sum\n")
+        	f.write("# time Fpx-blade0 Fpx-blade1 Fpx-blade2 Fpx-sum Ftaux-blade0 Ftaux-blade1 Ftaux-blade2 Ftaux-sum Fpy-blade0 Fpy-blade1 Fpy-blade2 Fpy-sum Ftauy-blade0 Ftauy-blade1 Ftauy-blade2 Ftauy-sum FX-sum FY-sum\n")
         else: 
-            f.write("# time | Mpz-blade0 | Mpz-blade1 | Mpz-blade2 | Mpz-sum | Mtauz-blade0 | Mtauz-blade1 | Mtauz-blade2 | Mtauz-sum | Mz-sum\n")
+            f.write("# time Mpz-blade0 Mpz-blade1 Mpz-blade2 Mpz-sum Mtauz-blade0 Mtauz-blade1 Mtauz-blade2 Mtauz-sum Mz-sum Power\n")
         for values in matrix:
             #f.write(' '.join([str(v) for i, v in enumerate(values) if i in indexes]) '\n')
             f.write(' '.join([str(v) for i, v in enumerate(values)]) + '\n')
@@ -91,6 +91,10 @@ def fixLine(line):
     line=line.replace(")", "")
     # remove comment at the end of the line
     return " ".join(line.split())
+
+
+def array_multiply(array, coef):
+	return [x*coef for x in array]
 
 
 def column(matrix, i):
@@ -111,7 +115,8 @@ def myplotmomentum(time, Mz, save=False, show=True, filename='Mz-summation', leg
     box = ax.get_position()
     ax.set_position([box.x0+box.width*0.1, box.y0+box.height*0.05, box.width*0.9, box.height])
     ax.legend(legendStrings, loc='best')
-    ax.set_ylim(ylim)  # [-0.6, 1])
+    if ylim != None:
+        ax.set_ylim(ylim)  # [-0.6, 1])
     plt.xlabel(r'Time, [s]')
     plt.ylabel(filename + " [" + unit + "]") # r'Momentum Z (summation), [Nm]')
 
@@ -130,6 +135,7 @@ values_blade0 = getValues(path_blade0, indexes)
 values_blade1 = getValues(path_blade1, indexes)
 values_blade2 = getValues(path_blade2, indexes)
 
+omega = 2 * math.pi / 60 *  100 # 100 rpm
 matrix = []
 for j in  range(len(values_blade0)): 
     row = []
@@ -142,18 +148,28 @@ for j in  range(len(values_blade0)):
             row.append(values_blade2[j][i])
             row.append(row[-1] + row[-2] + row[-3]) # summation column of single momentum for 3 blades
     row.append(row[-1] + row[-5]) # summation column of pressure and viscous momentum
+    row.append(row[-1] * omega)
     matrix.append(row)
+
 
 saveValues(params.savepath + "res-momentum.dat", matrix)
 
 time = column(matrix, 0)  # 0 = time index
 sumMzp = column(matrix, 4)  # -1 = summation of momentum index
-sumMztau = column(matrix, -2)  # -1 = summation of momentum index
-sumMz = column(matrix, -1)  # -1 = summation of momentum index
+sumMztau = column(matrix, -3)  # -1 = summation of momentum index
+sumMz = column(matrix, -2)  # -1 = summation of momentum index
+sumPower = column(matrix, -1)  # -1 = summation of power index
 
 myplotmomentum(time, sumMzp, save=params.save, show=False,  filename='Mz-pressure-summation')
 myplotmomentum(time, sumMztau, save=params.save, show=False,  filename='Mz-tau-summation')
 myplotmomentum(time, sumMz, save=params.save, show=False,  filename='Mz-summation')
+myplotmomentum(time, sumPower, save=params.save, show=False,  filename='InstantPower', legend=["Instantaneous power"], unit="W", ylim=None)
+
+
+sumPower = sumPower[5:]  # remove first unreliable data
+meanpower = sum(sumPower) / len(sumPower)
+power_text = "mean power = " + str(meanpower) + ' W'
+os.system("echo " + power_text + " > " + params.savepath + "meanpower")
 
 
 
@@ -165,7 +181,7 @@ values_blade1 = getValues(path_blade1, indexes)
 values_blade2 = getValues(path_blade2, indexes)
 
 matrix = []
-# time || fxp0 fxp1 fxp2 fxp fxtau0 fxtau1 fxtau2 fxtau || fyp0 fyp1 fyp2 fyp fytau0 fytau1 fytau2 fytau || fx fy
+# time |fxp0 fxp1 fxp2 fxp fxtau0 fxtau1 fxtau2 fxtau |fyp0 fyp1 fyp2 fyp fytau0 fytau1 fytau2 fytau |fx fy
 for j in  range(len(values_blade0)): 
     row = []
     for i in range(len(indexes)):
@@ -176,8 +192,8 @@ for j in  range(len(values_blade0)):
             row.append(values_blade1[j][i])
             row.append(values_blade2[j][i])
             row.append(row[-1] + row[-2] + row[-3]) # summation column of single forces for 3 blades
-    row.append(row[-1-8] + row[-5-8]) # summation column of pressure and viscous momentum
-    row.append(row[-1-1] + row[-5-1]) # summation column of pressure and viscous momentum
+    row.append(row[-1-8] + row[-5-8]) # summation column of pressure and viscous forces x
+    row.append(row[-1-1] + row[-5-1]) # summation column of pressure and viscous forces y
     matrix.append(row)
 
 saveValues(params.savepath + "res-forces.dat", matrix, forces=True)
