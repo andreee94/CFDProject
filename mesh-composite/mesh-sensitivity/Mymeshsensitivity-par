@@ -1,0 +1,108 @@
+#!/bin/bash
+#cd ${0%/*} || exit 1    # run from this directory
+
+
+#############################################
+
+function runcase() 
+{   
+    #set -x
+    folder="$1"
+    cells="$2"
+    
+    if [ ! -n "$3" ]
+    then
+        command="clean mesh run post"
+    else 
+        command="$3"
+    fi
+    
+    
+    echo "Running case "
+    
+    mkdir $folder
+    mkdir $folder/main
+    cp ../mesh/* $folder -r
+    cp ../main $folder/ -r
+    echo $cells > $folder/include/cells-array
+    ../Myrun "$command" "mesh-sensitivity/$folder" "mesh-sensitivity/$folder"
+    #../Myrun "clean mesh run post" "mesh-sensitivity/$folder" "mesh-sensitivity/$folder"
+}
+
+#############################################
+
+#runcase mesh-20 "(60 20 1)" &
+runcase mesh-120-par "(360 120 1)" "clean mesh run post par"
+#wait
+#runcase mesh-40 "(120 40 1)" &
+#runcase mesh-80 "(240 80 1)" &
+#wait
+#runcase mesh-115 "(345 115 1)"
+
+#############################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# mkdir mesh-20
+# mkdir mesh-40
+# mkdir mesh-80
+# 
+# mkdir mesh-20/main
+# mkdir mesh-40/main
+# mkdir mesh-80/main
+# 
+# 
+# # take mesh files
+# cp ../mesh/* mesh-20 -r
+# cp ../mesh/* mesh-40 -r
+# cp ../mesh/* mesh-80 -r
+# 
+# cp ../main mesh-20/ -r
+# cp ../main mesh-40/ -r
+# cp ../main mesh-80/ -r
+# 
+# 
+# echo "(60 20 1)" > mesh-20/include/cells-array
+# ../Myrun "clean mesh" "mesh-sensitivity/mesh-20" "mesh-sensitivity/mesh-20"
+# 
+# 
+# echo "(120 40 1)" > mesh-40/include/cells-array
+# ../Myrun "clean mesh" "mesh-sensitivity/mesh-40" "mesh-sensitivity/mesh-40"
+# 
+# 
+# echo "(240 80 1)" > mesh-80/include/cells-array
+# ../Myrun "clean mesh" "mesh-sensitivity/mesh-80" "mesh-sensitivity/mesh-80"

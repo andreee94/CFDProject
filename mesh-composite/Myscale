@@ -9,7 +9,17 @@
 #     echo "Scaling of file blade0..."
 #     surfaceTransformPoints -scale '(0.001 0.001 0.001)' CAD/blade0.stl  CAD-scaled/blade0.stl
 # fi
- 
+
+
+if [ ! -n "$1" ]
+then
+    mesh_folder=mesh
+else 
+    mesh_folder=$1
+fi
+
+#echo "$mesh_folder"
+
 
 cd ..
 mkdir CAD-scaled > /dev/null 2>&1
@@ -25,19 +35,19 @@ cd mesh-composite
 
     
 echo "Copying stl files into folders..."
-cp ../CAD-scaled/blade0.stl blade0/constant/triSurface/blade0.stl
-cp ../CAD-scaled/blade1.stl blade1/constant/triSurface/blade1.stl
-cp ../CAD-scaled/blade2.stl blade2/constant/triSurface/blade2.stl
+cp ../CAD-scaled/blade0.stl $mesh_folder/blade0/constant/triSurface/blade0.stl
+cp ../CAD-scaled/blade1.stl $mesh_folder/blade1/constant/triSurface/blade1.stl
+cp ../CAD-scaled/blade2.stl $mesh_folder/blade2/constant/triSurface/blade2.stl
 
-cp ../CAD-scaled/AMI-int0.stl blade0/constant/triSurface/AMI-int0.stl
-cp ../CAD-scaled/AMI-int0.stl circle-ext/constant/triSurface/AMI-int0.stl
+cp ../CAD-scaled/AMI-int0.stl $mesh_folder/blade0/constant/triSurface/AMI-int0.stl
+cp ../CAD-scaled/AMI-int0.stl $mesh_folder/circle-ext/constant/triSurface/AMI-int0.stl
 
-cp ../CAD-scaled/AMI-int1.stl blade1/constant/triSurface/AMI-int1.stl
-cp ../CAD-scaled/AMI-int1.stl circle-ext/constant/triSurface/AMI-int1.stl
+cp ../CAD-scaled/AMI-int1.stl $mesh_folder/blade1/constant/triSurface/AMI-int1.stl
+cp ../CAD-scaled/AMI-int1.stl $mesh_folder/circle-ext/constant/triSurface/AMI-int1.stl
 
-cp ../CAD-scaled/AMI-int2.stl blade2/constant/triSurface/AMI-int2.stl
-cp ../CAD-scaled/AMI-int2.stl circle-ext/constant/triSurface/AMI-int2.stl
+cp ../CAD-scaled/AMI-int2.stl $mesh_folder/blade2/constant/triSurface/AMI-int2.stl
+cp ../CAD-scaled/AMI-int2.stl $mesh_folder/circle-ext/constant/triSurface/AMI-int2.stl
 
-cp ../CAD-scaled/AMI-ext.stl steady/constant/triSurface/AMI-ext.stl
-cp ../CAD-scaled/AMI-ext.stl circle-ext/constant/triSurface/AMI-ext.stl
+cp ../CAD-scaled/AMI-ext.stl $mesh_folder/steady/constant/triSurface/AMI-ext.stl
+cp ../CAD-scaled/AMI-ext.stl $mesh_folder/circle-ext/constant/triSurface/AMI-ext.stl
 

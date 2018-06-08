@@ -1,0 +1,151 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.3.0                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      createBafflesDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// Whether to convert internal faces only (so leave boundary faces intact).
+// This is only relevant if your face selection type can pick up boundary
+// faces.
+internalFacesOnly false;
+
+
+// Baffles to create.
+baffles
+{
+
+    AMI-ext
+    {
+        //- Use predefined faceZone to select faces and orientation.
+        type        faceZone;
+        zoneName    facezone-ext;
+
+        patches
+        {
+            master
+            {
+                //- Master side patch
+                name            AMI-ext-master;
+                type            cyclicAMI;
+                inGroups        (cyclicAMI);
+                matchTolerance  0.0001;
+                neighbourPatch  AMI-ext-slave;
+                transform       noOrdering;
+            }
+            slave 
+            {
+
+                name            AMI-ext-slave;
+                type            cyclicAMI;
+                inGroups        (cyclicAMI);
+                matchTolerance  0.0001;
+                neighbourPatch  AMI-ext-master;
+                transform       noOrdering;
+            }
+        }
+    }
+	AMI-int0
+    {
+        //- Use predefined faceZone to select faces and orientation.
+        type        faceZone;
+        zoneName    facezone-int0;
+
+        patches
+        {
+            master
+            {
+                //- Master side patch
+                name            AMI-int0-master;
+                type            cyclicAMI;
+                inGroups        (cyclicAMI);
+                matchTolerance  0.0001;
+                neighbourPatch  AMI-int0-slave;
+                transform       noOrdering;
+            }
+            slave 
+            {
+
+                name            AMI-int0-slave;
+                type            cyclicAMI;
+                inGroups        (cyclicAMI);
+                matchTolerance  0.0001;
+                neighbourPatch  AMI-int0-master;
+                transform       noOrdering;
+            }
+        }
+    }
+	AMI-int1
+    {
+        //- Use predefined faceZone to select faces and orientation.
+        type        faceZone;
+        zoneName    facezone-int1;
+
+        patches
+        {
+            master
+            {
+                //- Master side patch
+                name            AMI-int1-master;
+                type            cyclicAMI;
+                inGroups        (cyclicAMI);
+                matchTolerance  0.0001;
+                neighbourPatch  AMI-int1-slave;
+                transform       noOrdering;
+            }
+            slave 
+            {
+
+                name            AMI-int1-slave;
+                type            cyclicAMI;
+                inGroups        (cyclicAMI);
+                matchTolerance  0.0001;
+                neighbourPatch  AMI-int1-master;
+                transform       noOrdering;
+            }
+        }
+    }
+	AMI-int2
+    {
+        //- Use predefined faceZone to select faces and orientation.
+        type        faceZone;
+        zoneName    facezone-int2;
+
+        patches
+        {
+            master
+            {
+                //- Master side patch
+                name            AMI-int2-master;
+                type            cyclicAMI;
+                inGroups        (cyclicAMI);
+                matchTolerance  0.0001;
+                neighbourPatch  AMI-int2-slave;
+                transform       noOrdering;
+            }
+            slave 
+            {
+
+                name            AMI-int2-slave;
+                type            cyclicAMI;
+                inGroups        (cyclicAMI);
+                matchTolerance  0.0001;
+                neighbourPatch  AMI-int2-master;
+                transform       noOrdering;
+            }
+        }
+    }
+
+}
+
+
+// ************************************************************************* //

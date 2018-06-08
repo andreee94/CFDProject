@@ -15,7 +15,7 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-application     snappyHexMesh;
+application     pimpleDyMFoam;
 
 startFrom       startTime;
 
@@ -27,9 +27,12 @@ endTime         1.8; //0.3; //1.8;
 
 deltaT          0.0003; // 0.0001;
 
-writeControl    timeStep;
+// writeControl    timeStep;
+// writeInterval   60;// 30; //120;
 
-writeInterval   60;// 30; //120;
+writeControl    adjustableRunTime;
+writeInterval   0.0036; // 500 steps saved in 1.8 seconds
+// writeInterval   0.01; // 180 steps saved in 1.8 seconds
 
 purgeWrite      0;
 
@@ -44,6 +47,9 @@ timeFormat      general;
 timePrecision   6;
 
 runTimeModifiable true;
+
+adjustTimeStep  yes;
+maxCo           0.75;
 
 functions
 {
@@ -107,11 +113,11 @@ functions
         pRef            100000;
         patches     (blade0);
         rho         rhoInf;
-        rhoInf      10000;
+        rhoInf      1000;
         p       p;
         U       U;
         log         true;
-        CofR        (0 0 0.11);  // Axle midpoint on ground
+        CofR        (0 0 0);  // Axle midpoint on ground
     }
     forces-blade1
     {
@@ -130,9 +136,9 @@ functions
         p       p;
         U       U;
         rho         rhoInf;
-        rhoInf      10000;
+        rhoInf      1000;
         log         true;
-        CofR        (0 0 0.11);  // Axle midpoint on ground
+        CofR        (0 0 0);  // Axle midpoint on ground
     }
     forces-blade2
     {
@@ -151,9 +157,30 @@ functions
         p       p;
         U       U;
         rho         rhoInf;
-        rhoInf      10000;
+        rhoInf      1000;
         log         true;
-        CofR        (0 0 0.11);  // Axle midpoint on ground
+        CofR        (0 0 0);  // Axle midpoint on ground
+    }
+    forces-blades
+    {
+        type        forces;
+
+        functionObjectLibs ( "libforces.so" );
+
+        writeControl   timeStep;
+        writeInterval  1;
+
+        log         yes;
+
+        // Reference pressure [Pa]
+        pRef            100000;
+        patches     (blade0 blade1 blade2);
+        p       p;
+        U       U;
+        rho         rhoInf;
+        rhoInf      1000;
+        log         true;
+        CofR        (0 0 0);  // Axle midpoint on ground
     }
 }
 

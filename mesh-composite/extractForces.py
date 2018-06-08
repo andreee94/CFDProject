@@ -163,7 +163,7 @@ sumPower = column(matrix, -1)  # -1 = summation of power index
 myplotmomentum(time, sumMzp, save=params.save, show=False,  filename='Mz-pressure-summation')
 myplotmomentum(time, sumMztau, save=params.save, show=False,  filename='Mz-tau-summation')
 myplotmomentum(time, sumMz, save=params.save, show=False,  filename='Mz-summation')
-myplotmomentum(time, sumPower, save=params.save, show=False,  filename='InstantPower', legend=["Instantaneous power"], unit="W", ylim=None)
+myplotmomentum(time, sumPower, save=params.save, show=False,  filename='InstantPower', legend=["Instantaneous power"], unit="W", ylim=[-3, -6])
 
 
 sumPower = sumPower[5:]  # remove first unreliable data

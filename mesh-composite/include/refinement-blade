@@ -1,7 +1,0 @@
- level       (4 4);
-//gapLevelIncrement 1;
-patchInfo
-{
-    type wall;
-    inGroups (blades);
-}

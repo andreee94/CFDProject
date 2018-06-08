@@ -1,0 +1,119 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.3.0                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      dynamicMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// See: 
+// - src/dynamicFvMesh/dynamicMotionSolverListFvMesh
+// - src/dynamicMesh/motionSolvers/displacement/solidBody/multiMotion
+
+dynamicFvMesh   dynamicMotionSolverListFvMesh;
+
+solvers ( 
+
+rot-ext
+{
+    motionSolver    solidBody;
+
+    cellZone        cellZone-ext;
+
+    solidBodyMotionFunction  rotatingMotion;
+
+    origin    (0 0 0);
+    omega     100;
+    axis      (0 0 1);
+    //amplitude (0 0 180);
+}
+
+rot-int0
+{
+    motionSolver    solidBody;
+
+    cellZone        cellZone-int0;
+
+    solidBodyMotionFunction  multiMotion;
+
+    rotating0-blade0
+    {
+    	solidBodyMotionFunction  rotatingMotion;
+	origin    (0 0 0);
+	omega     100;
+	axis      (0 0 1);
+    }
+    rotating1-blade0
+    {
+        solidBodyMotionFunction  rotatingMotion;
+        origin    (0.0476313972 -0.0275 0);
+        axis      (0 0 1);
+        omega     constant -50;
+    }
+
+}
+
+rot-int1
+{
+    motionSolver    solidBody;
+
+    cellZone        cellZone-int1;
+
+    solidBodyMotionFunction  multiMotion;
+
+    rotating0-blade1
+    {
+    	solidBodyMotionFunction  rotatingMotion;
+		origin    (0 0 0);
+		omega     100;
+		axis      (0 0 1);
+    }
+    rotating1-blade1
+    {
+        solidBodyMotionFunction  rotatingMotion;
+        origin    (0 0.055 0);
+        axis      (0 0 1);
+        omega     constant -50;
+    }
+
+}
+
+rot-int2
+{
+    motionSolver    solidBody;
+
+    cellZone        cellZone-int2;
+
+    solidBodyMotionFunction  multiMotion;
+
+    rotating0-blade2
+    {
+    	solidBodyMotionFunction  rotatingMotion;
+	origin    (0 0 0);
+	omega     100;
+	axis      (0 0 1);
+    }
+    rotating1-blade2
+    {
+        solidBodyMotionFunction  rotatingMotion;
+        origin    (-0.0476313972 -0.0275 0);
+        axis      (0 0 1);
+        omega     constant -50;
+    }
+
+}
+
+);
+
+
+
+// ************************************************************************* //

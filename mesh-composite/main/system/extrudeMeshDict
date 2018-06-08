@@ -76,7 +76,7 @@ sectorCoeffs
 
 linearNormalCoeffs
 {
-    thickness       0.02; //# control the thickness of the plate
+    thickness       0.22; //# control the thickness of the plate
 }
 
 linearDirectionCoeffs
