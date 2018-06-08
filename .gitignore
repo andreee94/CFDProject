@@ -3,7 +3,7 @@
 **/log
 **/polyMesh
 **/include
-!mesh-composite/include
+!mesh-composite/mesh/include
 #mesh-composite/blade0/log
 #mesh-composite/blade1/log
 #mesh-composite/blade2/log
