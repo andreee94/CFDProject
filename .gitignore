@@ -24,12 +24,11 @@ mesh-composite/mesh/blade2/constant/triSurface/*.stl
 mesh-composite/mesh/steady/constant/triSurface/*.stl
 mesh-composite/main/constant/triSurface/*.stl
 mesh-composite/circle-ext/constant/triSurface/*.stl
-
+#
 *.stl
 !CAD/*.stl
 mesh-composite/mesh-sensitivity/mesh-*
 !mesh-composite/mesh-sensitivity/Mymesh*
-
 # maybe add also files that contains old in the name
 ## MESH
 # mesh/constant/polyMesh
