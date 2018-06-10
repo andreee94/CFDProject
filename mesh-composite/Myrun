@@ -32,6 +32,24 @@ function cleanTime()
     rm -r $main_folder/main/[0-9]  > /dev/null 2>&1
 }
 
+function applyOptions()
+{
+    mkdir $main_folder/main/0 > /dev/null 2>&1
+    #cp $main_folder/main/0.org/* $main_folder/main/0/ -r
+    if [[ $options = *"komegasst"* ]]; then
+        echo "Applying kOmegaSST..."
+        cp $main_folder/main/0.org-komegasst/* $main_folder/main/0/ -r
+        cp $main_folder/main/constant/turbulenceProperties-komegasst $main_folder/main/constant/turbulenceProperties
+        cp $main_folder/main/system/fvSchemes-komegasst $main_folder/main/system/fvSchemes
+        
+    elif [[ $options = *"kepsilon"* ]]; then
+        echo "Applying kEpsilon..."
+        cp $main_folder/main/0.org-kepsilon/* $main_folder/main/0/ -r
+        cp $main_folder/main/constant/turbulenceProperties-kepsilon $main_folder/main/constant/turbulenceProperties
+        cp $main_folder/main/system/fvSchemes-kepsilon $main_folder/main/system/fvSchemes
+    fi
+}
+
 # first argument is what command to run
 if [ ! -n "$1" ]
 then
@@ -53,18 +71,26 @@ else
 fi
 #echo "$mesh_folder"
 
-# second argument is the path where we find a main folder
+# third argument is the path where we find a main folder
 if [ ! -n "$3" ]
 then
     main_folder=.
 else 
     main_folder=$3
 fi
+
+# forth argument is the path where we find a main folder
+if [ ! -n "$4" ]
+then
+    options="komegasst"
+else 
+    options=$4
+fi
 #echo "$main_folder"
 
 #################
 # PARAMETERS ####
-corenum=4 # remember to change also number in decomposeParDict
+corenum=2 # remember to change also number in decomposeParDict
 log_file=$main_folder/main/log.run
 
 echo "Log of timings" > $log_file
@@ -85,6 +111,7 @@ if [[ $commandname = *"clean"* ]]; then
     $mesh_folder/blade2/Allclean | tee -a "$log_file"
     $main_folder/main/Allclean | tee -a "$log_file"
     cleanTime 
+    rm -r $main_folder/main/fig > /dev/null 2>&1
     
     mkdir $mesh_folder/steady/log > /dev/null 2>&1
     mkdir $mesh_folder/circle-ext/log > /dev/null 2>&1
@@ -93,8 +120,6 @@ if [[ $commandname = *"clean"* ]]; then
     mkdir $mesh_folder/blade2/log > /dev/null 2>&1
     mkdir $main_folder/main/log > /dev/null 2>&1
 fi
-
-
 
 if [[ $commandname = *"mesh"* ]]; then
     mkdir $mesh_folder/steady/constant/triSurface > /dev/null 2>&1
@@ -128,6 +153,8 @@ if [[ $commandname = *"mesh"* ]]; then
 
     echo "Copying mesh in main folder..." | tee -a "$log_file"
     cp -r $mesh_folder/steady/constant/polyMesh $main_folder/main/constant/.
+    
+    applyOptions
 
     echo "Creating patches..." | tee -a "$log_file"
     (runAndTime "    " "createPatch" "-case" "$main_folder/main/" "-overwrite" > $main_folder/main/log/log.createPatch) 3>&1 1>&2 2>&3 | tee -a $log_file
@@ -174,8 +201,6 @@ if [[ $commandname = *"run"* ]]; then
 
     rm -r $main_folder/main/postProcessing > /dev/null 2>&1
     #cleanTime 
-    mkdir $main_folder/main/0 > /dev/null 2>&1
-    cp $main_folder/main/0.org/* $main_folder/main/0/ -r
     
     if [[ $commandname = *"par"* ]]; then
         echo "Running decomposePar..." | tee -a "$log_file"

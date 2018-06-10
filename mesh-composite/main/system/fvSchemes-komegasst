@@ -32,15 +32,27 @@ divSchemes
     div(phi,k)      Gauss upwind;
     div(phi,epsilon) Gauss upwind;
     div((nuEff*dev2(T(grad(U))))) Gauss linear;
+    
+    
+    
+    div(phi,omega) bounded Gauss upwind;
+    div((nuEff*dev2(T(grad(U))))) Gauss linear;
+    div(nonlinearStress) Gauss linear;
 }
 
 laplacianSchemes
 {
-    default         none;
-    laplacian(nuEff,U) Gauss linear corrected;
-    laplacian((1|A(U)),p) Gauss linear corrected;
-    laplacian(DkEff,k) Gauss linear uncorrected;
-    laplacian(DepsilonEff,epsilon) Gauss linear uncorrected;
+    default         Gauss linear corrected;
+    
+    //default         none;
+    //laplacian(nuEff,U) Gauss linear corrected;
+    //laplacian((1|A(U)),p) Gauss linear corrected;
+    //laplacian(DkEff,k) Gauss linear uncorrected;
+    //laplacian(DepsilonEff,epsilon) Gauss linear uncorrected;
+    
+    
+
+    //laplacian(DomegaEff,omega) Gauss linear uncorrected;
 }
 
 interpolationSchemes
@@ -60,4 +72,8 @@ fluxRequired
     p               ;
 }
 
+wallDist
+{
+    method meshWave;
+}
 // ************************************************************************* //

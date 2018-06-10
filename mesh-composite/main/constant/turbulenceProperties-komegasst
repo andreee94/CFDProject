@@ -10,35 +10,21 @@ FoamFile
     version     2.0;
     format      ascii;
     class       dictionary;
-    object      decomposeParDict;
+    location    "constant";
+    object      turbulenceProperties;
 }
-
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-numberOfSubdomains 2;
+simulationType  RAS;
 
-method          scotch; //hierarchical;
-
-constraints
+RAS
 {
-    preserveFaceZones
-    {
-        type        preserveFaceZones;
-        zones       ("AMI-ext-.*");
-    }
-}
+    RASModel        kOmegaSST;
 
-scotchCoeffs
-{
-    
-}
+    turbulence      on;
 
-// hierarchicalCoeffs
-// {
-//     n               (3 2 1); //(1 4 1);
-//     delta           0.001;
-//     order           xyz;
-// }
+    printCoeffs     on;
+}
 
 
 // ************************************************************************* //

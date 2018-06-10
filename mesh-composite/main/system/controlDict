@@ -31,7 +31,7 @@ deltaT          0.0003; // 0.0001;
 // writeInterval   60;// 30; //120;
 
 writeControl    adjustableRunTime;
-writeInterval   0.0036; // 500 steps saved in 1.8 seconds
+writeInterval   0.01; // 500 steps saved in 1.8 seconds
 // writeInterval   0.01; // 180 steps saved in 1.8 seconds
 
 purgeWrite      0;

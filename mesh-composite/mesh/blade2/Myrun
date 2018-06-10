@@ -36,8 +36,8 @@ if [ -f system/snappyHexMeshDict-blade ]; then
     snappyHexMesh -overwrite -dict system/snappyHexMeshDict-blade > log/log.snappyHexMesh-blade
 fi
 
-echo "Running extrudeMesh for $name..."
-extrudeMesh > log/log.extrudeMesh
+#echo "Running extrudeMesh for $name..."
+#extrudeMesh > log/log.extrudeMesh
 
 end_time="$(date -u +%s.%N)"
 elapsed="$(bc <<<"$end_time-$start_time")"

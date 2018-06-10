@@ -17,22 +17,34 @@ function runcase()
         command="$3"
     fi
     
-    
     echo "Running case "
     
-    mkdir $folder
-    mkdir $folder/main
-    cp ../mesh/* $folder -r
-    cp ../main $folder/ -r
+    if [ ! -f $folder ]; then
+        mkdir $folder
+        mkdir $folder/main
+        cp ../mesh/* $folder -r
+        cp ../main $folder/ -r
+    fi
+    
     echo $cells > $folder/include/cells-array
-    ../Myrun "$command" "mesh-sensitivity/$folder" "mesh-sensitivity/$folder"
-    #../Myrun "clean mesh run post" "mesh-sensitivity/$folder" "mesh-sensitivity/$folder"
+    
+    if [ ! -n "$4" ] then
+        ../Myrun "$command" "mesh-sensitivity/$folder" "mesh-sensitivity/$folder"
+    else
+        ../Myrun "$command" "mesh-sensitivity/$folder" "mesh-sensitivity/$folder" "$4" # options parameter
+    fi
+    
+    #    ../Myrun "clean mesh run post" "mesh-sensitivity/$folder" "mesh-sensitivity/$folder"
 }
+
 
 #############################################
 
 #runcase mesh-20 "(60 20 1)" &
-runcase mesh-120-par "(360 120 1)" "clean mesh run post par"
+
+#runcase mesh-120-par "(360 120 1)" "clean mesh run post par"
+#runcase mesh-120-par2 "(360 120 1)" "clean mesh run post par"
+runcase mesh-160-par "(480 160 1)" "clean mesh run post par"
 #wait
 #runcase mesh-40 "(120 40 1)" &
 #runcase mesh-80 "(240 80 1)" &
