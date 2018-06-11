@@ -19,7 +19,7 @@ function runcase()
     
     echo "Running case "
     
-    if [ ! -f $folder ]; then
+    if [ ! -d $folder ]; then
         mkdir $folder
         mkdir $folder/main
         cp ../mesh/* $folder -r
