@@ -29,6 +29,7 @@ mesh-composite/circle-ext/constant/triSurface/*.stl
 !CAD/*.stl
 mesh-composite/mesh-sensitivity/mesh-*
 !mesh-composite/mesh-sensitivity/Mymesh*
+!mesh-composite/mesh-sensitivity/*.odf
 # maybe add also files that contains old in the name
 ## MESH
 # mesh/constant/polyMesh
@@ -44,5 +45,6 @@ CAD-scaled
 log.*
 #times
 [0-9]*
-!0.org
+!0.org-kepsilon
+!0.org-komegasst
 **/tests

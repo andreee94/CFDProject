@@ -15,6 +15,17 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
+
+gravitationalForce
+{
+    type            buoyancyForce;
+	fields			(U);
+    active          true;
+    // timeStart       0; 
+    // duration        10; 
+}
+
+
 // MRF1
 // {
 //     type            MRFSource;
