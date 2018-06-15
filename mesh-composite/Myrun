@@ -200,6 +200,8 @@ fi
 
 if [[ $commandname = *"run"* ]]; then
 
+    applyOptions
+    
     rm -r $main_folder/main/postProcessing > /dev/null 2>&1
     #cleanTime 
     
@@ -210,7 +212,7 @@ if [[ $commandname = *"run"* ]]; then
 
     
     sleep 10 && ./MyfoamMonitor -logscale -refresh 1 -idle 10 "$main_folder/main/postProcessing/residuals/0/residuals.dat" "$main_folder/main/fig/residuals.png" &
-    
+    sleep 10 && python checkcompletion.py -case "$main_folder/main/" -endtime 1.8 -pause 1 &
     
     echo "Running pimpleDyMFoam..." | tee -a "$log_file"
     if [[ $commandname = *"par"* ]]; then
@@ -221,7 +223,7 @@ if [[ $commandname = *"run"* ]]; then
     
     if [[ $commandname = *"par"* ]]; then
         echo "Running reconstructPar..." | tee -a "$log_file"
-        (runAndTime "    " "reconstructPar" "-case" "$main_folder/main/" > $main_folder/main/log/log.reconstructPar) 3>&1 1>&2 2>&3 | tee -a $log_file
+        (runAndTime "    " "reconstructPar" "-case" "$main_folder/main" > $main_folder/main/log/log.reconstructPar) 3>&1 1>&2 2>&3 | tee -a $log_file
     fi
 fi
 

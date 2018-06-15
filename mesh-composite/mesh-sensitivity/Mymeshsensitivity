@@ -39,14 +39,16 @@ function runcase()
 
 #############################################
 
-runcase mesh-10-komegasst "(30 10 1)" "clean mesh run post" "komegasst"
-runcase mesh-10-kepsilon "(30 10 1)" "clean mesh run post" "kepsilon"
+#runcase mesh-10-komegasst "(30 10 1)" "clean mesh run post" "komegasst"
+#runcase mesh-10-kepsilon "(30 10 1)" "clean mesh run post" "kepsilon"
 
 #runcase mesh-20 "(60 20 1)" &
 #runcase mesh-120 "(360 120 1)" &
 #wait
 #runcase mesh-40 "(120 40 1)" &
 #runcase mesh-80 "(240 80 1)"
+
+runcase mesh-60 "(180 60 1)" "clean mesh run post" "kepsilon"
 
 #mapFields -case mesh-120-par/main/ mesh-80/main/ -consistent
 #runcase mesh-120 "(360 120 1)"
