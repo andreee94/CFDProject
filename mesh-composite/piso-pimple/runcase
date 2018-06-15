@@ -1,0 +1,38 @@
+#!/bin/bash
+function runcase() # folder     cellsnumber     nOuterCorrectors     nCorrectors    maxCo    command    options
+{   
+    #set -x
+    folder="$1"
+    cells="$2"
+    nOuterCorrectors="$3"
+    nCorrectors="$4"
+    maxCo="$5"
+    
+    if [ ! -n "$6" ]
+    then
+        command="clean mesh run post"
+    else 
+        command="$6"
+    fi
+    
+    echo "Running case "
+    
+    if [ ! -d $folder ]; then
+        mkdir $folder
+        mkdir $folder/main
+        cp ../mesh/* $folder -r
+        cp ../main $folder/ -r
+    fi
+    
+    # change parameters according to user options
+    echo $cells > $folder/include/cells-array
+    echo $nOuterCorrectors > $folder/main/controls/nOuterCorrectors
+    echo $nCorrectors > $folder/main/controls/nCorrectors
+    echo $maxCo > $folder/main/controls/maxCo
+    
+    if [ ! -n "$7" ]; then
+        ../Myrun "$command" "piso-pimple/$folder" "piso-pimple/$folder"
+    else
+        ../Myrun "$command" "piso-pimple/$folder" "piso-pimple/$folder" "$7" # options parameter
+    fi
+}

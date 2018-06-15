@@ -57,10 +57,16 @@ while not os.path.isdir(mainfolder + "/" + str(endtime)):
     perc = 100 * maxtime / endtime
     if perc != 0:
         now = datetime.datetime.now()
-        duration = datetime.timedelta(seconds=((now - startdate).seconds/perc*100))
+        duration = datetime.timedelta(seconds=((now - startdate).seconds/(perc)*100))
         endestimation = startdate + duration
         
-        sys.stdout.write("\r" + myround(perc, decimals=2, strConversion=True) + "% completed. Running time = " + formatTimeDelta(datetime.datetime.now() - startdate) +  ". Missing time = " + formatTimeDelta(duration) + ". End estimation = " + formatTime(endestimation) )
+        str1 = myround(perc, decimals=2, strConversion=True) + "% completed. "
+        str2 = " Running time = " + formatTimeDelta(datetime.datetime.now() - startdate) +  ". "
+        str3 = "Missing time = " + formatTimeDelta(duration) + ". "
+        str4 = ". End estimation = " + formatTime(endestimation) + ". "
+        
+        print(str1 + str2 + str3 + str4, end="\r")
+        #sys.stdout.write("\r" )
         sys.stdout.flush()
     
     time.sleep(pause)

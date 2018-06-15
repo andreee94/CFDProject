@@ -29,7 +29,19 @@ mesh-composite/circle-ext/constant/triSurface/*.stl
 !CAD/*.stl
 mesh-composite/mesh-sensitivity/mesh-*
 !mesh-composite/mesh-sensitivity/Mymesh*
-!mesh-composite/mesh-sensitivity/*.odf
+!mesh-composite/mesh-sensitivity/*.ods
+#
+mesh-composite/mesh-sensitivity-pimple/mesh-pimple-*
+!mesh-composite/mesh-sensitivity-pimple/Mymesh*
+!mesh-composite/mesh-sensitivity-pimple/*.ods
+!mesh-composite/mesh-sensitivity-pimple/power
+!mesh-composite/mesh-sensitivity-pimple/runcase
+#
+mesh-composite/piso-pimple/pimple-*
+mesh-composite/piso-pimple/piso-*
+!mesh-composite/piso-pimple/My*
+!mesh-composite/piso-pimple/*.ods
+!mesh-composite/piso-pimple/runcase
 # maybe add also files that contains old in the name
 ## MESH
 # mesh/constant/polyMesh

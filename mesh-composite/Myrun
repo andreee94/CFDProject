@@ -93,6 +93,7 @@ fi
 # PARAMETERS ####
 corenum=2 # remember to change also number in decomposeParDict
 log_file=$main_folder/main/log.run
+endTime=$(cat "$main_folder/main/controls/endTime")
 
 echo "Log of timings" > $log_file
 
@@ -211,8 +212,8 @@ if [[ $commandname = *"run"* ]]; then
     fi
 
     
-    sleep 10 && ./MyfoamMonitor -logscale -refresh 1 -idle 10 "$main_folder/main/postProcessing/residuals/0/residuals.dat" "$main_folder/main/fig/residuals.png" &
-    sleep 10 && python checkcompletion.py -case "$main_folder/main/" -endtime 1.8 -pause 1 &
+    sleep 10 && ./MyfoamMonitor -logscale -refresh 1 -idle 120 "$main_folder/main/postProcessing/residuals/0/residuals.dat" "$main_folder/main/fig/residuals.png" &
+    sleep 10 && python3 checkcompletion.py -case "$main_folder/main/" -endtime $endTime -pause 1 &
     
     echo "Running pimpleDyMFoam..." | tee -a "$log_file"
     if [[ $commandname = *"par"* ]]; then
@@ -235,6 +236,7 @@ if [[ $commandname = *"post"* ]]; then
     (python plotForces.py "$main_folder/main/postProcessing" "forces-blade2" --save --savepath "$main_folder/main/fig/" ) 3>&1 1>&2 2>&3 | tee -a $log_file &
     (python extractForces.py -case "$main_folder/main" --save --savepath "$main_folder/main/fig/") 3>&1 1>&2 2>&3 | tee -a $log_file &
     wait
+    ./MyfoamMonitor -logscale -idle 1 "$main_folder/main/postProcessing/residuals/0/residuals.dat" "$main_folder/main/fig/residuals.png" &
 fi
 
 end_time="$(date -u +%s.%N)"
