@@ -95,7 +95,13 @@ corenum=2 # remember to change also number in decomposeParDict
 log_file=$main_folder/main/log.run
 endTime=$(cat "$main_folder/main/controls/endTime")
 
-echo "Log of timings" > $log_file
+if [ ! -f $log_file ]; then
+	echo "Log of timings" > $log_file
+	echo $(date '+%d/%m/%Y %H:%M:%S'); >> $log_file
+else
+	echo "Append to Log of timings" >> $log_file
+	echo $(date '+%d/%m/%Y %H:%M:%S'); >> $log_file
+fi
 
 start_time="$(date -u +%s.%N)"
 

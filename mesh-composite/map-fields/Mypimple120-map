@@ -1,0 +1,39 @@
+#!/bin/bash
+#cd ${0%/*} || exit 1    # run from this directory
+
+
+#############################################
+source ./runcase
+#############################################
+
+#           folder     cellsnumber      command             options
+runcase mesh-pimple-120-map "(360 120 1)" "clean mesh" "komegasst"
+
+mapFields -case mesh-pimple-120-map/main -consistent mesh-pimple-80/main -sourceTime 'latestTime'
+
+runcase mesh-pimple-120-map "(360 120 1)" "run post" "komegasst"
+
+#############################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
