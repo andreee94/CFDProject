@@ -1,0 +1,36 @@
+#!/bin/bash
+#cd ${0%/*} || exit 1    # run from this directory
+
+
+#############################################
+source ./runcase
+#############################################
+
+#           folder     cellsnumber      command             options
+runcase mesh-pimple-200 "(600 200 1)" "clean mesh run post" "komegasst"
+#runcase mesh-pimple-160 "(600 200 1)" "post" "komegasst"
+
+#############################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

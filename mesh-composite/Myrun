@@ -170,6 +170,8 @@ if [[ $commandname = *"mesh"* ]]; then
     echo "Refining the wall layers..." | tee -a "$log_file"
     (runAndTime "    refinement 1" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-case" "$main_folder/main" > $main_folder/main/log/log.refineWallLayer1) 3>&1 1>&2 2>&3 | tee -a $log_file
     (runAndTime "    refinement 2" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-case" "$main_folder/main" > $main_folder/main/log/log.refineWallLayer2) 3>&1 1>&2 2>&3 | tee -a $log_file
+    #(runAndTime "    refinement 3" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-case" "$main_folder/main" > $main_folder/main/log/log.refineWallLayer2) 3>&1 1>&2 2>&3 | tee -a $log_file
+    #(runAndTime "    refinement 4" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-case" "$main_folder/main" > $main_folder/main/log/log.refineWallLayer2) 3>&1 1>&2 2>&3 | tee -a $log_file
     #runAndTime "    refinement 3" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-case" "$main_folder/main" > $main_folder/main/log/log.refineWallLayer3
     #runAndTime "    refinement 4" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-case" "$main_folder/main" > $main_folder/main/log/log.refineWallLayer4
 

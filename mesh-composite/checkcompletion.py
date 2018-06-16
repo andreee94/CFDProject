@@ -62,7 +62,7 @@ while not os.path.isdir(mainfolder + "/" + str(endtime)):
         
         str1 = myround(perc, decimals=2, strConversion=True) + "% completed. "
         str2 = " Running time = " + formatTimeDelta(datetime.datetime.now() - startdate) +  ". "
-        str3 = "Missing time = " + formatTimeDelta(duration) + ". "
+        str3 = "Total time = " + formatTimeDelta(duration) + ". "
         str4 = ". End estimation = " + formatTime(endestimation) + ". "
         
         print(str1 + str2 + str3 + str4, end="\r")
@@ -71,7 +71,7 @@ while not os.path.isdir(mainfolder + "/" + str(endtime)):
     
     time.sleep(pause)
     
-print(Completed)
+print("Completed")
         
         
         
