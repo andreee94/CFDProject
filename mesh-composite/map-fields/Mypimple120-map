@@ -10,6 +10,7 @@ source ./runcase
 runcase mesh-pimple-120-map "(360 120 1)" "clean mesh" "komegasst"
 
 mapFields -case mesh-pimple-120-map/main -consistent mesh-pimple-80/main -sourceTime 'latestTime'
+# check foamFormatConvert before mapfields
 
 runcase mesh-pimple-120-map "(360 120 1)" "run post" "komegasst"
 

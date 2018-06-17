@@ -31,7 +31,7 @@ deltaT          0.0003; // 0.0001;
 // writeInterval   60;// 30; //120;
 
 writeControl    adjustableRunTime;
-writeInterval   0.01; // 500 steps saved in 1.8 seconds
+writeInterval   0.02; // 500 steps saved in 1.8 seconds
 // writeInterval   0.01; // 180 steps saved in 1.8 seconds
 
 purgeWrite      0;
@@ -53,19 +53,19 @@ maxCo           #include "../controls/maxCo";
 
 functions
 {
-    readFields
-    {
-        type            readFields;
-        libs ("libfieldFunctionObjects.so");
-        enabled         true;
-        writeControl    timeStep;
-        writeInterval   1;
-
-        fields
-        (
-            p T U phi
-        );
-    }
+//     readFields
+//     {
+//         type            readFields;
+//         libs ("libfieldFunctionObjects.so");
+//         enabled         true;
+//         writeControl    timeStep;
+//         writeInterval   1;
+// 
+//         fields
+//         (
+//             p T U phi
+//         );
+//     }
     
     #includeFunc  residuals
     
@@ -77,7 +77,21 @@ functions
         functionObjectLibs ("libfieldFunctionObjects.so");
 
         rho rhoInf;
-        rhoInf      1;           // Redundant for incompressible
+        rhoInf      1000;           // Redundant for incompressible
+        enabled         true;
+        writeControl   outputTime; //timeStep; 
+        writeInterval  1;
+    }
+    
+    // Calculation wallShearStress
+    // See: src/functionObjects/field/wallShearStress
+    wallShearStress
+    {
+        type        wallShearStress;
+        functionObjectLibs ("libfieldFunctionObjects.so");
+
+        rho rhoInf;
+        rhoInf      1000;           // Redundant for incompressible
         enabled         true;
         writeControl   outputTime; //timeStep; 
         writeInterval  1;

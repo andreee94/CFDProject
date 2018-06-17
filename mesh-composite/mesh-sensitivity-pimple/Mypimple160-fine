@@ -7,8 +7,8 @@ source ./runcase
 #############################################
 
 #           folder     cellsnumber      command             options
-runcase mesh-pimple-120 "(360 120 1)" "clean mesh run post" "komegasst"
-#runcase mesh-pimple-120 "(360 120 1)" "post" "komegasst"
+runcase mesh-pimple-160-fine "(480 160 1)" "clean mesh run post" "komegasst"
+#runcase mesh-pimple-160-fine "(480 160 1)" "post" "komegasst"
 
 #############################################
 

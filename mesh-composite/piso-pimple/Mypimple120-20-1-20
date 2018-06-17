@@ -2,13 +2,22 @@
 #cd ${0%/*} || exit 1    # run from this directory
 
 
+
+
+
+
+
+
+
+
+
+
 #############################################
 source ./runcase
 #############################################
 
-#           folder     cellsnumber      command             options
-runcase mesh-pimple-120 "(360 120 1)" "clean mesh run post" "komegasst"
-#runcase mesh-pimple-120 "(360 120 1)" "post" "komegasst"
+# folder     cellsnumber     nOuterCorrectors     nCorrectors    maxCo    command    options
+runcase pimple120-20-1-20 "(360 120 1)" 20 1 20 "clean mesh run post" "komegasst"
 
 #############################################
 
