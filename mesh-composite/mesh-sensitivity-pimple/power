@@ -3,12 +3,14 @@ cells: 24021
 cells: 42508
 cells: 64293
 cells: 120614
+cells: 191690
 cells: 151805
 cells: 213695
--4.70957480232# mean power [W]
--5.00862345412# mean power [W]
+-4.66616346884# mean power [W] from time = 1.8
+-4.9699827675# mean power [W] from time = 1.8
 -4.97812040071# mean power [W]
--5.00425547639# mean power [W]
--5.05668958458# mean power [W]
--4.81115588656# mean power [W]
--4.83930344397# mean power [W]
+-4.97403994968# mean power [W] from time = 1.8
+-5.01659701757# mean power [W] from time = 1.8
+
+-5.08559367096# mean power [W] from time = 1.8
+-4.81267981395# mean power [W] from time = 1.8

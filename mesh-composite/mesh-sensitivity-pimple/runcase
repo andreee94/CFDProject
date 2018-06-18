@@ -49,22 +49,25 @@ function analysis()
 	cells80=$(checkMesh -case mesh-pimple-80/main/ -latestTime | grep cells | head -n 1)
 	cells120=$(checkMesh -case mesh-pimple-120/main/ -latestTime | grep cells | head -n 1)
 	cells160=$(checkMesh -case mesh-pimple-160/main/ -latestTime | grep cells | head -n 1)
+	cells160fine=$(checkMesh -case mesh-pimple-160-fine/main/ -latestTime | grep cells | head -n 1)
 	cells200=$(checkMesh -case mesh-pimple-200/main/ -latestTime | grep cells | head -n 1)
 	
 	# -4.70985928088# mean power [W]
-	power20=$(cat mesh-pimple-20/main/fig/meanpower)
-	power40=$(cat mesh-pimple-40/main/fig/meanpower)
-	power60=$(cat mesh-pimple-60/main/fig/meanpower)
-	power80=$(cat mesh-pimple-80/main/fig/meanpower)
-	power120=$(cat mesh-pimple-120/main/fig/meanpower)
-	power160=$(cat mesh-pimple-160/main/fig/meanpower)
-	power200=$(cat mesh-pimple-200/main/fig/meanpower)
+	power20=$(cat mesh-pimple-20/main/fig/meanpower | head -n 1)
+	power40=$(cat mesh-pimple-40/main/fig/meanpower | head -n 1)
+	power60=$(cat mesh-pimple-60/main/fig/meanpower | head -n 1)
+	power80=$(cat mesh-pimple-80/main/fig/meanpower | head -n 1)
+	power120=$(cat mesh-pimple-120/main/fig/meanpower | head -n 1)
+	power160fine=$(cat mesh-pimple-160-fine/main/fig/meanpower | head -n 1)
+	power160=$(cat mesh-pimple-160/main/fig/meanpower | head -n 1)
+	power200=$(cat mesh-pimple-200/main/fig/meanpower | head -n 1)
 	
 	echo $cells20 > power
 	echo $cells40 >> power
 	echo $cells60 >> power
 	echo $cells80 >> power
 	echo $cells120 >> power
+	echo $cells160fine >> power
 	echo $cells160 >> power
 	echo $cells200 >> power
 	
@@ -73,6 +76,7 @@ function analysis()
 	echo $power60 >> power
 	echo $power80 >> power
 	echo $power120 >> power
+	echo $power160fine >> power
 	echo $power160 >> power
 	echo $power200 >> power
 }
