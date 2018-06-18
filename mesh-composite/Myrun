@@ -65,11 +65,11 @@ function applyOptions()
 if [ ! -n "$1" ]
 then
     commandname="full"
-    commandname="clean mesh move run post"
+    commandname="clean mesh run post"
 else
     commandname=$1
     if [[ $commandname = "full" ]]; then
-        commandname="clean mesh move run post"
+        commandname="clean mesh run post"
     fi
 fi
 

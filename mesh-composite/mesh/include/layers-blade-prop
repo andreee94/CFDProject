@@ -10,7 +10,7 @@
     // is the thickness of the layer furthest away from the wall.
     // Relative to undistorted size of cell outside layer.
     // See relativeSizes parameter.
-    finalLayerThickness 1.1;//0.0006; // 0.3;
+    finalLayerThickness 2;// 1.1;//0.0006; // 0.3;
 
     // Minimum thickness of cell layer. If for any reason layer
     // cannot be above minThickness do not add layer.
