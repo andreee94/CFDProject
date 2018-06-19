@@ -32,10 +32,14 @@ function runcase() # folder     cellsnumber     nOuterCorrectors     nCorrectors
     echo $maxCo > $folder/main/controls/maxCo
     echo $endTime > $folder/main/controls/endTime
     
+    
+    # get the name of the current directory
+    name=${PWD##*/}  
+    
     if [ ! -n "$4" ]; then
-        ../Myrun "$command" "mesh-sensitivity-pimple/$folder" "mesh-sensitivity-pimple/$folder"
+        ../Myrun "$command" "$name/$folder" "$name/$folder"
     else
-        ../Myrun "$command" "mesh-sensitivity-pimple/$folder" "mesh-sensitivity-pimple/$folder" "$4" # options parameter
+        ../Myrun "$command" "$name/$folder" "$name/$folder" "$4" # options parameter
     fi
 }
 

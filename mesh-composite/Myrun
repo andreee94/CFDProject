@@ -230,7 +230,7 @@ if [[ $commandname = *"run"* ]]; then
     fi
 
     
-    sleep 10 && ./MyfoamMonitor -logscale -refresh 1 -idle 120 "$main_folder/main/postProcessing/residuals/0/residuals.dat" "$main_folder/main/fig/residuals.png" &
+    sleep 10 && ./MyfoamMonitor -logscale -refresh 1 -idle 20 "$main_folder/main/postProcessing/residuals/0/residuals.dat" "$main_folder/main/fig/residuals.png" &
     sleep 10 && python3 checkcompletion.py -case "$main_folder/main/" -endtime $endTime -pause 1 &
     
     echo "Running pimpleDyMFoam..." | tee -a "$log_file"
@@ -255,20 +255,21 @@ if [[ $commandname = *"post"* ]]; then
     (python extractForces.py -case "$main_folder/main" --save --savepath "$main_folder/main/fig/") 3>&1 1>&2 2>&3 | tee -a $log_file &
     wait
     
-    if [[ ! $main_folder = "." ]]; then
-        extractData
-    fi
     ./MyfoamMonitor -logscale -idle 1 "$main_folder/main/postProcessing/residuals/0/residuals.dat" "$main_folder/main/fig/residuals.png" 
 fi
 
-if [[ $commandname = *"extract"* ]]; then
-    extractData
-fi
 
 end_time="$(date -u +%s.%N)"
 elapsed="$(bc <<<"$end_time-$start_time")"
 echo "<--> DONE --> Total duration = $elapsed seconds" | tee -a "$log_file"
 
+if [[ ! $main_folder = "." ]]; then
+        extractData
+fi
+
+if [[ $commandname = *"extract"* ]]; then
+    extractData
+fi
 
 # plotting residuals
 # foamMonitor -l -r 1 postProcessing/residuals/0/residuals.dat
