@@ -203,27 +203,27 @@ myplot(time, sumPower, save=params.save, show=False, filename='InstantPower', le
 ## only turn 4
 sumPowerTurn4 = [x for ii, x in enumerate(sumPower) if time[ii] >= 1.8]  # extract with delay
 meanpower = sum(sumPowerTurn4) / len(sumPowerTurn4)
-power_text = str(meanpower) + '# mean power [W]  from time = 1.8'
-os.system("echo " + power_text + " > " + params.savepath + "meanpower")
+power_text = str(meanpower) + ' # mean power [W]  from time = 1.8'
+os.system("echo '" + power_text + "' > " + params.savepath + "meanpower")
 
 ## only turn 3 and 4
 sumPowerTurn34 = [x for ii, x in enumerate(sumPower) if time[ii] >= 1.2]  # extract with delay
 meanpower = sum(sumPowerTurn34) / len(sumPowerTurn34)
-power_text = str(meanpower) + '# mean power [W]  from time = 1.2'
-os.system("echo " + power_text + " >> " + params.savepath + "meanpower")
+power_text = str(meanpower) + ' # mean power [W]  from time = 1.2'
+os.system("echo '" + power_text + "' >> " + params.savepath + "meanpower")
 
 ## only turn 2 and  3 and 4
 sumPowerTurn234 = [x for ii, x in enumerate(sumPower) if time[ii] >= 0.6]  # extract with delay
 meanpower = sum(sumPowerTurn234) / len(sumPowerTurn234)
-power_text = str(meanpower) + '# mean power [W]  from time 0.6'
-os.system("echo " + power_text + " >> " + params.savepath + "meanpower")
+power_text = str(meanpower) + ' # mean power [W]  from time 0.6'
+os.system("echo '" + power_text + "' >> " + params.savepath + "meanpower")
 
 ## only turn 2 and  3 and 4
 sumPowerTurn1234 = [x for ii, x in enumerate(sumPower) if time[ii] >= 0.0]  # extract with delay
 sumPowerTurn1234 = sumPowerTurn1234[5:]  # remove first unreliable data (5 chosen randomly)
 meanpower = sum(sumPowerTurn1234) / len(sumPowerTurn1234)
-power_text = str(meanpower) + '# mean power [W]  from time 0'
-os.system("echo " + power_text + " >> " + params.savepath + "meanpower")
+power_text = str(meanpower) + ' # mean power [W]  from time 0'
+os.system("echo '" + power_text + "' >> " + params.savepath + "meanpower")
 
 ## EXTRACT FORCES AND SUM THEM
 

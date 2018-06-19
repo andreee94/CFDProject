@@ -38,6 +38,7 @@ function extractData() # simply copy important folders and files up
     cp $main_folder/main/fig $main_folder/_fig -rT
     cp $main_folder/main/controls $main_folder/_controls -rT
     cp $main_folder/main/fig/meanpower $main_folder/_meanpower 
+    cp $main_folder/main/fig/meannut $main_folder/_meannut
     cp $main_folder/main/fig/residuals.png $main_folder/_residuals.png
     cp $main_folder/main/log.run $main_folder/_log.run
 }
@@ -186,8 +187,8 @@ if [[ $commandname = *"mesh"* ]]; then
     echo "Refining the wall layers..." | tee -a "$log_file"
     (runAndTime "    refinement 1" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-case" "$main_folder/main" > $main_folder/main/log/log.refineWallLayer1) 3>&1 1>&2 2>&3 | tee -a $log_file
     (runAndTime "    refinement 2" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-case" "$main_folder/main" > $main_folder/main/log/log.refineWallLayer2) 3>&1 1>&2 2>&3 | tee -a $log_file
-    #(runAndTime "    refinement 3" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-case" "$main_folder/main" > $main_folder/main/log/log.refineWallLayer2) 3>&1 1>&2 2>&3 | tee -a $log_file
-    #(runAndTime "    refinement 4" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-case" "$main_folder/main" > $main_folder/main/log/log.refineWallLayer2) 3>&1 1>&2 2>&3 | tee -a $log_file
+    (runAndTime "    refinement 3" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-case" "$main_folder/main" > $main_folder/main/log/log.refineWallLayer3) 3>&1 1>&2 2>&3 | tee -a $log_file
+    (runAndTime "    refinement 4" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-case" "$main_folder/main" > $main_folder/main/log/log.refineWallLayer4) 3>&1 1>&2 2>&3 | tee -a $log_file
     #runAndTime "    refinement 3" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-case" "$main_folder/main" > $main_folder/main/log/log.refineWallLayer3
     #runAndTime "    refinement 4" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-case" "$main_folder/main" > $main_folder/main/log/log.refineWallLayer4
 
@@ -253,9 +254,10 @@ if [[ $commandname = *"post"* ]]; then
     (python plotForces.py "$main_folder/main/postProcessing" "forces-blade1" --save --savepath "$main_folder/main/fig/" ) 3>&1 1>&2 2>&3 | tee -a $log_file &
     (python plotForces.py "$main_folder/main/postProcessing" "forces-blade2" --save --savepath "$main_folder/main/fig/" ) 3>&1 1>&2 2>&3 | tee -a $log_file &
     (python extractForces.py -case "$main_folder/main" --save --savepath "$main_folder/main/fig/") 3>&1 1>&2 2>&3 | tee -a $log_file &
+    (python extractNut.py -case "$main_folder/main" --save --savepath "$main_folder/main/fig/") 3>&1 1>&2 2>&3 | tee -a $log_file &
     wait
     
-    ./MyfoamMonitor -logscale -idle 1 "$main_folder/main/postProcessing/residuals/0/residuals.dat" "$main_folder/main/fig/residuals.png" 
+    ./MyfoamMonitor -logscale -idle 1 "$main_folder/main/postProcessing/residuals/0/residuals.dat" "$main_folder/main/fig/residuals.png" &
 fi
 
 
