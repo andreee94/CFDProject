@@ -46,7 +46,7 @@ function runcase() # folder     cellsnumber     nOuterCorrectors     nCorrectors
 
 function analysis()
 {
-    allsimulations=("mesh-20" "mesh-40" "mesh-60" "mesh-80" "mesh-120" "mesh-160")
+    allsimulations=("mesh-20" "mesh-40" "mesh-60" "mesh-80" "mesh-120" "mesh-160" "mesh-200")
     
     echo "" > power
     # print cell numbers
