@@ -78,7 +78,7 @@ addLayersControls
     {
         blades
         {
-            nSurfaceLayers 1;
+            nSurfaceLayers #include "../include/snappy-blade-layers";
         }
     }
     
