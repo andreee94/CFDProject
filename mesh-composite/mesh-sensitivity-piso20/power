@@ -5,15 +5,18 @@ cells: 40462
 cells: 58877
 cells: 103384
 cells: 156791
+cells: 219925
 -4.68526840785 # mean power [W] from time = 1.8
 -4.88289547076 # mean power [W] from time = 1.8
 -4.82120747157 # mean power [W] from time = 1.8
 -4.77824753176 # mean power [W] from time = 1.8
 -4.77443993217 # mean power [W] from time = 1.8
 -4.7770410507 # mean power [W] from time = 1.8
+-4.82279753551 # mean power [W] from time = 1.8
 0.00201765159635 # average nut all times
 0.00195454266362 # average nut all times
 0.00193658190446 # average nut all times
 0.00191806772909 # average nut all times
 0.0018806841852 # average nut all times
 0.00186558127011 # average nut all times
+0.00183880554894 # average nut all times
