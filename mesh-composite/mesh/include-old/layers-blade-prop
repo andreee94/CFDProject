@@ -3,26 +3,19 @@
     // size of the refined cell outside layer (true) or absolute sizes (false).
     relativeSizes true;
     
-
-    // Wanted overall thickness of layers.
-    // If relativeSizes this is relative to undistorted size of cell
-    // outside layer.
-    thickness 3.9;
-
     // Expansion factor for layer mesh
-    //expansionRatio 1.25;//1.25;  //////////1.0;
+    expansionRatio 1.0; //1.0;
 
     // Wanted thickness of final added cell layer. If multiple layers
     // is the thickness of the layer furthest away from the wall.
     // Relative to undistorted size of cell outside layer.
     // See relativeSizes parameter.
-    finalLayerThickness 1.4;// 1.1; ////////0.0006; // 0.3;
-    // finalLayerThickness 0.3;
+    finalLayerThickness 2;// 1.1;//0.0006; // 0.3;
 
     // Minimum thickness of cell layer. If for any reason layer
     // cannot be above minThickness do not add layer.
     // Relative to undistorted size of cell outside layer.
-    minThickness 0.1; // 0.1; /////////0.0006;//0.0001; // 0.1;
+    minThickness 0.1;//0.0006;//0.0001; // 0.1;
 
     // If points get not extruded do nGrow layers of connected faces that are
     // also not grown. This helps convergence of the layer addition process
@@ -34,13 +27,13 @@
 
     // When not to extrude surface. 0 is flat surface, 90 is when two faces
     // are perpendicular
-    featureAngle 130; //30;
+    featureAngle 150; //30;
     
     //slipFeatureAngle 85;
 
     // Maximum number of snapping relaxation iterations. Should stop
     // before upon reaching a correct mesh.
-    nRelaxIter 5;
+    nRelaxIter 3;
 
     // Number of smoothing iterations of surface normals
     nSmoothSurfaceNormals 1;// 1;
@@ -56,7 +49,7 @@
 
     // Reduce layer growth where ratio thickness to medial
     // distance is large
-    maxThicknessToMedialRatio 0.3;//0.3;
+    maxThicknessToMedialRatio 0.1;//0.3;
 
     // Angle used to pick up medial axis points
     // Note: changed(corrected) w.r.t 17x! 90 degrees corresponds to 130 in 17x.
