@@ -93,7 +93,7 @@ function runcase() # folder     cellsnumber   command    options  nOuterCorrecto
 
 function analysis()
 {
-    allsimulations=("bsr-1" "bsr-2" "bsr-0.5" "mesh-80" "mesh-120" "mesh-160" "mesh-200")
+    allsimulations=("bsr-0.1" "bsr-0.25" "bsr-0.375" "bsr-0.5" "bsr-0.625" "bsr-0.75" "bsr-0.9" "bsr-1")
     
     echo "" > power
     # print cell numbers

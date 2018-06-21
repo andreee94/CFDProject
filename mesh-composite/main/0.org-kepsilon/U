@@ -17,7 +17,7 @@ FoamFile
 
 dimensions      [0 1 -1 0 0 0 0];
 
-internalField   uniform (#include "../controls/initialU"1 0 0);
+internalField   uniform (#include "../controls/initialU" 0 0);
 
 boundaryField
 {
