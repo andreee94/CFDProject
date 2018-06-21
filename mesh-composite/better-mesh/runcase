@@ -6,14 +6,32 @@ function runcase() # folder     cellsnumber     nOuterCorrectors     nCorrectors
     cells="$2"
     nOuterCorrectors=1
     nCorrectors=20
-    maxCo=50
     endTime=2.4
+    refineWallLayerNumber=2
     
     if [ ! -n "$3" ]
     then
         command="clean mesh run post"
     else 
         command="$3"
+    fi
+    
+    if [ ! -n "$5" ]; then
+        nOuterCorrectors=1
+    else
+        nOuterCorrectors=$5
+    fi
+    
+    if [ ! -n "$6" ]; then
+        nCorrectors=20
+    else
+        nCorrectors=$6
+    fi
+    
+    if [ ! -n "$7" ]; then
+        maxCo=50
+    else
+        maxCo=$7
     fi
     
     echo "Running case "

@@ -19,7 +19,7 @@ application     pimpleDyMFoam;
 
 startFrom       startTime;
 
-startTime       0;
+startTime       #include "../controls/startTime"; //0;
 
 stopAt          endTime;
 

@@ -66,21 +66,27 @@ startdate = datetime.datetime.now()
 print("")
 print("")
 
+startTime = 0
+for x in os.listdir(mainfolder):
+    if isfloat(x):
+        startTime = max(startTime, float(x))
+
 first = True
 while not os.path.isdir(mainfolder + "/" + str(endtime)):
     maxtime = 0
     for x in os.listdir(mainfolder):
         if isfloat(x):
             maxtime = max(maxtime, float(x))
-    perc = 100 * maxtime / endtime
-    if perc != 0:
+    percTotal = 100 * maxtime / endtime
+    percResume = 100 * (maxtime - startTime) / endtime
+    if percResume != 0:
         now = datetime.datetime.now()
-        duration = datetime.timedelta(seconds=((now - startdate).seconds/(perc)*100))
+        duration = datetime.timedelta(seconds=((now - startdate).seconds/(percResume)*100))
         missing = duration - (datetime.datetime.now() - startdate)
         endestimation = startdate + duration
         
         str0 = 'Started at = ' + formatTime(startdate) + '. '
-        str1 = myround(perc, decimals=2, strConversion=True) + "% completed. "
+        str1 = myround(percTotal, decimals=2, strConversion=True) + "% completed. "
         str2 = "Running time = " + formatTimeDelta(datetime.datetime.now() - startdate) +  ". "
         str3 = "Total time = " + formatTimeDelta(duration) + ". "
         str4 = "Missing time= " + formatTimeDelta(missing) + ". "

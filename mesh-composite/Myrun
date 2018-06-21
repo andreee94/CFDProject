@@ -60,6 +60,12 @@ function applyOptions()
         cp $main_folder/main/constant/turbulenceProperties.kepsilon $main_folder/main/constant/turbulenceProperties
         cp $main_folder/main/system/fvSchemes.kepsilon $main_folder/main/system/fvSchemes
     fi
+    if [[ $commandname = *"resume"* ]]; then
+        echo "latestTime" > $main_folder/main/controls/startTime
+    else
+        echo "0" > $main_folder/main/controls/startTime
+        rm -r $main_folder/main/postProcessing > /dev/null 2>&1
+    fi
 }
 
 # first argument is what command to run
@@ -67,6 +73,7 @@ if [ ! -n "$1" ]
 then
     commandname="full"
     commandname="clean mesh run post"
+    # also available move ectract resume
 else
     commandname=$1
     if [[ $commandname = "full" ]]; then
@@ -105,6 +112,7 @@ fi
 corenum=2 # remember to change also number in decomposeParDict
 log_file=$main_folder/main/log.run
 endTime=$(cat "$main_folder/main/controls/endTime")
+numwalllayers=$(cat "$main_folder/main/controls/refineWallLayerNumber")
 
 if [ ! -f $log_file ]; then
 	echo "Log of timings" > $log_file
@@ -116,11 +124,6 @@ fi
 
 start_time="$(date -u +%s.%N)"
 
-# use when modify blade0/Myrun
-cp $mesh_folder/blade0/Myrun $mesh_folder/blade1/Myrun
-cp $mesh_folder/blade0/Myrun $mesh_folder/blade2/Myrun
-cp $mesh_folder/blade0/Myrun $mesh_folder/circle-ext/Myrun
-cp $mesh_folder/blade0/Myrun $mesh_folder/steady/Myrun
 
 if [[ $commandname = *"clean"* ]]; then
     $mesh_folder/steady/Allclean | tee -a "$log_file"
@@ -141,6 +144,12 @@ if [[ $commandname = *"clean"* ]]; then
 fi
 
 if [[ $commandname = *"mesh"* ]]; then
+    # use when modify blade0/Myrun
+    cp $mesh_folder/blade0/Myrun $mesh_folder/blade1/Myrun
+    cp $mesh_folder/blade0/Myrun $mesh_folder/blade2/Myrun
+    cp $mesh_folder/blade0/Myrun $mesh_folder/circle-ext/Myrun
+    cp $mesh_folder/blade0/Myrun $mesh_folder/steady/Myrun
+
     mkdir $mesh_folder/steady/constant/triSurface > /dev/null 2>&1
     mkdir $mesh_folder/circle-ext/constant/triSurface > /dev/null 2>&1
     mkdir $mesh_folder/blade0/constant/triSurface > /dev/null 2>&1
@@ -184,10 +193,16 @@ if [[ $commandname = *"mesh"* ]]; then
     (runAndTime "    " "extrudeMesh" > log/log.extrudeMesh) 3>&1 1>&2 2>&3 | tee -a $log_file
     cd - # it goes back to previous directory
 
-    echo "Refining the wall layers..." | tee -a "$log_file"
-    (runAndTime "    refinement 1" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-case" "$main_folder/main" > $main_folder/main/log/log.refineWallLayer1) 3>&1 1>&2 2>&3 | tee -a $log_file
-    (runAndTime "    refinement 2" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-case" "$main_folder/main" > $main_folder/main/log/log.refineWallLayer2) 3>&1 1>&2 2>&3 | tee -a $log_file
-    (runAndTime "    refinement 3" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-case" "$main_folder/main" > $main_folder/main/log/log.refineWallLayer3) 3>&1 1>&2 2>&3 | tee -a $log_file
+    if [[ ! $numwalllayers = 0 ]]; then
+        echo "Refining the wall layers..." | tee -a "$log_file"
+        
+        for (( i=1; i<=$numwalllayers; i++ ))
+        do
+            (runAndTime "    refinement $i" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-case" "$main_folder/main" > $main_folder/main/log/log.refineWallLayer$i) 3>&1 1>&2 2>&3 | tee -a $log_file
+        done
+    fi
+    #(runAndTime "    refinement 2" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-case" "$main_folder/main" > $main_folder/main/log/log.refineWallLayer2) 3>&1 1>&2 2>&3 | tee -a $log_file
+    #(runAndTime "    refinement 3" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-case" "$main_folder/main" > $main_folder/main/log/log.refineWallLayer3) 3>&1 1>&2 2>&3 | tee -a $log_file
     #(runAndTime "    refinement 4" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-case" "$main_folder/main" > $main_folder/main/log/log.refineWallLayer4) 3>&1 1>&2 2>&3 | tee -a $log_file
     #runAndTime "    refinement 3" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-case" "$main_folder/main" > $main_folder/main/log/log.refineWallLayer3
     #runAndTime "    refinement 4" "refineWallLayer" "(blades)" "0.5" "-overwrite" "-case" "$main_folder/main" > $main_folder/main/log/log.refineWallLayer4
@@ -221,8 +236,6 @@ fi
 if [[ $commandname = *"run"* ]]; then
 
     applyOptions
-    
-    rm -r $main_folder/main/postProcessing > /dev/null 2>&1
     #cleanTime 
     
     if [[ $commandname = *"par"* ]]; then
@@ -266,7 +279,9 @@ elapsed="$(bc <<<"$end_time-$start_time")"
 echo "<--> DONE --> Total duration = $elapsed seconds" | tee -a "$log_file"
 
 if [[ ! $main_folder = "." ]]; then
+    if [[ $commandname = *"run"* ]]; then # extract only if it has run
         extractData
+    fi
 fi
 
 if [[ $commandname = *"extract"* ]]; then
