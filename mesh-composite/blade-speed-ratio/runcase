@@ -53,6 +53,12 @@ function runcase() # folder     cellsnumber   command    options  nOuterCorrecto
         initialU=${10}
     fi
     
+    if [ ! -n "${11}" ]; then
+        nNonOrthogonalCorrectors=0
+    else
+        nNonOrthogonalCorrectors=${11}
+    fi
+    
     echo $command
     echo $nOuterCorrectors
     echo $nCorrectors
@@ -78,6 +84,7 @@ function runcase() # folder     cellsnumber   command    options  nOuterCorrecto
     echo $endTime > $folder/main/controls/endTime
     echo $refineWallLayerNumber > $folder/main/controls/refineWallLayerNumber
     echo $initialU > $folder/main/controls/initialU
+    echo $nNonOrthogonalCorrectors > $folder/main/controls/nNonOrthogonalCorrectors
     
     
     # get the name of the current directory
@@ -91,9 +98,30 @@ function runcase() # folder     cellsnumber   command    options  nOuterCorrecto
 }
 
 
+function pressuredrop()
+{
+    allsimulations=("bsr-0.1" "bsr-0.25"  "bsr-0.375"  "bsr-0.425" "bsr-0.5"  "bsr-0.575" "bsr-0.625" "bsr-0.75" "bsr-0.9" "bsr-1")
+    
+    echo "inlet         oulet" >> totalpressure
+    
+    for i in "${allsimulations[@]}"
+    do
+        echo $i 
+        postProcess -func 'totalPressureIncompressible(U,p)' -case $i/main -time '0'
+        postProcess -func 'totalPressureIncompressible(U,p)' -case $i/main -latestTime
+        postProcess -func 'patchAverage(name=inlet,total(p))' -case $i/main -time '0'
+        postProcess -func 'patchAverage(name=outlet,total(p))' -case $i/main -latestTime
+        inlet=$(cat $i/main/postProcessing/patchAverage\(name\=inlet\,total\(p\)\)/0/surfaceFieldValue.dat | tail -n 1 | awk -F" " '{print $NF}')
+        outlet=$(cat $i/main/postProcessing/patchAverage\(name\=outlet\,total\(p\)\)/0/surfaceFieldValue.dat | tail -n 1 | awk -F" " '{print $NF}')
+        echo "$inlet       $outlet     || $i "  >> totalpressure
+    done
+    
+}
+
+
 function analysis()
 {
-    allsimulations=("bsr-0.1" "bsr-0.25" "bsr-0.375" "bsr-0.5" "bsr-0.625" "bsr-0.75" "bsr-0.9" "bsr-1")
+    allsimulations=("bsr-0.1" "bsr-0.25"  "bsr-0.375"  "bsr-0.425" "bsr-0.5"  "bsr-0.575" "bsr-0.625" "bsr-0.75" "bsr-0.9" "bsr-1")
     
     echo "" > power
     # print cell numbers
@@ -118,43 +146,34 @@ function analysis()
     done
     
     cat power
-        
-# 	#     cells:            9696
-# 	cells20=$(checkMesh -case mesh-pimple-20/main/ -latestTime | grep cells | head -n 1)
-# 	cells40=$(checkMesh -case mesh-pimple-40/main/ -latestTime | grep cells | head -n 1)
-# 	cells60=$(checkMesh -case mesh-pimple-60/main/ -latestTime | grep cells | head -n 1)
-# 	cells80=$(checkMesh -case mesh-pimple-80/main/ -latestTime | grep cells | head -n 1)
-# 	cells120=$(checkMesh -case mesh-pimple-120/main/ -latestTime | grep cells | head -n 1)
-# 	cells160=$(checkMesh -case mesh-pimple-160/main/ -latestTime | grep cells | head -n 1)
-# 	cells160fine=$(checkMesh -case mesh-pimple-160-fine/main/ -latestTime | grep cells | head -n 1)
-# 	cells200=$(checkMesh -case mesh-pimple-200/main/ -latestTime | grep cells | head -n 1)
-# 	
-# 	# -4.70985928088# mean power [W]
-# 	power20=$(cat mesh-pimple-20/main/fig/meanpower | head -n 1)
-# 	power40=$(cat mesh-pimple-40/main/fig/meanpower | head -n 1)
-# 	power60=$(cat mesh-pimple-60/main/fig/meanpower | head -n 1)
-# 	power80=$(cat mesh-pimple-80/main/fig/meanpower | head -n 1)
-# 	power120=$(cat mesh-pimple-120/main/fig/meanpower | head -n 1)
-# 	power160fine=$(cat mesh-pimple-160-fine/main/fig/meanpower | head -n 1)
-# 	power160=$(cat mesh-pimple-160/main/fig/meanpower | head -n 1)
-# 	power200=$(cat mesh-pimple-200/main/fig/meanpower | head -n 1)
-# 	
-# 	echo $cells20 > power
-# 	echo $cells40 >> power
-# 	echo $cells60 >> power
-# 	echo $cells80 >> power
-# 	echo $cells120 >> power
-# 	echo $cells160fine >> power
-# 	echo $cells160 >> power
-# 	echo $cells200 >> power
-# 	
-# 	echo $power20 >> power
-# 	echo $power40 >> power
-# 	echo $power60 >> power
-# 	echo $power80 >> power
-# 	echo $power120 >> power
-# 	echo $power160fine >> power
-# 	echo $power160 >> power
-# 	echo $power200 >> power
+}
+
+function analysis120()
+{
+    allsimulations=("bsr-0.1-120" "bsr-0.25-120" "bsr-0.5-120" "bsr-0.75-120" "bsr-0.9-120" )
+    
+    echo "" > power120
+    # print cell numbers
+    for i in "${allsimulations[@]}"
+    do
+        cells=$(checkMesh -case $i/main/ -latestTime | grep cells | head -n 1)
+        echo $cells >> power120
+    done
+    
+    # print power
+    for i in "${allsimulations[@]}"
+    do
+        power=$(cat $i/main/fig/meanpower | head -n 1)
+        echo $power >> power120
+    done
+    
+    # print nut
+    for i in "${allsimulations[@]}"
+    do
+        nut=$(cat $i/main/fig/meannut | head -n 1)
+        echo $nut >> power120
+    done
+    
+    cat power120
 }
 

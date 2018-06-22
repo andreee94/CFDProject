@@ -43,6 +43,26 @@ function runcase() # folder     cellsnumber     nOuterCorrectors     nCorrectors
     fi
 }
 
+function pressuredrop()
+{
+    allsimulations=("mesh-20" "mesh-40" "mesh-60" "mesh-80" "mesh-120" "mesh-160" "mesh-200")
+    
+    echo "inlet         oulet" >> totalpressure
+    
+    for i in "${allsimulations[@]}"
+    do
+        echo $i 
+        postProcess -func 'totalPressureIncompressible(U,p)' -case $i/main -time '0'
+        postProcess -func 'totalPressureIncompressible(U,p)' -case $i/main -latestTime
+        postProcess -func 'patchAverage(name=inlet,total(p))' -case $i/main -time '0'
+        postProcess -func 'patchAverage(name=outlet,total(p))' -case $i/main -latestTime
+        inlet=$(cat $i/main/postProcessing/patchAverage\(name\=inlet\,total\(p\)\)/0/surfaceFieldValue.dat | tail -n 1 | awk -F" " '{print $NF}')
+        outlet=$(cat $i/main/postProcessing/patchAverage\(name\=outlet\,total\(p\)\)/0/surfaceFieldValue.dat | tail -n 1 | awk -F" " '{print $NF}')
+        echo "$inlet       $outlet     || $i "  >> totalpressure
+    done
+    
+}
+
 
 function analysis()
 {

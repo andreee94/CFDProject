@@ -16,25 +16,23 @@ meshcells="(240 80 1)"
 ###
 # runcase mesh-only "$meshcells" "clean mesh" "komegasst" 1 13 30 3 2.4 5.75958653158129
 
-cp -r mesh-only bsr-0.375
-#cp -r mesh-only bsr-0.425
-#cp -r mesh-only bsr-0.575
-cp -r mesh-only bsr-0.625
-cp -r mesh-only bsr-1
-# cp -r mesh-only bsr-0.5
-# cp -r mesh-only bsr-0.75
-# cp -r mesh-only bsr-0.9
+#cp -r mesh-only bsr-0.375
+cp -r mesh-only bsr-0.425
+cp -r mesh-only bsr-0.575
+#cp -r mesh-only bsr-0.625
+#cp -r mesh-only bsr-1
+#cp -r mesh-only bsr-1.1
 ###
 
-runcase bsr-0.375 "$meshcells" "run post" "komegasst" 1 13 45 3 2.4 1.53588974175501
+#runcase bsr-0.375 "$meshcells" "run post" "komegasst" 1 13 45 3 2.4 1.53588974175501
 
-#runcase bsr-0.425 "$meshcells" "run post" "komegasst" 1 13 40 3 2.4 1.3551968309603
+runcase bsr-0.425 "$meshcells" "run post" "komegasst" 1 13 40 3 2.4 1.3551968309603 0
 
-#runcase bsr-0.575 "$meshcells" "run post" "komegasst" 1 13 30 3 2.4 1.0016672228837
+runcase bsr-0.575 "$meshcells" "run post" "komegasst" 1 4 30 3 2.4 1.0016672228837 9
 
-runcase bsr-0.625 "$meshcells" "run post" "komegasst" 1 13 28 3 2.4 0.921533845053006
+#runcase bsr-0.625 "$meshcells" "run post" "komegasst" 1 13 28 3 2.4 0.921533845053006
 
-runcase bsr-1 "$meshcells" "run post" "komegasst" 1 13 17 3 2.4 0.575958653158129
+#runcase bsr-1 "$meshcells" "run post" "komegasst" 1 13 17 3 2.4 0.575958653158129
 
 
 #############################################
