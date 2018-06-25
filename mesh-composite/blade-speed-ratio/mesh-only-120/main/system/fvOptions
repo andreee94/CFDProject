@@ -1,0 +1,48 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.3.0                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      fvOptions;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+
+gravitationalForce
+{
+    type            buoyancyForce;
+	fields			(U);
+    active          true;
+    // timeStart       0; 
+    // duration        10; 
+}
+
+
+// MRF1
+// {
+//     type            MRFSource;
+//     active          yes;
+//     selectionMode   cellZone;
+//     cellZone        rotating;
+// 
+//     MRFSourceCoeffs
+//     {
+//         // Fixed patches (by default they 'move' with the MRF zone)
+//         nonRotatingPatches ();
+// 
+//         origin    (0 0 0);
+//         axis      (0 -1 0);
+//         omega     constant 150;
+//     }
+// }
+
+
+// ************************************************************************* //

@@ -1,0 +1,51 @@
+#!/bin/bash
+#cd ${0%/*} || exit 1    # run from this directory
+
+
+#############################################
+source ./runcase
+#############################################
+
+#           folder     cellsnumber      command             options
+#runcase mesh-pimple-160 "(480 160 1)" "clean mesh run post" "komegasst"
+#runcase mesh-pimple-160 "(480 160 1)" "post" "komegasst"
+
+#############################################
+
+
+
+allsimulations=("mesh-pimple-20" "mesh-pimple-40" "mesh-pimple-60" "mesh-pimple-80" "mesh-pimple-120" "mesh-pimple-160" "mesh-pimple-200")
+
+
+
+runcase mesh-pimple-20  "(60 20 1)" "post" "komegasst"
+runcase mesh-pimple-40  "(120 40 1)" "post" "komegasst"
+runcase mesh-pimple-60  "(180 60 1)" "post" "komegasst"
+runcase mesh-pimple-80 "(240 80 1)" "post" "komegasst"
+runcase mesh-pimple-120 "(360 120 1)" "post" "komegasst"
+runcase mesh-pimple-160 "(480 160 1)" "post" "komegasst"
+runcase mesh-pimple-160-fine "(480 160 1)" "post" "komegasst"
+runcase mesh-pimple-200 "(600 200 1)" "post" "komegasst"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

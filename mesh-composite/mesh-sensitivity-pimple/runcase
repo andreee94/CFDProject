@@ -1,0 +1,133 @@
+#!/bin/bash
+function runcase() # folder     cellsnumber     nOuterCorrectors     nCorrectors    maxCo    command    options
+{   
+    #set -x
+    folder="$1"
+    cells="$2"
+    nOuterCorrectors=1
+    nCorrectors=20
+    maxCo=50
+    endTime=2.4
+    
+    if [ ! -n "$3" ]
+    then
+        command="clean mesh run post"
+    else 
+        command="$3"
+    fi
+    
+    echo "Running case "
+    
+    if [ ! -d $folder ]; then
+        mkdir $folder
+        mkdir $folder/main
+        cp ../mesh/* $folder -r
+        cp ../main $folder/ -r
+    fi
+    
+    # change parameters according to user options
+    echo $cells > $folder/include/cells-array
+    echo $nOuterCorrectors > $folder/main/controls/nOuterCorrectors
+    echo $nCorrectors > $folder/main/controls/nCorrectors
+    echo $maxCo > $folder/main/controls/maxCo
+    echo $endTime > $folder/main/controls/endTime
+    
+    
+    # get the name of the current directory
+    name=${PWD##*/}  
+    
+    if [ ! -n "$4" ]; then
+        ../Myrun "$command" "$name/$folder" "$name/$folder"
+    else
+        ../Myrun "$command" "$name/$folder" "$name/$folder" "$4" # options parameter
+    fi
+}
+
+function pressuredrop()
+{
+    allsimulations=("mesh-pimple-20" "mesh-pimple-40" "mesh-pimple-60" "mesh-pimple-80" "mesh-pimple-120" "mesh-pimple-160" "mesh-pimple-200")
+    
+    echo "inlet         oulet" >> totalpressure
+    
+    for i in "${allsimulations[@]}"
+    do
+        echo $i 
+        postProcess -func 'totalPressureIncompressible(U,p)' -case $i/main -time '0'
+        postProcess -func 'totalPressureIncompressible(U,p)' -case $i/main -latestTime
+        postProcess -func 'patchAverage(name=inlet,total(p))' -case $i/main -time '0'
+        postProcess -func 'patchAverage(name=outlet,total(p))' -case $i/main -latestTime
+        inlet=$(cat $i/main/postProcessing/patchAverage\(name\=inlet\,total\(p\)\)/0/surfaceFieldValue.dat | tail -n 1 | awk -F" " '{print $NF}')
+        outlet=$(cat $i/main/postProcessing/patchAverage\(name\=outlet\,total\(p\)\)/0/surfaceFieldValue.dat | tail -n 1 | awk -F" " '{print $NF}')
+        echo "$inlet       $outlet     || $i "  >> totalpressure
+    done
+    
+}
+
+
+function analysis()
+{
+    allsimulations=("mesh-pimple-20" "mesh-pimple-40" "mesh-pimple-60" "mesh-pimple-80" "mesh-pimple-120" "mesh-pimple-160" "mesh-pimple-200")
+    
+    echo "" > power
+    # print cell numbers
+    for i in "${allsimulations[@]}"
+    do
+        cells=$(checkMesh -case $i/main/ -latestTime | grep cells | head -n 1)
+        echo $cells >> power
+    done
+    
+    # print power
+    for i in "${allsimulations[@]}"
+    do
+        power=$(cat $i/main/fig/meanpower | head -n 1)
+        echo $power >> power
+    done
+    
+    # print nut
+    for i in "${allsimulations[@]}"
+    do
+        nut=$(cat $i/main/fig/meannut | head -n 1)
+        echo $nut >> power
+    done
+    
+    cat power
+        
+# 	#     cells:            9696
+# 	cells20=$(checkMesh -case mesh-pimple-20/main/ -latestTime | grep cells | head -n 1)
+# 	cells40=$(checkMesh -case mesh-pimple-40/main/ -latestTime | grep cells | head -n 1)
+# 	cells60=$(checkMesh -case mesh-pimple-60/main/ -latestTime | grep cells | head -n 1)
+# 	cells80=$(checkMesh -case mesh-pimple-80/main/ -latestTime | grep cells | head -n 1)
+# 	cells120=$(checkMesh -case mesh-pimple-120/main/ -latestTime | grep cells | head -n 1)
+# 	cells160=$(checkMesh -case mesh-pimple-160/main/ -latestTime | grep cells | head -n 1)
+# 	cells160fine=$(checkMesh -case mesh-pimple-160-fine/main/ -latestTime | grep cells | head -n 1)
+# 	cells200=$(checkMesh -case mesh-pimple-200/main/ -latestTime | grep cells | head -n 1)
+# 	
+# 	# -4.70985928088# mean power [W]
+# 	power20=$(cat mesh-pimple-20/main/fig/meanpower | head -n 1)
+# 	power40=$(cat mesh-pimple-40/main/fig/meanpower | head -n 1)
+# 	power60=$(cat mesh-pimple-60/main/fig/meanpower | head -n 1)
+# 	power80=$(cat mesh-pimple-80/main/fig/meanpower | head -n 1)
+# 	power120=$(cat mesh-pimple-120/main/fig/meanpower | head -n 1)
+# 	power160fine=$(cat mesh-pimple-160-fine/main/fig/meanpower | head -n 1)
+# 	power160=$(cat mesh-pimple-160/main/fig/meanpower | head -n 1)
+# 	power200=$(cat mesh-pimple-200/main/fig/meanpower | head -n 1)
+# 	
+# 	echo $cells20 > power
+# 	echo $cells40 >> power
+# 	echo $cells60 >> power
+# 	echo $cells80 >> power
+# 	echo $cells120 >> power
+# 	echo $cells160fine >> power
+# 	echo $cells160 >> power
+# 	echo $cells200 >> power
+# 	
+# 	echo $power20 >> power
+# 	echo $power40 >> power
+# 	echo $power60 >> power
+# 	echo $power80 >> power
+# 	echo $power120 >> power
+# 	echo $power160fine >> power
+# 	echo $power160 >> power
+# 	echo $power200 >> power
+}
+

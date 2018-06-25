@@ -46,6 +46,11 @@ mesh-composite/piso-pimple/piso*
 mesh-composite/better-mesh/mesh*
 mesh-composite/map-fields/mesh*
 #
+mesh-composite/blade-speed-ratio/bsr-*
+!mesh-composite/blade-speed-ratio/My*
+!mesh-composite/blade-speed-ratio/*.ods
+!mesh-composite/blade-speed-ratio/runcase
+#
 mesh-composite/mesh-sensitivity-piso20/mesh-*
 !mesh-composite/mesh-sensitivity-piso20/My*
 !mesh-composite/mesh-sensitivity-piso20/runcase
