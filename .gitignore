@@ -49,6 +49,7 @@ mesh-composite/map-fields/mesh*
 mesh-composite/mesh-sensitivity-piso20/mesh-*
 !mesh-composite/mesh-sensitivity-piso20/My*
 !mesh-composite/mesh-sensitivity-piso20/runcase
+mesh-composite/testpout
 # maybe add also files that contains old in the name
 ## MESH
 # mesh/constant/polyMesh
