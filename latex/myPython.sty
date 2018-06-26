@@ -1,0 +1,29 @@
+\ProvidesPackage{myPython}
+
+
+\usepackage[pyfuture=all,gobble=auto]{pythontex}
+
+
+\newcommand{\printfile}[1]
+{
+	\pyc{
+	print('testo da new command');
+	print("\n");
+	print(#1);
+	print("\n");
+	print(str(#1));
+	print("\n");
+    %for i in range(1, 5): print(str(i) + "\n");
+    }
+    \pyc{f = open(#1);}
+    \pyc{for l in f.readlines(): print(l);}
+    \pyc{f.close();}
+}
+
+%1 = filename 
+%2 = propname
+\newcommand{\csvprop}[2] 
+{
+	\pyc{from mycsvimport import MyCSVImport}
+	\pyc{print(MyCSVImport.csvgetprop(#1, #2));}
+}
