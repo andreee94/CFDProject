@@ -159,6 +159,22 @@ Boundary condition are defied over patches so it is important to define that.
 \item \textbf{Internal field} is uniform at the beginning and it is set to $1\ms$ in the x direction even if in class we have set inlet velocity to $1\ms$ and internal field inited to $0\ms$. We take this decision to make the transition phase faster to limit the simulation time. We are actually interested only in staeady state power so limit the transition let to reduce computational time;
 \item \emph{Inlet Section} velocity is fixed to $1\ms$ during all the simulation; 
 \item \emph{Outlet Section} velocity is unknown so we have to set it to ZeroGradient boundary condition;
+\item \emph{Upper wall} velocity is set to Slip since the fluid can flow in the free stream;
+\item \emph{Lower wall} velocity is set to NoSlip which is equivalent to fix the value to zero;
+\item \emph{Blades} velocity is set to MovingWallVelocity which is equivalent to NoSlip for moving bodies;
+\end{itemize}
+
+\paragraph{Pressure $p$}
+\begin{itemize}
+\item \textbf{Internal field} is uniform at the beginning and it is set to $0$. 
+OpenFoam for incompressible cases works with pressure normalized respect to density. 
+Moreover it can manage relative pressures. 
+So the value that we set is relative $0 \,\text{bar} \cdot \text{m}^3 / \kg = \m / \s^2$.
+\item \emph{Inlet Section} pressure distribution unknown so we set to ZeroGradient; 
+\item \emph{Outlet Section} is set to atmospheric ($0 \m / \s^2$) since we assume to be sufficiently far from the blades that pressure is constant;
+\item \emph{Upper wall} pressure is set to atmospheric since it is free stream;
+\item \emph{Lower wall} pressure is set to ZeroGradient since boundary layer are isobar;
+\item \emph{Blades} pressure is set to ZeroGradient since boundary layer are isobar;
 \end{itemize}
 
 
