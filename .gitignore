@@ -80,4 +80,5 @@ latex/*.dvi
 latex/*.aux
 latex/*.toc
 latex/*.gz
+!latex/images/*.png
 
