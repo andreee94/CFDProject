@@ -1,13 +1,14 @@
 #!/bin/bash
-function runcase() # folder     cellsnumber     nOuterCorrectors     nCorrectors    maxCo    command    options
+function runcase() # folder     cellsnumber   command    options  nOuterCorrectors     nCorrectors    maxCo   refineWallLayerNumber     endTime         initialU
 {   
     #set -x
     folder="$1"
     cells="$2"
-    nOuterCorrectors=1
-    nCorrectors=20
-    maxCo=50
-    endTime=2.4
+    #nOuterCorrectors=1
+    #nCorrectors=20
+    #endTime=2.4
+    #refineWallLayerNumber=3
+    #initialU=1
     
     if [ ! -n "$3" ]
     then
@@ -15,6 +16,56 @@ function runcase() # folder     cellsnumber     nOuterCorrectors     nCorrectors
     else 
         command="$3"
     fi
+    
+    if [ ! -n "$5" ]; then
+        nOuterCorrectors=1
+    else
+        nOuterCorrectors=$5
+    fi
+    
+    if [ ! -n "$6" ]; then
+        nCorrectors=20
+    else
+        nCorrectors=$6
+    fi
+    
+    if [ ! -n "$7" ]; then
+        maxCo=50
+    else
+        maxCo=$7
+    fi
+    
+    if [ ! -n "$8" ]; then
+        refineWallLayerNumber=3
+    else
+        refineWallLayerNumber=$8
+    fi
+    
+    if [ ! -n "$9" ]; then
+        endTime=2.4
+    else
+        endTime=$9
+    fi
+    
+    if [ ! -n "${10}" ]; then
+        initialU=1
+    else
+        initialU=${10}
+    fi
+    
+    if [ ! -n "${11}" ]; then
+        nNonOrthogonalCorrectors=0
+    else
+        nNonOrthogonalCorrectors=${11}
+    fi
+    
+    echo $command
+    echo $nOuterCorrectors
+    echo $nCorrectors
+    echo $maxCo
+    echo $refineWallLayerNumber
+    echo $endTime
+    echo $initialU
     
     echo "Running case "
     
@@ -31,6 +82,9 @@ function runcase() # folder     cellsnumber     nOuterCorrectors     nCorrectors
     echo $nCorrectors > $folder/main/controls/nCorrectors
     echo $maxCo > $folder/main/controls/maxCo
     echo $endTime > $folder/main/controls/endTime
+    echo $refineWallLayerNumber > $folder/main/controls/refineWallLayerNumber
+    echo $initialU > $folder/main/controls/initialU
+    echo $nNonOrthogonalCorrectors > $folder/main/controls/nNonOrthogonalCorrectors
     
     
     # get the name of the current directory
@@ -41,26 +95,6 @@ function runcase() # folder     cellsnumber     nOuterCorrectors     nCorrectors
     else
         ../Myrun "$command" "$name/$folder" "$name/$folder" "$4" # options parameter
     fi
-}
-
-function pressuredrop()
-{
-    allsimulations=("mesh-20" "mesh-40" "mesh-60" "mesh-80" "mesh-120" "mesh-160" "mesh-200")
-    
-    echo "inlet         oulet" >> totalpressure
-    
-    for i in "${allsimulations[@]}"
-    do
-        echo $i 
-        postProcess -func 'totalPressureIncompressible(U,p)' -case $i/main -time '0.02'
-        postProcess -func 'totalPressureIncompressible(U,p)' -case $i/main -latestTime
-        postProcess -func 'patchAverage(name=inlet,total(p))' -case $i/main -time '0'
-        postProcess -func 'patchAverage(name=outlet,total(p))' -case $i/main -latestTime
-        inlet=$(cat $i/main/postProcessing/patchAverage\(name\=inlet\,total\(p\)\)/0/surfaceFieldValue.dat | tail -n 1 | awk -F" " '{print $NF}')
-        outlet=$(cat $i/main/postProcessing/patchAverage\(name\=outlet\,total\(p\)\)/0/surfaceFieldValue.dat | tail -n 1 | awk -F" " '{print $NF}')
-        echo "$inlet       $outlet     || $i "  >> totalpressure
-    done
-    
 }
 
 

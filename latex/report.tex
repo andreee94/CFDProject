@@ -105,6 +105,63 @@ The in-class workflow has been divided into four little sub-tasks.
 
 The sub-tasks allowed us to start to get more familiar with the project work and understand the main issues met along the path with the help of the professors. The in-class project started with the raw mesh generation (blockMesh, snappyHexMesh), continued with the preparation of the rotating mesh(AMI files, baffles creation, merge and split procedure), movement of the mesh with the provided motion laws  (real turbine rotation, gif rendering) and finally the set up, running and post processing of the simulation.
 
+\section{In-class work}
+\paragraph{In-class workflow}\mbox{}\\
+The in-class workflow has been divided into four little sub-tasks. The sub-tasks allowed us to start to get more familiar with the project work and understand the main issues met along the path with the help of the professors. The in-class project started with the raw mesh generation (blockMesh, snappyHexMesh), continued with the preparation of the rotating mesh(AMI files, baffles creation, merge and split procedure), movement of the mesh with the provided motion laws  (real turbine rotation, gif rendering) and finally the set up, running and post processing of the simulation.
+
+\paragraph{Mesh generation}\mbox{}\\
+One of the most challenging section of the in-class project was the generation of the raw turbine domain mesh. We have used many different openFoam comands in order to build a complete and exhaustive mesh that must be suitable for the hydraulic problem characteristics.
+\\ 
+Let's start to present the overall mesh work-flow with all the brief steps evaluation.
+\\
+\begin{itemize}
+\item The scaling of the dimensions and geometry parameters coming from the stl files from millimiters to meters in order to perform correst calculations in the openFoam environment;
+
+\item BlockMesh and SnappyHexMesh for each of the three blades. At this point castellated, snapped and layered mesh have been realized for each blade and we have to join all together;
+
+\item Merging procedure in order to have one complete mesh and the copy of the mesh inside our main environment of the project. We have decided to oparate in this way in order to have a better comunication level in terms of interpolation values among mesh sub-domains. In this way the neighboring cells of different sub-domain are well oriented and aligned. The result is an improvement on the mesh quality controls as non-orthogonality index and skewness coefficient  because we have parallel disposition of cells and they appear as concentric refined layers;
+
+\item Mesh extrusion with the thickness of the 2D domain already given as a geometry parameter equal to the blade width);
+
+\item Wall layer refinement;
+
+\item The first mesh is the 40$\times$120 mesh where the couple of numbers indicates the number of squared and regular cells that are disposed in the y and x direction respectively in the blockMeshDict definition.  
+\end{itemize}
+
+Since we deal quite often with different mesh size, in particular during the mesh senitivity analysis, we will call mesh $i$ the mesh with $i$ cells in the y direction, and the cells in the x direction are such a number that let to have squared cells, in order to make the comparison easier and faster to understand.
+
+\paragraph{In-class simulation}\mbox{}\\
+In the final part of the in-class project we performed the set up and run of the first raw simulation.
+To do so, we have to manage with the boundary conditions of the problem, the turbolence modeling and the numeric schemes. All thease macro-section of the simulation were assigned a priori and the last part of our work is to play with all these parameters and try to understand the influence of each singular changing in the set up on the final result that the turbine must provide.
+
+For the first setup we use the simpler $k\!-\!\varepsilon$ turbolence model respect to more appropriate $k\!-\!\omega \, \text{SST}$.
+
+\subsection{Boundary conditions}
+Boundary conditions are referred to the water stream velocity that is investing the machine, the pressure of the water in the stream channel, k, w and nut values.
+
+Our main interest is to focus the first two boundary conditions so velocity and pressure, since the other are maily taken as the default condition for the respective turbolence model.
+
+\paragraph{Patches}\mbox{}\\
+Boundary condition are defied over patches so it is important to define that.
+\begin{itemize}
+\item \emph{Inlet Section} is that from which water comes into the domain moving toward the x direction;
+\item \emph{Outlet Section} is where water comes out from the domain;
+\item \emph{Front and back faces} are always set to empty since we are dealing with a 2D problem;
+\item \emph{Lower wall} is a physical wall that limit the flow;
+\item \emph{Upper wall} is a free surface where the flow can slip;
+\item \emph{Blades} are physical surfaces that moves inside the domain;
+\item \emph{Ami interfaces} are internal patches that allow the communication between moving adiacent cells. All the quantities are set as CyclicAmi.
+\end{itemize}
+
+
+\paragraph{Velocity U}
+\begin{itemize}
+\item \textbf{Internal field} is uniform at the beginning and it is set to $1\ms$ in the x direction even if in class we have set inlet velocity to $1\ms$ and internal field inited to $0\ms$. We take this decision to make the transition phase faster to limit the simulation time. We are actually interested only in staeady state power so limit the transition let to reduce computational time;
+\item \emph{Inlet Section} velocity is fixed to $1\ms$ during all the simulation; 
+\item \emph{Outlet Section} velocity is unknown so we have to set it to ZeroGradient boundary condition;
+\end{itemize}
+
+
 \section{Mesh sensitivity Analysis}
 
 

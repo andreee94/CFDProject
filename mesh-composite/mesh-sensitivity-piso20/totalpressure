@@ -6,3 +6,27 @@ inlet         oulet
 6.000000e-01       4.841686e-01     || mesh-120 
 6.000000e-01       4.887155e-01     || mesh-160 
 6.000000e-01       4.903777e-01     || mesh-200 
+inlet         oulet
+6.000000e-01       4.561031e-01     || mesh-20 
+            || mesh-40 
+            || mesh-60 
+            || mesh-80 
+            || mesh-120 
+            || mesh-160 
+            || mesh-200 
+inlet         oulet
+6.000000e-01       4.561031e-01     || mesh-20 
+            || mesh-40 
+            || mesh-60 
+            || mesh-80 
+            || mesh-120 
+            || mesh-160 
+            || mesh-200 
+inlet         oulet
+6.000000e-01       4.561031e-01     || mesh-20 
+            || mesh-40 
+            || mesh-60 
+            || mesh-80 
+            || mesh-120 
+            || mesh-160 
+            || mesh-200 

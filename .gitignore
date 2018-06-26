@@ -55,6 +55,8 @@ mesh-composite/mesh-sensitivity-piso20/mesh-*
 !mesh-composite/mesh-sensitivity-piso20/My*
 !mesh-composite/mesh-sensitivity-piso20/runcase
 mesh-composite/testpout
+mesh-composite/no-gravity/mesh*
+!mesh-composite/no-gravity/My*
 # maybe add also files that contains old in the name
 ## MESH
 # mesh/constant/polyMesh
@@ -81,4 +83,5 @@ latex/*.aux
 latex/*.toc
 latex/*.gz
 !latex/images/*.png
+!*.ods
 
