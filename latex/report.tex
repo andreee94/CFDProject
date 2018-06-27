@@ -177,9 +177,40 @@ So the value that we set is relative $0 \,\text{bar} \cdot \text{m}^3 / \kg = \m
 \item \emph{Blades} pressure is set to ZeroGradient since boundary layer are isobar;
 \end{itemize}
 
+\paragraph{Turbolent quantities $k$, $\varepsilon$, $\omega$, $\nu_T$}\mbox{}\\
+For what that concern the boundary conditions of the turbolence quantity we apply default settings.
+We will discuss instead a modification of the value of initialization of that quantity to speed up as much as possible the convergence to a steady state condition.
+
+\paragraph{Solver}\mbox{}\\
+The solver applied in the class session is pimpleDyMFoam in PISO mode with one outer corrector, two inner correctors and no non orthogonal correctors. This solver is responsible not only for the solution of the system of differential equation, but also for the movement of the mesh at each time step. 
 
 \section{Mesh sensitivity Analysis}
+With the mesh sensitivity analysis second part of the report starts. Here we are interested to find the proper value of parameters that let to have the best simulation as possible.
 
+The first and probably the mos significant operation is the mesh sensitivity analysis.
+\\
+The aim is to find a tradeoff between \emph{accuracy} and \emph{computational cost}. 
+
+The expected improvement into the quantities of interest decreases with the increase of the number of cells.
+
+There is a point beyond which the improvement becomes really negligible and we encounter a plateau; beyond that it not worth the increate in computational time. 
+
+Our sensitivity analysis includes 6 different simulation:
+\begin{itemize}
+\item mesh 20
+\item mesh 40
+\item mesh 60
+\item mesh 80
+\item mesh 120
+\item mesh 160
+\end{itemize}
+
+The choise of the level of vertical cells depends on the need to exploit 3 different steps in which the number of cells becomes 4 times bigger. Actually we pass from approximately 10000 cells of the mesh 20 to 40000 cells of the mesh 80 finally to around 160000 cells of the mesh 160. 
+The ratio four explains the necessity to double the cells number in each of the relevant dimensions of our 2D problem.
+
+Despite the fact that the power generated is not the best indicator possible for highliting sensitivity behaviour it is instead the most relevant output parameter of our simulation.
+Beside that we put also the total pressure drop that is a measure of the losses due to the turbine.
+To compute the drop we consider the averate of the total pressure at the inlet and at the outlet both calculated at the end of the simulation.
 
 \section{Numerical Schemes}
 
