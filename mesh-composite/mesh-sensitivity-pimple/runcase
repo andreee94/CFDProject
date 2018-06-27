@@ -45,20 +45,20 @@ function runcase() # folder     cellsnumber     nOuterCorrectors     nCorrectors
 
 function pressuredrop()
 {
-    allsimulations=("mesh-pimple-20" "mesh-pimple-40" "mesh-pimple-60" "mesh-pimple-80" "mesh-pimple-120" "mesh-pimple-160" "mesh-pimple-200")
+    allsimulations=("mesh-pimple-20" "mesh-pimple-40" "mesh-pimple-60" "mesh-pimple-80" "mesh-pimple-120" "mesh-pimple-160-fine")
     
-    echo "inlet         oulet" >> totalpressure
+    echo "inlet         oulet" >> totalpressurefine
     
     for i in "${allsimulations[@]}"
     do
         echo $i 
         postProcess -func 'totalPressureIncompressible(U,p)' -case $i/main -time '0'
-        postProcess -func 'totalPressureIncompressible(U,p)' -case $i/main -latestTime
-        postProcess -func 'patchAverage(name=inlet,total(p))' -case $i/main -time '0'
+        postProcess -func 'totalPressureIncompressible(U,p)' -case $i/main -latestTime #
+        postProcess -func 'patchAverage(name=inlet,total(p))' -case $i/main -latestTime # -time '0'
         postProcess -func 'patchAverage(name=outlet,total(p))' -case $i/main -latestTime
         inlet=$(cat $i/main/postProcessing/patchAverage\(name\=inlet\,total\(p\)\)/0/surfaceFieldValue.dat | tail -n 1 | awk -F" " '{print $NF}')
         outlet=$(cat $i/main/postProcessing/patchAverage\(name\=outlet\,total\(p\)\)/0/surfaceFieldValue.dat | tail -n 1 | awk -F" " '{print $NF}')
-        echo "$inlet       $outlet     || $i "  >> totalpressure
+        echo "$inlet       $outlet     || $i "  >> totalpressurefine
     done
     
 }
@@ -66,28 +66,28 @@ function pressuredrop()
 
 function analysis()
 {
-    allsimulations=("mesh-pimple-20" "mesh-pimple-40" "mesh-pimple-60" "mesh-pimple-80" "mesh-pimple-120" "mesh-pimple-160" "mesh-pimple-200")
+    allsimulations=("mesh-pimple-20" "mesh-pimple-40" "mesh-pimple-60" "mesh-pimple-80" "mesh-pimple-120" "mesh-pimple-160-fine")
     
-    echo "" > power
+    echo "" > powerfine
     # print cell numbers
     for i in "${allsimulations[@]}"
     do
         cells=$(checkMesh -case $i/main/ -latestTime | grep cells | head -n 1)
-        echo $cells >> power
+        echo $cells >> powerfine
     done
     
     # print power
     for i in "${allsimulations[@]}"
     do
         power=$(cat $i/main/fig/meanpower | head -n 1)
-        echo $power >> power
+        echo $power >> powerfine
     done
     
     # print nut
     for i in "${allsimulations[@]}"
     do
         nut=$(cat $i/main/fig/meannut | head -n 1)
-        echo $nut >> power
+        echo $nut >> powerfine
     done
     
     cat power

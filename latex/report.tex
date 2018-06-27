@@ -30,6 +30,9 @@
 \usepackage{url}
 \usepackage{tabularx}
 \usepackage{ltablex}
+\usepackage{booktabs}
+\usepackage{float}
+\restylefloat{table} % with H force table position
 
 \title{
 \includegraphics[scale=0.4]{images/logo.png}
@@ -211,6 +214,116 @@ The ratio four explains the necessity to double the cells number in each of the 
 Despite the fact that the power generated is not the best indicator possible for highliting sensitivity behaviour it is instead the most relevant output parameter of our simulation.
 Beside that we put also the total pressure drop that is a measure of the losses due to the turbine.
 To compute the drop we consider the averate of the total pressure at the inlet and at the outlet both calculated at the end of the simulation.
+
+During the choice of the mesh we have expoited two different possibilities:
+\begin{itemize}
+\item with a refinement region around the blades;
+\item without a refinement region.
+\end{itemize}
+In both cases the same layer were present.
+What we have noticed is that the results in terms of power were slighlty different, so we have decided to perform mesh sensitivity analysis with both the meshes.
+
+\begin{figure}
+\subfigure[Mesh 120 without refinement region]{\includegraphics[width=8.5cm]{images/meshsensitivity/mesh120-blade0-noregion.png}}
+\hfill
+\subfigure[Mesh 120 with refinement region]{\includegraphics[width=8.5cm]{images/meshsensitivity/mesh120-blade0-region.png}}
+\caption{Comparison between meshes with and without refinement.}
+\end{figure}
+
+\begin{figure}
+\label{fig:noregion-allmeshes}
+\subfigure[Mesh 20 without refinement region]{\includegraphics[width=8.5cm]{images/meshsensitivity/mesh20-blade0-noregion.png}}
+\hfill
+\subfigure[Mesh 40 without refinement region]{\includegraphics[width=8.5cm]{images/meshsensitivity/mesh40-blade0-noregion.png}}
+\subfigure[Mesh 60 without refinement region]{\includegraphics[width=8.5cm]{images/meshsensitivity/mesh60-blade0-noregion.png}}
+\hfill
+\subfigure[Mesh 80 without refinement region]{\includegraphics[width=8.5cm]{images/meshsensitivity/mesh80-blade0-noregion.png}}
+\subfigure[Mesh 120 without refinement region]{\includegraphics[width=8.5cm]{images/meshsensitivity/mesh120-blade0-noregion.png}}
+\hfill
+\subfigure[Mesh 160 without refinement region]{\includegraphics[width=8.5cm]{images/meshsensitivity/mesh160-blade0-noregion.png}}
+\caption{Comparison between different mesh sizes.}
+\end{figure}
+
+Given the mesh in figure \ref{fig:noregion-allmeshes} we have performed the simulation and extracted both power and total pressure drop.
+
+\paragraph{Number of cells}\mbox{}\\
+In table \ref{table:cellsnumber} we can find the cells number of the varius simulations.
+\begin{table}[H]
+\centering
+\label{table:cellsnumber}
+%\begin{tabular}{@{}lrr@{}}
+\begin{tabular}{lrr}
+\toprule
+         & Without region & With region \\ \midrule
+Mesh 20  & 10328          & 9696        \\
+Mesh 40  & 24066          & 24021       \\
+Mesh 60  & 40462          & 42508       \\
+Mesh 80  & 58877          & 64293       \\
+Mesh 120 & 103384         & 120614      \\
+Mesh 160 & 156791         & 160547      \\ \bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Power:} for the power we have make the simulations run for 4 periods from 0 to 2.4 seconds and then we have taken the average of the power over the last turn, between 1.8 and 2.4 seconds.
+We have done this since we have assumed that the last revolution was the best indicator of the steady state behaviur of the turbine.
+
+
+\begin{figure}[htbp]
+\label{fig:meshsensityvity-power}
+\centering
+\includegraphics[width=8.5cm]{images/meshsensitivity/power-noregion} 
+\includegraphics[width=8.5cm]{images/meshsensitivity/power-region} 
+\caption{Average power in time between 1.8 and 2.4 seconds}
+\end{figure}
+
+As we can see in figure \ref{fig:meshsensityvity-power} the power converges in both cases around mesh 80, and we get a stable convergence above mesh 120.
+This fact is quite interesting since the two kind of meshes bring to slighly different results, from $4.8 \w$ to $5.0 \w$ but in both cases the mesh converges.
+
+This result let us think that depending on the mesh we can have different results but at around mesh 120 the power result is reliable.
+
+So in the next sections we will design a mesh which best fits the 120 cells along y direction, since the mesh used during mesh sensitivity analysis has to be applied generically between 20 and 160 cells along y axis, which is a pretty wide range.
+
+\paragraph{Total pressure:} for the total pressure we consider 3 different cases:
+\begin{itemize}
+\item Total pressure average on outlet patch at 2.4 seconds.
+\item Total pressure drop between inlet and outlet at 2.4 seconds.
+\item Total pressure drop between reference inlet at 0 seconds and outlet at 2.4 seconds.
+\end{itemize}
+
+\begin{figure}[htbp]
+\label{fig:meshsensityvity-totalpressure-case1}
+\centering
+\subfigure[Mesh without refinement region]{\includegraphics[width=8.5cm]{{images/meshsensitivity/totalpout-2.4-noregion}.pdf}}
+\subfigure[Mesh with refinement region]{\includegraphics[width=8.5cm]{{images/meshsensitivity/totalpout-2.4-region}.pdf}}
+\caption{Total pressure average on outlet patch at 2.4 seconds}
+\end{figure}
+
+\begin{figure}[htbp]
+\label{fig:meshsensityvity-totalpressure-case2}
+\centering
+\subfigure[Mesh without refinement region]{\includegraphics[width=8.5cm]{{images/meshsensitivity/totalpdrop-2.4-noregion}.pdf}}
+\subfigure[Mesh with refinement region]{\includegraphics[width=8.5cm]{{images/meshsensitivity/totalpdrop-2.4-region}.pdf}}
+\caption{Total pressure drop between inlet and outlet at 2.4 seconds.}
+\end{figure}
+
+\begin{figure}[htbp]
+\label{fig:meshsensityvity-totalpressure-case3}
+\centering
+\subfigure[Mesh without refinement region]{\includegraphics[width=8.5cm]{{images/meshsensitivity/totalpdrop-constantref-noregion}.pdf}}
+\subfigure[Mesh with refinement region]{\includegraphics[width=8.5cm]{{images/meshsensitivity/totalpdrop-constantref-region}.pdf}}
+\caption{Total pressure drop between reference inlet at 0 seconds and outlet at 2.4 seconds.}
+\end{figure}
+
+Some cases shows a great convergence at mesh 120, some others highlight the fact that probably the best possibility is to go towards mesh 160, even though the difference is in general small.
+
+Due to limitation in computational time we stay in the middle between mesh 80 which seems good from the point of view of the power and mesh 160 which seems the best even in any case.
+
+To let us perform more analysis in next chapter and balancing the fact that power shows a good convergence we will chose mesh 120 to perform further simulation if not explicitely specified.
+
+\section{Final mesh}
+
+As we have said before we will design a proper mesh that fits with 120 cells in y direction.
+
 
 \section{Numerical Schemes}
 

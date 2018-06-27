@@ -1,0 +1,42 @@
+inlet         oulet
+6.000000e-01       4.717739e-01     || mesh-pimple-20 
+6.000000e-01       4.669473e-01     || mesh-pimple-40 
+6.000000e-01       4.749341e-01     || mesh-pimple-60 
+6.000000e-01       4.806388e-01     || mesh-pimple-80 
+6.000000e-01       4.872702e-01     || mesh-pimple-120 
+6.000000e-01       4.875768e-01     || mesh-pimple-160-fine 
+inlet         oulet
+6.000000e-01       4.717739e-01     || mesh-pimple-20 
+6.000000e-01       4.669473e-01     || mesh-pimple-40 
+6.000000e-01       4.749341e-01     || mesh-pimple-60 
+6.000000e-01       4.806388e-01     || mesh-pimple-80 
+6.000000e-01       4.872702e-01     || mesh-pimple-120 
+6.000000e-01       4.875768e-01     || mesh-pimple-160-fine 
+inlet         oulet
+6.000000e-01       4.717739e-01     || mesh-pimple-20 
+6.000000e-01       4.669473e-01     || mesh-pimple-40 
+6.000000e-01       4.749341e-01     || mesh-pimple-60 
+6.000000e-01       4.806388e-01     || mesh-pimple-80 
+6.000000e-01       4.872702e-01     || mesh-pimple-120 
+6.000000e-01       4.875768e-01     || mesh-pimple-160-fine 
+inlet         oulet
+6.000000e-01       4.717739e-01     || mesh-pimple-20 
+6.000000e-01       4.669473e-01     || mesh-pimple-40 
+6.000000e-01       4.749341e-01     || mesh-pimple-60 
+6.000000e-01       4.806388e-01     || mesh-pimple-80 
+6.000000e-01       4.872702e-01     || mesh-pimple-120 
+6.000000e-01       4.875768e-01     || mesh-pimple-160-fine 
+inlet         oulet
+6.000000e-01       4.717739e-01     || mesh-pimple-20 
+6.000000e-01       4.669473e-01     || mesh-pimple-40 
+6.000000e-01       4.749341e-01     || mesh-pimple-60 
+6.000000e-01       4.806388e-01     || mesh-pimple-80 
+6.000000e-01       4.872702e-01     || mesh-pimple-120 
+6.000000e-01       4.875768e-01     || mesh-pimple-160-fine 
+inlet         oulet
+6.525665e-01       4.717739e-01     || mesh-pimple-20 
+6.468695e-01       4.669473e-01     || mesh-pimple-40 
+6.480844e-01       4.749341e-01     || mesh-pimple-60 
+6.517402e-01       4.806388e-01     || mesh-pimple-80 
+6.538798e-01       4.872702e-01     || mesh-pimple-120 
+6.525867e-01       4.875768e-01     || mesh-pimple-160-fine 
