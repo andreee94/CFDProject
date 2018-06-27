@@ -45,7 +45,7 @@ function runcase() # folder     cellsnumber     nOuterCorrectors     nCorrectors
 
 function pressuredrop()
 {
-    allsimulations=("mesh-pimple-20" "mesh-pimple-40" "mesh-pimple-60" "mesh-pimple-80" "mesh-pimple-120" "mesh-pimple-160-fine")
+    allsimulations=("mesh-pimple-20" "mesh-pimple-40" "mesh-pimple-60" "mesh-pimple-80" "mesh-pimple-120" "mesh-pimple-160-fine-smart")
     
     echo "inlet         oulet" >> totalpressurefine
     
@@ -66,7 +66,7 @@ function pressuredrop()
 
 function analysis()
 {
-    allsimulations=("mesh-pimple-20" "mesh-pimple-40" "mesh-pimple-60" "mesh-pimple-80" "mesh-pimple-120" "mesh-pimple-160-fine")
+    allsimulations=("mesh-pimple-20" "mesh-pimple-40" "mesh-pimple-60" "mesh-pimple-80" "mesh-pimple-120" "mesh-pimple-160-fine-smart")
     
     echo "" > powerfine
     # print cell numbers

@@ -57,6 +57,10 @@ mesh-composite/mesh-sensitivity-piso20/mesh-*
 mesh-composite/testpout
 mesh-composite/no-gravity/mesh*
 !mesh-composite/no-gravity/My*
+mesh-composite/turbolent-intensity/mesh*
+mesh-composite/turbolent-intensity/turb*
+!mesh-composite/turbolent-intensity/My*
+!mesh-composite/turbolent-intensity/runcase
 # maybe add also files that contains old in the name
 ## MESH
 # mesh/constant/polyMesh

@@ -1,0 +1,179 @@
+#!/bin/bash
+function runcase() # folder     cellsnumber   command    options  nOuterCorrectors     nCorrectors    maxCo   refineWallLayerNumber     endTime         initialU
+{   
+    #set -x
+    folder="$1"
+    cells="$2"
+    #nOuterCorrectors=1
+    #nCorrectors=20
+    #endTime=2.4
+    #refineWallLayerNumber=3
+    #initialU=1
+    
+    if [ ! -n "$3" ]
+    then
+        command="clean mesh run post"
+    else 
+        command="$3"
+    fi
+    
+    if [ ! -n "$5" ]; then
+        nOuterCorrectors=1
+    else
+        nOuterCorrectors=$5
+    fi
+    
+    if [ ! -n "$6" ]; then
+        nCorrectors=20
+    else
+        nCorrectors=$6
+    fi
+    
+    if [ ! -n "$7" ]; then
+        maxCo=50
+    else
+        maxCo=$7
+    fi
+    
+    if [ ! -n "$8" ]; then
+        refineWallLayerNumber=3
+    else
+        refineWallLayerNumber=$8
+    fi
+    
+    if [ ! -n "$9" ]; then
+        endTime=2.4
+    else
+        endTime=$9
+    fi
+    
+    if [ ! -n "${10}" ]; then
+        initialU=1
+    else
+        initialU=${10}
+    fi
+    
+    if [ ! -n "${11}" ]; then
+        nNonOrthogonalCorrectors=0
+    else
+        nNonOrthogonalCorrectors=${11}
+    fi
+    
+    echo $command
+    echo $nOuterCorrectors
+    echo $nCorrectors
+    echo $maxCo
+    echo $refineWallLayerNumber
+    echo $endTime
+    echo $initialU
+    
+    echo "Running case "
+    
+    if [ ! -d $folder ]; then
+        mkdir $folder
+        mkdir $folder/main
+        cp ../mesh/* $folder -r
+        cp ../main $folder/ -r
+    fi
+    
+    # change parameters according to user options
+    echo $cells > $folder/include/cells-array
+    echo $nOuterCorrectors > $folder/main/controls/nOuterCorrectors
+    echo $nCorrectors > $folder/main/controls/nCorrectors
+    echo $maxCo > $folder/main/controls/maxCo
+    echo $endTime > $folder/main/controls/endTime
+    echo $refineWallLayerNumber > $folder/main/controls/refineWallLayerNumber
+    echo $initialU > $folder/main/controls/initialU
+    echo $nNonOrthogonalCorrectors > $folder/main/controls/nNonOrthogonalCorrectors
+    
+    
+    # get the name of the current directory
+    name=${PWD##*/}  
+    
+    if [ ! -n "$4" ]; then
+        ../Myrun "$command" "$name/$folder" "$name/$folder"
+    else
+        ../Myrun "$command" "$name/$folder" "$name/$folder" "$4" # options parameter
+    fi
+}
+
+
+function pressuredrop()
+{
+    allsimulations=("turb1" "turb10")
+    
+    echo "inlet         oulet" >> totalpressure
+    
+    for i in "${allsimulations[@]}"
+    do
+        echo $i 
+        postProcess -func 'totalPressureIncompressible(U,p)' -case $i/main -time '0'
+        postProcess -func 'totalPressureIncompressible(U,p)' -case $i/main -latestTime
+        postProcess -func 'patchAverage(name=inlet,total(p))' -case $i/main -time '0'
+        postProcess -func 'patchAverage(name=outlet,total(p))' -case $i/main -latestTime
+        inlet=$(cat $i/main/postProcessing/patchAverage\(name\=inlet\,total\(p\)\)/0/surfaceFieldValue.dat | tail -n 1 | awk -F" " '{print $NF}')
+        outlet=$(cat $i/main/postProcessing/patchAverage\(name\=outlet\,total\(p\)\)/0/surfaceFieldValue.dat | tail -n 1 | awk -F" " '{print $NF}')
+        echo "$inlet       $outlet     || $i "  >> totalpressure
+    done
+    
+}
+
+
+function analysis()
+{
+    allsimulations=("turb1" "turb10")
+    
+    echo "" > power
+    # print cell numbers
+    for i in "${allsimulations[@]}"
+    do
+        cells=$(checkMesh -case $i/main/ -latestTime | grep cells | head -n 1)
+        echo $cells >> power
+    done
+    
+    # print power
+    for i in "${allsimulations[@]}"
+    do
+        power=$(cat $i/main/fig/meanpower | head -n 1)
+        echo $power >> power
+    done
+    
+    # print nut
+    for i in "${allsimulations[@]}"
+    do
+        nut=$(cat $i/main/fig/meannut | head -n 1)
+        echo $nut >> power
+    done
+    
+    cat power
+}
+
+function analysis120()
+{
+    allsimulations=("bsr-0.1-120" "bsr-0.25-120" "bsr-0.5-120" "bsr-0.75-120" "bsr-0.9-120" )
+    
+    echo "" > power120
+    # print cell numbers
+    for i in "${allsimulations[@]}"
+    do
+        cells=$(checkMesh -case $i/main/ -latestTime | grep cells | head -n 1)
+        echo $cells >> power120
+    done
+    
+    # print power
+    for i in "${allsimulations[@]}"
+    do
+        power=$(cat $i/main/fig/meanpower | head -n 1)
+        echo $power >> power120
+    done
+    
+    # print nut
+    for i in "${allsimulations[@]}"
+    do
+        nut=$(cat $i/main/fig/meannut | head -n 1)
+        echo $nut >> power120
+    done
+    
+    cat power120
+}
+
