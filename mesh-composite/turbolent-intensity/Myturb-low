@@ -19,8 +19,8 @@ meshcells="(360 120 1)"
 #cp -r mesh-only-120 turb2
 #cp -r mesh-only-120 turb4
 #cp -r mesh-only-120 turb6
-cp -rT mesh-only-120 turb3
-cp -rT mesh-only-120 turb8
+#cp -r mesh-only-120 turb3
+#cp -r mesh-only-120 turb8
 ###
 #runcase turb2 "$meshcells" "run post" "komegasst" 1 13 30 3 2.4 1 0
 #runcase turb4 "$meshcells" "run post" "komegasst" 1 13 30 3 2.4 1 0

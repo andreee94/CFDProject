@@ -1,0 +1,37 @@
+#!/bin/bash
+#cd ${0%/*} || exit 1    # run from this directory
+
+
+#############################################
+source ./runcase
+#############################################
+
+#           folder     cellsnumber      command             options
+#runcase mesh-pimple-120 "(360 120 1)" "clean mesh run post" "komegasst"
+#runcase mesh-40-g "(120 40 1)" "clean mesh run post" "komegasst"
+runcase mesh-120-g-test "(360 120 1)" "run post" "komegasst" 1 3 30 3 2.4 1 3
+
+#############################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -39,3 +39,54 @@ cells: 113754
 0.00206301201234 # average nut all times
 0.00349456007919 # average nut all times
 0.00537971701609 # average nut all times
+##########################################
+##########################################
+cells: 113754
+cells: 113754
+cells: 113754
+cells: 113754
+cells: 113754
+cells: 113754
+cells: 113754
+cells: 113754
+cells: 113754
+######### POWER TOTAL ####################
+-5.09275057052 # mean power [W] from time = 1.8
+-4.99155075051 # mean power [W] from time = 1.8
+-4.90684251183 # mean power [W] from time = 1.8
+-4.86656623487 # mean power [W] from time = 1.8
+-4.90684251183 # mean power [W] from time = 1.8
+-4.95259373438 # mean power [W] from time = 1.8
+-4.90684251183 # mean power [W] from time = 1.8
+-5.04252001137 # mean power [W] from time = 1.8
+-5.05783642273 # mean power [W] from time = 1.8
+######### POWER PRESSURE #################
+-5.22264948411 # mean power [W] from time = 1.8
+-5.12544880973 # mean power [W] from time = 1.8
+-5.05077250619 # mean power [W] from time = 1.8
+-5.00720926478 # mean power [W] from time = 1.8
+-5.05077250619 # mean power [W] from time = 1.8
+-5.09981154888 # mean power [W] from time = 1.8
+-5.05077250619 # mean power [W] from time = 1.8
+-5.20092756027 # mean power [W] from time = 1.8
+-5.22791516117 # mean power [W] from time = 1.8
+######### POWER TAU ######################
+0.129898913588 # mean power [W] from time = 1.8
+0.133898059217 # mean power [W] from time = 1.8
+0.143929994356 # mean power [W] from time = 1.8
+0.140643029904 # mean power [W] from time = 1.8
+0.143929994356 # mean power [W] from time = 1.8
+0.147217814497 # mean power [W] from time = 1.8
+0.143929994356 # mean power [W] from time = 1.8
+0.158407548897 # mean power [W] from time = 1.8
+0.170078738448 # mean power [W] from time = 1.8
+##########################################
+0.000345918550587 # average nut all times
+0.000713918960622 # average nut all times
+0.00172180436046 # average nut all times
+0.00139907661665 # average nut all times
+0.00172180436046 # average nut all times
+0.00206301201234 # average nut all times
+0.00172180436046 # average nut all times
+0.00349456007919 # average nut all times
+0.00537971701609 # average nut all times
