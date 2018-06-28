@@ -100,7 +100,7 @@ function runcase() # folder     cellsnumber   command    options  nOuterCorrecto
 
 function pressuredrop()
 {
-    allsimulations=("turb1" "turb5" "turb10" "turb15")
+    allsimulations=("turb1" "turb2" "turb4" "turb5" "turb6" "turb10" "turb15")
     
     echo "inlet         oulet" >> totalpressure
     
@@ -121,9 +121,11 @@ function pressuredrop()
 
 function analysis()
 {
-    allsimulations=("turb1" "turb5" "turb10" "turb15")
+    allsimulations=("turb1" "turb2" "turb4" "turb5" "turb6" "turb10" "turb15")
     
-    echo "" > power
+    echo "##########################################" >> power
+    echo "##########################################" >> power
+    #echo "" > power
     # print cell numbers
     for i in "${allsimulations[@]}"
     do
@@ -131,12 +133,28 @@ function analysis()
         echo $cells >> power
     done
     
-    # print power
+   # print power
+    echo "######### POWER TOTAL ####################" >> power
     for i in "${allsimulations[@]}"
     do
         power=$(cat $i/main/fig/meanpower | head -n 1)
         echo $power >> power
     done
+    
+    echo "######### POWER PRESSURE #################" >> power
+    for i in "${allsimulations[@]}"
+    do
+        power=$(cat $i/main/fig/meanpowerpressure | head -n 1)
+        echo $power >> power
+    done
+    
+    echo "######### POWER TAU ######################" >> power
+    for i in "${allsimulations[@]}"
+    do
+        power=$(cat $i/main/fig/meanpowertau | head -n 1)
+        echo $power >> power
+    done
+    echo "##########################################" >> power
     
     # print nut
     for i in "${allsimulations[@]}"

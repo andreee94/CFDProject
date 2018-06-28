@@ -285,6 +285,14 @@ We have done this since we have assumed that the last revolution was the best in
 \label{fig:meshsensityvity-power}
 \end{figure}
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=8.5cm]{images/meshsensitivity/power-ptau-noregion} 
+\includegraphics[width=8.5cm]{images/meshsensitivity/power-ptau-region} 
+\caption{Average power in time between 1.8 and 2.4 seconds}
+\label{fig:meshsensityvity-power-ptau}
+\end{figure}
+
 As we can see in figure \ref{fig:meshsensityvity-power} the power converges in both cases around mesh 80, and we get a stable convergence above mesh 120.
 This fact is quite interesting since the two kind of meshes bring to slighly different results, from $4.8 \w$ to $5.0 \w$ but in both cases the mesh converges.
 
@@ -388,6 +396,47 @@ Max aspect ratio      & $16.1092$    & OK \\ \bottomrule
 \paragraph{$k-\omega $ SST model}
 
 \subsection{Turbolence intensity}
+The turbolence intensity up to now is a parameter that was simple set to reasonable value. We have taken $5\%$ as turbolence intensity at the inlet and then we have evaluated the turbolent kinetic energy from that returning us the value for the initial value and the value at boundaries.
+\begin{equation}
+\label{eq:turbolent_I}
+\text{turbolent intensity } \text{I} = \dfrac{u'}{U} = 0.05 = 5\%
+\end{equation}
+\begin{equation}
+\text{turbolent kinetic energy } k = \dfrac{1}{2} \, \left( u'^2+v'^2+w'^2 \right) \approx \dfrac{3}{2} \, u'^2 = \dfrac{3}{2} \, \left(I\, \text{U} \right) ^2 = 0.00375 \m^2 / \s^2
+\label{eq:turbolent_k}
+\end{equation}
+
+Since this value is obtain by common sense, we have tried to see how results would have changed with different turbolent intensity.
+We have tested in a sensitivity analysis values from $1\%$ which is very moderate turbolence to $15\%$ which is instead medium-intense turbolence.
+
+The power results compare both the total power produced, and decompose in the two components of pressure and tangential stress (Figure \ref{fig:turbintensity-power}(a) and \ref{fig:turbintensity-power}(b))
+
+\begin{figure}[htbp]
+\centering
+\caption{Power comparison}
+\subfigure[Total power.]{\includegraphics[width=8.5cm]{{images/turbolentsensitivity/power}.pdf}}
+\subfigure[Normal and tangential power.]{\includegraphics[width=8.5cm]{{images/turbolentsensitivity/power-ptau}.pdf}}
+\label{fig:turbintensity-power}
+\end{figure}
+
+Mainly to things can be highlighted from the previous figures:
+\begin{itemize}
+\item as expected, increasing turbolent intensity at the inlet, the dissipation power from shear stress, linearly increases;
+\item power from pressure hexibit a strage behaviour, presenting a minimum around intensity around $4\%$
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\subfigure{\includegraphics[width=8.5cm]{{images/turbolentsensitivity/pressuredrop}.pdf}}
+\subfigure{\includegraphics[width=8.5cm]{{images/turbolentsensitivity/pressuredrop-distribution}.pdf}}
+\caption{Pressure drop}
+\label{fig:turbintensity-pressuredrop}
+\end{figure}
+
+Then in figure \ref{fig:turbintensity-pressuredrop} we have compared respect to the pressure drop, in terms of difference between the mean value at inlet and outlet and in terms of difference along y direction.
+The trend of the total pressure drop perfecly trace the same behaviour of the power generated.
+
+Our analysis highlight the fact that changing intensity of order of magnitude (and turbolent kinetic energy even scales with the square of I) the power stay almost around the reference value with just a change of few percents.
 
 \section{The domain's sizes}
 

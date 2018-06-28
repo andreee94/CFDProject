@@ -1,0 +1,57 @@
+#!/bin/bash
+#cd ${0%/*} || exit 1    # run from this directory
+
+
+#############################################
+source ./runcase
+#############################################
+
+#           folder     cellsnumber      command             options
+#runcase mesh-pimple-120 "(360 120 1)" "clean mesh run post" "komegasst"
+# folder     cellsnumber   command    options  nOuterCorrectors     nCorrectors    maxCo   refineWallLayerNumber     endTime         initialU
+
+meshcells="(360 120 1)"
+
+# mesh only
+###
+#runcase mesh-only-120 "$meshcells" "clean mesh" "komegasst" 1 13 30 3 2.4 1 0
+# 
+#cp -r mesh-only-120 turb2
+#cp -r mesh-only-120 turb4
+#cp -r mesh-only-120 turb6
+cp -rT mesh-only-120 turb3
+cp -rT mesh-only-120 turb8
+###
+#runcase turb2 "$meshcells" "run post" "komegasst" 1 13 30 3 2.4 1 0
+#runcase turb4 "$meshcells" "run post" "komegasst" 1 13 30 3 2.4 1 0
+#runcase turb6 "$meshcells" "run post" "komegasst" 1 13 30 3 2.4 1 0
+
+runcase turb3 "$meshcells" "run post" "komegasst" 1 13 30 3 2.4 1 0
+runcase turb8 "$meshcells" "run post" "komegasst" 1 13 30 3 2.4 1 0
+
+
+
+#############################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
