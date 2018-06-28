@@ -67,8 +67,8 @@ function pressuredrop()
 function analysis()
 {
     allsimulations=("mesh-pimple-20" "mesh-pimple-40" "mesh-pimple-60" "mesh-pimple-80" "mesh-pimple-120" "mesh-pimple-160-fine-smart")
-    
-    echo "" > powerfine
+   
+    #echo "" > power
     # print cell numbers
     for i in "${allsimulations[@]}"
     do
@@ -77,11 +77,27 @@ function analysis()
     done
     
     # print power
+    echo "######### POWER TOTAL ####################" >> powerfine
     for i in "${allsimulations[@]}"
     do
         power=$(cat $i/main/fig/meanpower | head -n 1)
         echo $power >> powerfine
     done
+    
+    echo "######### POWER PRESSURE #################" >> powerfine
+    for i in "${allsimulations[@]}"
+    do
+        power=$(cat $i/main/fig/meanpowerpressure | head -n 1)
+        echo $power >> powerfine
+    done
+    
+    echo "######### POWER TAU ######################" >> powerfine
+    for i in "${allsimulations[@]}"
+    do
+        power=$(cat $i/main/fig/meanpowertau | head -n 1)
+        echo $power >> powerfine
+    done
+    echo "##########################################" >> powerfine
     
     # print nut
     for i in "${allsimulations[@]}"
@@ -89,8 +105,7 @@ function analysis()
         nut=$(cat $i/main/fig/meannut | head -n 1)
         echo $nut >> powerfine
     done
-    
-    cat power
+    cat powerfine
         
 # 	#     cells:            9696
 # 	cells20=$(checkMesh -case mesh-pimple-20/main/ -latestTime | grep cells | head -n 1)

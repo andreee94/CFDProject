@@ -100,7 +100,7 @@ function runcase() # folder     cellsnumber   command    options  nOuterCorrecto
 
 function pressuredrop()
 {
-    allsimulations=("turb1" "turb10")
+    allsimulations=("turb1" "turb5" "turb10" "turb15")
     
     echo "inlet         oulet" >> totalpressure
     
@@ -109,7 +109,7 @@ function pressuredrop()
         echo $i 
         postProcess -func 'totalPressureIncompressible(U,p)' -case $i/main -time '0'
         postProcess -func 'totalPressureIncompressible(U,p)' -case $i/main -latestTime
-        postProcess -func 'patchAverage(name=inlet,total(p))' -case $i/main -time '0'
+        postProcess -func 'patchAverage(name=inlet,total(p))' -case $i/main -latestTime #-time '0'
         postProcess -func 'patchAverage(name=outlet,total(p))' -case $i/main -latestTime
         inlet=$(cat $i/main/postProcessing/patchAverage\(name\=inlet\,total\(p\)\)/0/surfaceFieldValue.dat | tail -n 1 | awk -F" " '{print $NF}')
         outlet=$(cat $i/main/postProcessing/patchAverage\(name\=outlet\,total\(p\)\)/0/surfaceFieldValue.dat | tail -n 1 | awk -F" " '{print $NF}')
@@ -121,7 +121,7 @@ function pressuredrop()
 
 function analysis()
 {
-    allsimulations=("turb1" "turb10")
+    allsimulations=("turb1" "turb5" "turb10" "turb15")
     
     echo "" > power
     # print cell numbers

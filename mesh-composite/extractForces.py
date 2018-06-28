@@ -182,7 +182,9 @@ else:
             row.append(values_blades[j][i])
 
         row.append(row[-1] + row[-2])  # summation column of p and tau
-        row.append(row[-1] * omega)  # power
+        row.append(row[-3] * omega)  # power p
+        row.append(row[-3] * omega)  # power taw
+        row.append(row[-3] * omega)  # power
         matrix.append(row)
 
     saveValues(params.savepath + "res-momentum.dat", matrix, type="momentum")
@@ -191,7 +193,9 @@ else:
     sumMzp = column(matrix, 1)  # -1 = summation of momentum index
     sumMztau = column(matrix, 2)  # -1 = summation of momentum index
     sumMz = column(matrix, 3)  # -1 = summation of momentum index
-    sumPower = column(matrix, 4)  # -1 = summation of power index
+    sumPowerPressure = column(matrix, 4)  # -1 = summation of power index
+    sumPowerTau = column(matrix, 5)  # -1 = summation of power index
+    sumPower = column(matrix, 6)  # -1 = summation of power index
 
 myplot(time, sumMzp, save=params.save, show=False, filename='Mz-pressure', legend=["Momentum of pressure"], unit="Nm", ylim=[-0.3, -0.7], fromTime=0)
 myplot(time, sumMztau, save=params.save, show=False, filename='Mz-tau', legend=["Momentum of shear stress"], unit="Nm", ylim=None, fromTime=0)
@@ -200,30 +204,55 @@ myplot(time, sumPower, save=params.save, show=False, filename='InstantPower', le
 
 ## CALCULATE MEAN POWER     
 
-## only turn 4
-sumPowerTurn4 = [x for ii, x in enumerate(sumPower) if time[ii] >= 1.8]  # extract with delay
-meanpower = sum(sumPowerTurn4) / len(sumPowerTurn4)
-power_text = str(meanpower) + ' # mean power [W]  from time = 1.8'
-os.system("echo '" + power_text + "' > " + params.savepath + "meanpower")
+fromtimes = [1.8, 1.2, 0.6, 0]
 
-## only turn 3 and 4
-sumPowerTurn34 = [x for ii, x in enumerate(sumPower) if time[ii] >= 1.2]  # extract with delay
-meanpower = sum(sumPowerTurn34) / len(sumPowerTurn34)
-power_text = str(meanpower) + ' # mean power [W]  from time = 1.2'
-os.system("echo '" + power_text + "' >> " + params.savepath + "meanpower")
+for fromtime in fromtimes:
+    # pressure power
+    sumPowerTurn = [x for ii, x in enumerate(sumPowerPressure) if time[ii] >= fromtime]  # extract with delay
+    meanpower = sum(sumPowerTurn) / len(sumPowerTurn)
+    power_text = str(meanpower) + ' # mean power [W]  from time = ' + str(fromtime)
+    os.system("echo '" + power_text + "' >> " + params.savepath + "meanpowerpressure")
+    
+    #tau power
+    sumPowerTurn = [x for ii, x in enumerate(sumPowerTau) if time[ii] >= fromtime]  # extract with delay
+    meanpower = sum(sumPowerTurn) / len(sumPowerTurn)
+    power_text = str(meanpower) + ' # mean power [W]  from time = ' + str(fromtime)
+    os.system("echo '" + power_text + "' >> " + params.savepath + "meanpowertau")
+    
+    #resultant power
+    sumPowerTurn = [x for ii, x in enumerate(sumPower) if time[ii] >= fromtime]  # extract with delay
+    meanpower = sum(sumPowerTurn) / len(sumPowerTurn)
+    power_text = str(meanpower) + ' # mean power [W]  from time = ' + str(fromtime)
+    os.system("echo '" + power_text + "' >> " + params.savepath + "meanpower")
 
-## only turn 2 and  3 and 4
-sumPowerTurn234 = [x for ii, x in enumerate(sumPower) if time[ii] >= 0.6]  # extract with delay
-meanpower = sum(sumPowerTurn234) / len(sumPowerTurn234)
-power_text = str(meanpower) + ' # mean power [W]  from time 0.6'
-os.system("echo '" + power_text + "' >> " + params.savepath + "meanpower")
+os.system("echo '###############################' >> " + params.savepath + "meanpowerpressure")
+os.system("echo '###############################' >> " + params.savepath + "meanpowertau")
+os.system("echo '###############################' >> " + params.savepath + "meanpower")
 
-## only turn 2 and  3 and 4
-sumPowerTurn1234 = [x for ii, x in enumerate(sumPower) if time[ii] >= 0.0]  # extract with delay
-sumPowerTurn1234 = sumPowerTurn1234[5:]  # remove first unreliable data (5 chosen randomly)
-meanpower = sum(sumPowerTurn1234) / len(sumPowerTurn1234)
-power_text = str(meanpower) + ' # mean power [W]  from time 0'
-os.system("echo '" + power_text + "' >> " + params.savepath + "meanpower")
+### only turn 4
+#sumPowerTurn4 = [x for ii, x in enumerate(sumPower) if time[ii] >= 1.8]  # extract with delay
+#meanpower = sum(sumPowerTurn4) / len(sumPowerTurn4)
+#power_text = str(meanpower) + ' # mean power [W]  from time = 1.8'
+#os.system("echo '" + power_text + "' > " + params.savepath + "meanpower")
+
+### only turn 3 and 4
+#sumPowerTurn34 = [x for ii, x in enumerate(sumPower) if time[ii] >= 1.2]  # extract with delay
+#meanpower = sum(sumPowerTurn34) / len(sumPowerTurn34)
+#power_text = str(meanpower) + ' # mean power [W]  from time = 1.2'
+#os.system("echo '" + power_text + "' >> " + params.savepath + "meanpower")
+
+### only turn 2 and  3 and 4
+#sumPowerTurn234 = [x for ii, x in enumerate(sumPower) if time[ii] >= 0.6]  # extract with delay
+#meanpower = sum(sumPowerTurn234) / len(sumPowerTurn234)
+#power_text = str(meanpower) + ' # mean power [W]  from time 0.6'
+#os.system("echo '" + power_text + "' >> " + params.savepath + "meanpower")
+
+### only turn 2 and  3 and 4
+#sumPowerTurn1234 = [x for ii, x in enumerate(sumPower) if time[ii] >= 0.0]  # extract with delay
+#sumPowerTurn1234 = sumPowerTurn1234[5:]  # remove first unreliable data (5 chosen randomly)
+#meanpower = sum(sumPowerTurn1234) / len(sumPowerTurn1234)
+#power_text = str(meanpower) + ' # mean power [W]  from time 0'
+#os.system("echo '" + power_text + "' >> " + params.savepath + "meanpower")
 
 ## EXTRACT FORCES AND SUM THEM
 

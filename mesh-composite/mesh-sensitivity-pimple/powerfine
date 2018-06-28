@@ -17,3 +17,37 @@ cells: 191690
 
 
 
+cells: 9696
+cells: 24021
+cells: 42508
+cells: 64293
+cells: 120614
+cells: 189197
+######### POWER TOTAL ####################
+-4.66616346884# mean power [W] from time = 1.8
+-4.9699827675# mean power [W] from time = 1.8
+-4.97812040071# mean power [W]
+-4.97403994968# mean power [W] from time = 1.8
+-5.01659701757# mean power [W] from time = 1.8
+-5.07565915339 # mean power [W] from time = 1.8
+######### POWER PRESSURE #################
+-4.81369272491 # mean power [W] from time = 1.8
+-5.11319541334 # mean power [W] from time = 1.8
+-5.10612829803 # mean power [W] from time = 1.8
+-5.12644739915 # mean power [W] from time = 1.8
+-5.174657866 # mean power [W] from time = 1.8
+-5.23879140303 # mean power [W] from time = 1.8
+######### POWER TAU ######################
+0.147529256071 # mean power [W] from time = 1.8
+0.143212645838 # mean power [W] from time = 1.8
+0.147665960927 # mean power [W] from time = 1.8
+0.152407449475 # mean power [W] from time = 1.8
+0.158060848435 # mean power [W] from time = 1.8
+0.163132249636 # mean power [W] from time = 1.8
+##########################################
+
+
+
+
+
+0.00174737997085 # average nut all times

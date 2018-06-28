@@ -47,3 +47,10 @@ inlet         oulet
 6.517402e-01       4.806388e-01     || mesh-pimple-80 
 6.538798e-01       4.872702e-01     || mesh-pimple-120 
 6.528831e-01       4.844707e-01     || mesh-pimple-160-fine-smart 
+inlet         oulet
+6.525665e-01       4.717739e-01     || mesh-pimple-20 
+6.468695e-01       4.669473e-01     || mesh-pimple-40 
+6.480844e-01       4.749341e-01     || mesh-pimple-60 
+6.517402e-01       4.806388e-01     || mesh-pimple-80 
+6.538798e-01       4.872702e-01     || mesh-pimple-120 
+6.528831e-01       4.844707e-01     || mesh-pimple-160-fine-smart 
