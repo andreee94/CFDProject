@@ -1,0 +1,316 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[margin=0.7in]{geometry}
+\usepackage[latin1]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{cases}
+\usepackage[makeroom]{cancel}
+\usepackage{amsmath,tabu}
+\usepackage[fleqn]{mathtools}
+\usepackage[fleqn]{amsmath}
+\usepackage{bm}
+\usepackage{tikz}
+\usepackage{enumitem}
+\usepackage{wrapfig}
+\usepackage{graphicx}
+\usepackage{siunitx}
+\usepackage{microtype}
+\usepackage{array,tabularx}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{import}
+\usepackage{cases}
+\usepackage{graphicx,subfigure}
+\usepackage{myUnitOfMeasure}
+%\usepackage{myThermodynamics}
+\usepackage{myMath}
+\usepackage{mathtools}
+\usepackage{gensymb}
+\usepackage{xcolor}
+\usepackage{url}
+\usepackage{tabularx}
+\usepackage{ltablex}
+
+\title{
+\includegraphics[scale=0.4]{images/logo.png}
+\\[1cm]
+FINAL REPORT ON THE  MRL TURBINE SIMULATION
+COURSE OF MODELING TECHNIQUES FOR FLUID MACHINES 
+A.Y. 2017/2018}
+\author{
+Andrea Rossi \and Marco Bonasegale
+\and Marco Belloli \and Alberto Casali 
+}
+\date{}
+
+% usefull for ltablex to split long tables in many pages
+\keepXColumns
+
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}%
+
+%\newcommand{\Fy}[1]{\text{F}_{y_{#1}}}
+
+%\newcommand{\diameter}{\oslash}
+
+%\newcommand{\todo}{\colorbox{cyan!60}{TODO}}
+
+\renewcommand{\thesubsection}{\thesection.\arabic{subsection}}
+
+\renewcommand{\arraystretch}{1.4}
+
+\newcommand{\variable}[1]{\textcolor{blue}{#1}}
+
+\newcommand{\paramtext}[1]{\textcolor{black!30!green}{#1}}
+
+\newcommand{\terminal}[1]{\textcolor{black!30!cyan}{#1}}
+
+\newcommand{\todo}{\colorbox{cyan!60}{TODO}}
+
+\makeindex
+
+\begin{document}
+
+
+
+\maketitle
+
+\newpage
+
+\tableofcontents
+
+\newpage
+
+%Per il grassetto scriviamo:
+%%\textbf{testo in grassetto}
+%Per il corsivo:
+%\textit{testo in corsivo}
+%E per la sottolineatura:
+%\underline{testo sottolineato}
+
+%Altri comandi utili sono \textsl{qualcosa} per il testo “slanted shape”, simile al corsivo, e
+%\textsc{qualcosa} per il maiuscoletto.
+
+
+\section{Numerical Schemes}
+The file which menage the numeric scheme is in \textit{fvSchemes}. Inside that file it is possible to define the scheme used for the calculation of many terms, specified in the following section. All of them are necessary to be able to discretize all the terms inside the continuity and momentum equation:
+\begin{itemize} 
+ \item time derivative terms inside \textit{timeSchemes}
+ \item gradient terms $\nabla$ inside \textit{gradScheme}
+ \item divergence terms $\nabla\cdot $ inside \textit{divSchemes}
+ \item laplacian terms $\nabla^2$ inside \textit{lapSchemes}
+ \item cell to face interpolation schemes  inside \textit{interpolationSchemes}
+ \item component of gradient normal to a cell face  inside \textit{snGradSchemes}
+ \end{itemize} 
+it is possible to define specific scheme for each term of the equation, however our decision was to use as much as we can the default scheme. In addition from a very large amount of scheme only those used in the tutorial cases of openFoam were tested. This research can be simply done by using the command \textit{foamSearch} 
+In the next sub paragraphs we present an overviwe of different schemes and their characteristics.
+
+\subsection{Interpolation schemes}
+Specify the scheme for moving proprieties for cell center to face center. These operation is inluded in the calculation of gradient, divergence and laplacian terms. An overview of interpolation schemes are:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{ll}
+\toprule
+Scheme          & Numerical behaviour                           \\ \midrule
+linear          & linear interpolation (central differencing)   \\
+cubicCorrection & Cubic scheme                                  \\
+midPoint        & Linear interpolation with symmetric weighting \\ \bottomrule
+\end{tabular}
+\caption{General interpolation schemes}
+\label{table:interpolation_general}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{ll}
+\toprule
+Scheme                                    & Numerical behaviour                              \\ \midrule
+upwind (upwind convection group)          & Upwind differencing                              \\
+linearUpwind (upwind convection group)    & Linear upwind differencing                       \\
+skewLinear (upwind convection group)      & Linear with skewness correction                  \\
+filteredLinear2 (upwind convection group) & Linear with filtering for high-frequency ringing \\
+limitedLinear (TVD schemes)               & limited linear differencing                      \\
+vanLeer (TVD schemes)                     & van Leer limiter                                 \\
+MUSCL (TVD schemes)                       & MUSCL limiter                                    \\
+limitedCubic (TVD schemes)                & Cubic limiter                                    \\
+SFCD (NVD schemes)                        & Self-filtered central differencing               \\
+Gamma $\psi$  (NVD schemes)               & Gamma differencing                               \\ \bottomrule
+\end{tabular}
+\caption{Gaussian discretization of convection}
+\label{table:interpolation_convection}
+\end{table}
+
+% up to now %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+For our calculation, only linear scheme has been adopted. Second group of schemes interpolate on the basis of the flux of the flow velocity. For this reason they require the name of the flux field used for interpolation.
+
+
+\subsection{Normal gradient schemes}
+The gradient is calculated from cell center, and then interpolated. 
+\\The normal contribution will be: 
+\begin{equation}
+\nabla_f Q = \hat{n} \cdot (\nabla Q )_f
+\end{equation}
+
+where $\hat{n}$ is the face unit normal. It controls the scheme for the calculation on the gradient normal to cell face, in the middle of the face in between two cells. available schemes are : \\
+\begin{itemize} 
+
+ \item {\ttfamily corrected} : Central-difference snGrad scheme with non-orthogonal correction, explicit.
+  \item {\ttfamily uncorrected}: no correction of the orthogonality.
+ \item {\ttfamily limited $\psi$}: which requires another input, in between 1 and 0, where 1 correspond to correct scheme while 0 correspond to uncorrect sccheme. So it is a weighted bland between the two.
+ \item {\ttfamily bounded}: bounded correction for positive scalars
+ \item {\ttfamily fourth} : fourth order scheme.
+\end{itemize} 
+
+
+\subsection{Time schemes}
+Time schemes define the way in which a propriety is integrated in time. Depending on the choise of the user, an old $\phi^0$ or old-old $\phi^{00}$ solution will be required
+The different schemes analyzed are:
+\begin{itemize} 
+ \item {\ttfamily steadyState}: used for steady state simulation where there's no time derivative, so to analize a steady problem.
+ 
+ \item {\ttfamily localEuler}:first order,implicit, psuedotransient used for accelerating the convergency to a steady state problem,.
+ 
+ \item {\ttfamily Euler}: implicit, first order, transient used for unsteady problem.
+\begin{equation}
+\frac{d \phi}{dt} = \frac{\phi - \phi^0}{\Delta t}
+\end{equation} 
+
+ 
+ \item {\ttfamily backward}: implicit, second order, transient, conditionally stable and boundness is not guaranteed.
+\begin{equation}
+\frac{d \phi}{dt} = \frac{1}{\Delta t}\left(\frac{3}{2}\phi - 2\phi^0- \frac{1}{2}\phi^{00}\right)
+\end{equation} 
+ 
+ \item {\ttfamily CrankNicolson}: second order, transient, bounded. \\for uniform time step the scheme is equal to:
+\begin{equation}
+ \frac{d \phi}{dt} = \frac{\phi - \phi^{00}}{2\Delta t}
+\end{equation} 
+ 
+To assure stability it is possible to adopt a blend with Euler system, with a coefficient in between 0 and 1, where 0 rappresent pure Euler while 1 rapprensent pure CrankNicolson.
+ 
+ \end{itemize} 
+ For second derivative scheme (not present in our equation) only Euler scheme is possible.
+
+\subsection{Gradient schemes}
+The gradient of a certain quantity $\phi$ rappresent the way in which that propriety is changon along a direction. For a scalar quantity $\phi$
+\\ 
+\begin{equation}
+\nabla \phi = \begin{bmatrix} \frac{\partial \phi}{\partial x} \\ \frac{\partial \phi}{\partial y} \\\frac{\partial \phi}{\partial z}\end{bmatrix} 
+\end{equation}
+
+The different schemes analyzed are:
+\begin{itemize} 
+ \item {\ttfamily Gauss linear}: Gauss specify that the scheme used ,in these case the Gaussian integration, which requires the interpolation from cell center to face centres. Therefore second input specify the scheme used for interpolation, in these case linear interpolation or central differencing.
+ 
+ \item {\ttfamily leastSquares}: second order scheme which uses all neighbouring cells to calculate distance with least square scheme.
+ 
+ \item {\ttfamily Gauss cubic}: third-order schemes, typically used in very regular mesh.
+ \end{itemize} 
+ 
+\subsection{Divergence schemes}
+The divergence of a propriety $U$ rappresent the rate at which that quantity is changing.
+\begin{equation}
+ \nabla \cdot U = \frac{\partial U_x}{\partial x}+ \frac{\partial U_y}{\partial y} + \frac{\partial U_z}{\partial z} 
+\end{equation}
+
+
+Only in this case since divergent terms are very dissimilar, it is preferable not to use a default scheme, equal to all the terms but to specify a specific sceme for each term. In addition, considering that the scheme availble are a lot, and we have:
+\begin{itemize} 
+ \item divergence of velocity;
+ \item divergence of turbulent kinetic energy;
+ \item divergence of $\omega$ or $\epsilon$ depending on the turbulence model chosen;
+ \item divergence of shearstress;
+
+% \item $\nabla\cdot (\rhoUU)$
+% \item $\nabla\cdot k$
+% \item $\nabla\cdot espilon$ or $\nabla\cdot omega$
+ % cerca cos'è div((nuEff*dev2(T(grad(U))))) Gauss linear;
+% \item $\nabla\cdot nonlinearshearstress$
+\end{itemize} 
+So our choice is to concentrate our self, and so our time machine on the trial of different schemes for the divergence of the velocity field
+ $ \nabla \cdot ( \rho UU )$
+\\ an overview of all the scheme availble is reported below:
+
+
+% Please add the following required packages to your document preamble:
+% \usepackage{booktabs}
+\begin{table}[]
+\centering
+\begin{tabular}{ll}
+\toprule
+Scheme         & Numerical behaviour                                                               \\ \midrule
+linear         & second order, unbounded (good for LES calculations due to low dissipation) \\
+skewLinear     & Second order, (more) unbounded, skewness correction                               \\
+cubicCorrected & Fourth order, unbounded                                                           \\
+upwind         & First order, bounded                                                              \\
+linearUpwind   & First/second order, bounded                                                       \\
+QUICK          & First/second order, bounded                                                       \\
+TVD schemes    & First/second order, bounded                                                       \\
+SFCD           & Second order, bounded                                                             \\ \bottomrule
+\end{tabular}
+\caption{Divergence schemes}
+\label{table:divergence}
+\end{table}
+
+NVD and TVD provide a blend between low order schemes and higher order schemes based on the calculation of a limiter. boundness is assure only for 1D problem, while 2D and 3D boundness can be imporeved limiting the gradient.
+\\The possibility are many and below we list all what we tried.
+
+\begin{itemize} 
+
+ \item {\ttfamily Gauss upwind}: first order, bounded. The face value is set according to upstream value. It forces the cell value to be constant and equal to the mean value.
+ 
+ \item {\ttfamily Gauss linearUpwind limited}:
+ 
+ \item {\ttfamily Gauss linearUpwind grad(U)}: second order, unbounded, employs upwind interpolation weights, with a correction based on cell gradient.
+ 
+ \item {\ttfamily Gauss linearUpwindV grad(U)}: The same as previous but in "V" schemes a limiter is applied in the direction of a creater change.
+
+\end{itemize} 
+
+only this set of scheme is correclty run. Going further with the accurancy, we move to instability for following schemes:
+
+
+\begin{itemize} 
+
+ \item {\ttfamily Gauss linear}
+ \item {\ttfamily Gauss limited linear}
+ \item {\ttfamily Gauss cubic}
+ \item {\ttfamily Gauss LUST unlimitedGrad(U)}
+ \item {\ttfamily Gauss LUST grad(U)}
+ \item {\ttfamily Gauss bounded Gauss limitedLinear 0.2}
+ \item {\ttfamily Gauss linear}
+ \item {\ttfamily Gauss limitedLinearV 1}
+ \item {\ttfamily bounded Gauss upwind}
+ \item {\ttfamily bounded Gauss linearUpwind grad}
+ \item {\ttfamily bounded Gauss linearUpwind limited}
+ \item {\ttfamily bounded Gauss linearUpwind unlimited}
+ \item {\ttfamily bounded Gauss linearUpwindV grad(U)}
+ \item {\ttfamily Gauss vanLeerV}
+\end{itemize} 
+
+The "V" schemes improve stability, penalizing the accurancy, beacause they work in the direction where the gradient are changing more, limiting its variation
+The bounded version instead works on time derivative on the following way:
+\begin{equation}
+\frac{d \phi}{dt} = \frac{\partial \phi}{\partial t} + U \cdot \nabla \phi = \frac{\partial \phi}{\partial t} + \nabla \cdot (U \phi) - ( \nabla \cdot U ) \phi
+\end{equation}
+\\ However for compressible flows $( \nabla \cdot U ) = 0 $ at convergence, but before it this term may be different. In some cases it is preferable to consider it, to control better the boundness of the solution, and promote convergence.
+
+\subsection{Laplacian schemes}
+The laplacian operator act as follows:
+\begin{equation}
+\nabla^2 \phi = \frac{\partial^2 U_x}{\partial x^2}+ \frac{\partial^2 U_y}{\partial y^2} + \frac{\partial^2 U_z}{\partial z^2}
+\end{equation}
+
+Typically it is associated to the diffusive term. Gauss scheme is the only one available and requires the interpolation scheme used and the normal gradient scheme, define in the propper subsection \textit{interpolationSchemes} and \textit{snGradSchemes}. Therefore the command would be:
+\\ {\ttfamily laplacian	Gauss	<interpolationSchemes>		<snGradSchemes>}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%	from:
+% https://www.openfoam.com/documentation/user-guide/fvSchemes.php#x23-870273
+% https://cfd.direct/openfoam/user-guide/fvschemes/
+% https://www.openfoam.com/documentation/cpp-guide/html/guide-schemes.html
+
+
+\end{document}

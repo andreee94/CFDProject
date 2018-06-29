@@ -1,0 +1,104 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.3.0                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      snappyHexMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// Which of the steps to run
+castellatedMesh false;
+snap            false;
+addLayers       true;
+
+
+// Geometry. Definition of all surfaces. All surfaces are of class
+// searchableSurface.
+// Surfaces are used
+// - to specify refinement for any mesh cell intersecting it
+// - to specify refinement for any mesh cell inside/outside/near
+// - to 'snap' the mesh boundary to the surface
+geometry
+{
+    blade2.stl
+    {
+        type        triSurfaceMesh;
+        name        blade2;
+    }
+    AMI-int2.stl
+    {
+        type        triSurfaceMesh;
+        name        AMI-int2-in;
+    }
+};
+
+
+// Settings for the castellatedMesh generation.
+castellatedMeshControls
+{
+	#include "../include/castelleted-prop"
+	refinementSurfaces {}
+    refinementRegions {}
+    features ();
+    // Mesh selection
+    // ~~~~~~~~~~~~~~
+
+    // After refinement patches get added for all refinementSurfaces and
+    // all cells intersecting the surfaces get put into these patches. The
+    // section reachable from the locationInMesh is kept.
+    // NOTE: This point should never be on a face, always inside a cell, even
+    // after refinement.
+    locationInMesh (-0.060 -0.040 0.11);
+}
+
+
+
+// Settings for the snapping.
+snapControls
+{
+	#include "../include/snap-prop"
+}
+
+
+
+// Settings for the layer addition.
+addLayersControls
+{
+
+    // Per final patch (so not geometry!) the layer information
+    layers
+    {
+        blades
+        {
+            nSurfaceLayers #include "../include/snappy-blade-layers";
+        }
+    }
+    
+	#include "../include/layers-blade-prop"
+}
+
+
+
+// Generic mesh quality settings. At any undoable phase these determine
+// where to undo.
+meshQualityControls
+{
+	#include "../include/mesh-quality-prop"
+}
+
+
+
+// Merge tolerance. Is fraction of overall bounding box of initial mesh.
+// Note: the write tolerance needs to be higher than this.
+mergeTolerance 1e-6;
+
+
+// ************************************************************************* //

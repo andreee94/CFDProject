@@ -1,0 +1,9 @@
+cells: 23439
+######### POWER TOTAL ####################
+-4.59221434676 # mean power [W] from time = 1.8
+######### POWER PRESSURE #################
+-4.84602561871 # mean power [W] from time = 1.8
+######### POWER TAU ######################
+0.253811271949 # mean power [W] from time = 1.8
+##########################################
+0.00137553141346 # average nut all times

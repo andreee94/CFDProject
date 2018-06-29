@@ -1,0 +1,9 @@
+    front
+    {
+        type    empty;
+    }
+
+    back
+    {
+        type    empty;
+    }

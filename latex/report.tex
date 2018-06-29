@@ -32,6 +32,7 @@
 \usepackage{ltablex}
 \usepackage{booktabs}
 \usepackage{float}
+\usepackage{listings}
 \restylefloat{table} % with H force table position
 
 \title{
@@ -70,8 +71,22 @@ Andrea Rossi \and Marco Bonasegale
 
 \newcommand{\todo}{\colorbox{cyan!60}{TODO}}
 
-
 \newcommand{\nut}{\nu_\text{T}}
+
+\newcommand{\foam}[1]{{\ttfamily #1}}
+
+
+\lstset{
+	basicstyle=\fontsize{11}{13}\selectfont\ttfamily,
+    frame=tb, % draw a frame at the top and bottom of the code block
+    tabsize=4, % tab space width
+    showstringspaces=false, % don't mark spaces in strings
+    numbers=left, % display line numbers on the left
+    commentstyle=\color{black!50!green}, % comment color
+    keywordstyle=\color{blue!50!cyan}, % keyword color
+    stringstyle=\color{black!30!red} % string color
+}
+
 
 
 \newcommand{\fakecaption}{%
@@ -98,10 +113,8 @@ Andrea Rossi \and Marco Bonasegale
 \section{Introduction}
 
 \subsection{MRL Tidal Turbine Description}
-The MRL Turbine is a hydraulic machine which is able to exploit the upcoming  water flow that is passing through the cross sectional area of the inlet of the machine. Momentum Reversal and Lift Tidal Turbine is a cross-
-flow tidal-stream device which converts
- the energy of the water
-flow into mechanical power.So the most advantageous locations in order to place this device are whatever kind of regular river with a smooth river bed or any sea/ocean areas which are subjected to relevant tidal phenomena.
+The MRL Turbine is a hydraulic machine which is able to exploit the upcoming  water flow that is passing through the cross sectional area of the inlet of the machine. Momentum Reversal and Lift Tidal Turbine is a cross-flow tidal-stream device which converts the energy of the water
+flow into mechanical power. So the most advantageous locations in order to place this device are whatever kind of regular river with a smooth river bed or any sea/ocean areas which are subjected to relevant tidal phenomena.
 The turbine is made up of three rotating blades and each blade is subjected to the combination of two rotating motions. A rotation $\omega_0$ along the machine axis  and a rotation omega1 around the blade individual axis with counter-rotating $\omega_0$ and $\omega_1$.
 
 \begin{center}
@@ -136,7 +149,7 @@ Let's start to present the overall mesh work-flow with all the brief steps evalu
 
 \item Merging procedure in order to have one complete mesh and the copy of the mesh inside our main environment of the project. We have decided to oparate in this way in order to have a better comunication level in terms of interpolation values among mesh sub-domains. In this way the neighboring cells of different sub-domain are well oriented and aligned. The result is an improvement on the mesh quality controls as non-orthogonality index and skewness coefficient  because we have parallel disposition of cells and they appear as concentric refined layers;
 
-\item Mesh extrusion with the thickness of the 2D domain already given as a geometry parameter equal to the blade width);
+\item Mesh extrusion with the thickness of the 2D domain already given as a geometry parameter equal to the blade width;
 
 \item Wall layer refinement;
 
@@ -151,6 +164,61 @@ To do so, we have to manage with the boundary conditions of the problem, the tur
 
 For the first setup we use the simpler $k\!-\!\varepsilon$ turbolence model respect to more appropriate $k\!-\!\omega \, \text{SST}$.
 
+Analysing $y^+$ from table \ref{table:inclass-yplus} we can notice that even with a quite coarse mesh we have $y^+$ much smaller that 30 which is the
+minimum threshold under which $k\!-\!\varepsilon$ is not suitable; this is the reason why in the next part of this report we will always adopt $k\!-\!\omega \, \text{SST}$ except when differently specified.
+\begin{table}[H]
+\centering
+\begin{tabular}{lrrr}
+\toprule
+$y^+$     & Minimum             & Maximum            & Average            \\ \midrule
+lowerWall & $\round{11.58443}$  & $\round{18.03507}$ & $\round{14.0232}$  \\
+blade0    & $\round{0.7735179}$ & $\round{9.497755}$ & $\round{4.377209}$ \\
+blade1    & $\round{1.072712}$  & $\round{3.972875}$ & $\round{2.488902}$ \\
+blade2    & $\round{0.4794929}$ & $\round{9.077512}$ & $\round{5.569296}$ \\ \bottomrule
+\end{tabular}
+\caption{$y^+$ at time 2.4 seconds}
+\label{table:inclass-yplus}
+\end{table}
+
+The final results of the first raw simulation are provided in following figure.
+
+\begin{figure}[H]
+\subfigure[Pressure at 2.4]{\includegraphics[width=8.5cm]{images/inclass/{pfield2.4sec}.png}}
+\hfill
+\subfigure[Velocity at 2.4]{\includegraphics[width=8.5cm]{images/inclass/{velocityfield2.4sec}.png}}
+\caption{Comparison between meshes with and without refinement.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=14cm]{images/inclass/mesh40.pdf}
+\end{figure}
+
+In table \ref{table:inclass-power} we have reported the mean power computed in the last round, between 1.8 and 2.4 seconds.
+This choice derives from the analysis of the trend of the instantaneous power plotted in figure \ref{fig:inclass-instantpower}
+that shows that the power reaches steadyness condition after 3 complete revolutions.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lr}
+\toprule
+Power (Pressure) [W]     & $\round{4.84602561871}$   \\ \midrule
+Power (Shear stress) (W) & $\round{-0.253811271949}$ \\
+Power (Total) [W]        & $\round{4.59221434676}$   \\ \bottomrule
+\end{tabular}
+\caption{Mean power between 1.8 and 2.4}
+\label{table:inclass-power}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=14cm]{images/inclass/instantpower.png}
+\caption{Instant power}
+\label{fig:inclass-instantpower}
+\end{figure}
+
+
+
 \subsection{Boundary conditions}
 Boundary conditions are referred to the water stream velocity that is investing the machine, the pressure of the water in the stream channel, k, w and nut values.
 
@@ -159,7 +227,7 @@ Our main interest is to focus the first two boundary conditions so velocity and 
 \paragraph{Patches}\mbox{}\\
 Boundary condition are defied over patches so it is important to define that.
 \begin{itemize}
-\item \emph{Inlet Section} is that from which water comes into the domain moving toward the x direction;
+\item \emph{Inlet Section} is that from which water comes into the domain moving towards the x direction;
 \item \emph{Outlet Section} is where water comes out from the domain;
 \item \emph{Front and back faces} are always set to empty since we are dealing with a 2D problem;
 \item \emph{Lower wall} is a physical wall that limit the flow;
@@ -202,13 +270,13 @@ The solver applied in the class session is pimpleDyMFoam in PISO mode with one o
 \section{Mesh sensitivity Analysis}
 With the mesh sensitivity analysis second part of the report starts. Here we are interested to find the proper value of parameters that let to have the best simulation as possible.
 
-The first and probably the mos significant operation is the mesh sensitivity analysis.
+The first and probably the most significant operation is the mesh sensitivity analysis.
 \\
 The aim is to find a tradeoff between \emph{accuracy} and \emph{computational cost}. 
 
 The expected improvement into the quantities of interest decreases with the increase of the number of cells.
 
-There is a point beyond which the improvement becomes really negligible and we encounter a plateau; beyond that it not worth the increate in computational time. 
+There is a point beyond which the improvement becomes really negligible and we encounter a plateau; beyond that it does not worth the increate in computational time. 
 
 Our sensitivity analysis includes 6 different simulation:
 \begin{itemize}
@@ -259,7 +327,7 @@ What we have noticed is that the results in terms of power were slighlty differe
 Given the mesh in figure \ref{fig:noregion-allmeshes} we have performed the simulation and extracted both power and total pressure drop.
 
 \paragraph{Number of cells}\mbox{}\\
-In table \ref{table:cellsnumber} we can find the cells number of the varius simulations.
+In table \ref{table:cellsnumber} we can find the cells number of the various simulations.
 \begin{table}[H]
 \centering
 %\begin{tabular}{@{}lrr@{}}
@@ -278,7 +346,7 @@ Mesh 160 & 156791         & 160547      \\ \bottomrule
 \end{table}
 
 \paragraph{Power:} for the power we have make the simulations run for 4 periods from 0 to 2.4 seconds and then we have taken the average of the power over the last turn, between 1.8 and 2.4 seconds.
-We have done this since we have assumed that the last revolution was the best indicator of the steady state behaviur of the turbine.
+We have done this since we have assumed that the last revolution was the best indicator of the steady state behavior of the turbine.
 
 
 \begin{figure}[htbp]
@@ -298,7 +366,7 @@ We have done this since we have assumed that the last revolution was the best in
 \end{figure}
 
 As we can see in figure \ref{fig:meshsensityvity-power} the power converges in both cases around mesh 80, and we get a stable convergence above mesh 120.
-This fact is quite interesting since the two kind of meshes bring to slighly different results, from $4.8 \w$ to $5.0 \w$ but in both cases the mesh converges.
+This fact is quite interesting since the two kind of meshes bring to slightly different results, from $4.8 \w$ to $5.0 \w$ but in both cases the mesh converges.
 
 This result let us think that depending on the mesh we can have different results but at around mesh 120 the power result is reliable for each kind of mesh.
 
@@ -339,7 +407,7 @@ Some cases shows a great convergence at mesh 120, some others highlight the fact
 
 Due to limitation in computational time we stay in the middle between mesh 80 which seems good from the point of view of the power and mesh 160 which seems the best even in any case.
 
-To let us perform more analysis in next chapter and balancing the fact that power shows a good convergence we will chose mesh 120 to perform further simulation if not explicitely specified.
+To let us perform more analysis in next chapter and balancing the fact that power shows a good convergence we will choose mesh 120 to perform further simulation if not explicitely specified.
 
 \section{Final mesh}
 
@@ -386,6 +454,313 @@ Max aspect ratio      & $16.1092$    & OK \\ \bottomrule
 \end{table} 
 
 \section{Numerical Schemes}
+The file which menage the numeric scheme is in \textit{fvSchemes}. Inside that file it is possible to define the scheme used for the calculation of many terms, specified in the following section. All of them are necessary to be able to discretize all the terms inside the continuity and momentum equation:
+\begin{itemize} 
+ \item time derivative terms inside \textit{timeSchemes}
+ \item gradient terms $\nabla$ inside \textit{gradScheme}
+ \item divergence terms $\nabla\cdot $ inside \textit{divSchemes}
+ \item laplacian terms $\nabla^2$ inside \textit{lapSchemes}
+ \item cell to face interpolation schemes  inside \textit{interpolationSchemes}
+ \item component of gradient normal to a cell face  inside \textit{snGradSchemes}
+ \end{itemize} 
+it is possible to define specific scheme for each term of the equation, however our decision was to use as much as we can the default scheme. In addition from a very large amount of scheme only those used in the tutorial cases of openFoam were tested. This research can be simply done by using the command \textit{foamSearch} 
+In the next sub paragraphs we present an overviwe of different schemes and their characteristics.
+
+\subsection{Interpolation schemes}
+Specify the scheme for moving proprieties for cell center to face center. These operation is inluded in the calculation of gradient, divergence and laplacian terms. An overview of interpolation schemes are:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{ll}
+\toprule
+Scheme          & Numerical behaviour                           \\ \midrule
+linear          & linear interpolation (central differencing)   \\
+cubicCorrection & Cubic scheme                                  \\
+midPoint        & Linear interpolation with symmetric weighting \\ \bottomrule
+\end{tabular}
+\caption{General interpolation schemes}
+\label{table:interpolation_general}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{ll}
+\toprule
+Scheme                                    & Numerical behaviour                              \\ \midrule
+upwind (upwind convection group)          & Upwind differencing                              \\
+linearUpwind (upwind convection group)    & Linear upwind differencing                       \\
+skewLinear (upwind convection group)      & Linear with skewness correction                  \\
+filteredLinear2 (upwind convection group) & Linear with filtering for high-frequency ringing \\
+limitedLinear (TVD schemes)               & limited linear differencing                      \\
+vanLeer (TVD schemes)                     & van Leer limiter                                 \\
+MUSCL (TVD schemes)                       & MUSCL limiter                                    \\
+limitedCubic (TVD schemes)                & Cubic limiter                                    \\
+SFCD (NVD schemes)                        & Self-filtered central differencing               \\
+Gamma $\psi$  (NVD schemes)               & Gamma differencing                               \\ \bottomrule
+\end{tabular}
+\caption{Gaussian discretization of convection}
+\label{table:interpolation_convection}
+\end{table}
+
+% up to now %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+For our calculation, only linear scheme has been adopted. Second group of schemes interpolate on the basis of the flux of the flow velocity. For this reason they require the name of the flux field used for interpolation.
+
+
+\subsection{Normal gradient schemes}
+The gradient is calculated from cell center, and then interpolated. 
+\\The normal contribution will be: 
+\begin{equation}
+\nabla_f Q = \hat{n} \cdot (\nabla Q )_f
+\end{equation}
+
+where $\hat{n}$ is the face unit normal. It controls the scheme for the calculation on the gradient normal to cell face, in the middle of the face in between two cells. available schemes are : \\
+\begin{itemize} 
+
+ \item {\ttfamily corrected} : Central-difference snGrad scheme with non-orthogonal correction, explicit.
+  \item {\ttfamily uncorrected}: no correction of the orthogonality.
+ \item {\ttfamily limited $\psi$}: which requires another input, in between 1 and 0, where 1 correspond to correct scheme while 0 correspond to uncorrect sccheme. So it is a weighted bland between the two.
+ \item {\ttfamily bounded}: bounded correction for positive scalars
+ \item {\ttfamily fourth} : fourth order scheme.
+\end{itemize} 
+
+
+\subsection{Time schemes}
+Time schemes define the way in which a propriety is integrated in time. Depending on the choise of the user, an old $\phi^0$ or old-old $\phi^{00}$ solution will be required
+The different schemes analyzed are:
+\begin{itemize} 
+ \item {\ttfamily steadyState}: used for steady state simulation where there's no time derivative, so to analize a steady problem.
+ 
+ \item {\ttfamily localEuler}:first order,implicit, psuedotransient used for accelerating the convergency to a steady state problem,.
+ 
+ \item {\ttfamily Euler}: implicit, first order, transient used for unsteady problem.
+\begin{equation}
+\frac{d \phi}{dt} = \frac{\phi - \phi^0}{\Delta t}
+\end{equation} 
+
+ 
+ \item {\ttfamily backward}: implicit, second order, transient, conditionally stable and boundness is not guaranteed.
+\begin{equation}
+\frac{d \phi}{dt} = \frac{1}{\Delta t}\left(\frac{3}{2}\phi - 2\phi^0- \frac{1}{2}\phi^{00}\right)
+\end{equation} 
+ 
+ \item {\ttfamily CrankNicolson}: second order, transient, bounded. \\for uniform time step the scheme is equal to:
+\begin{equation}
+ \frac{d \phi}{dt} = \frac{\phi - \phi^{00}}{2\Delta t}
+\end{equation} 
+ 
+To assure stability it is possible to adopt a blend with Euler system, with a coefficient in between 0 and 1, where 0 rappresent pure Euler while 1 rapprensent pure CrankNicolson.
+ 
+ \end{itemize} 
+ For second derivative scheme (not present in our equation) only Euler scheme is possible.
+
+\subsection{Gradient schemes}
+The gradient of a certain quantity $\phi$ rappresent the way in which that propriety is changon along a direction. For a scalar quantity $\phi$
+\\ 
+\begin{equation}
+\nabla \phi = \begin{bmatrix} \frac{\partial \phi}{\partial x} \\ \frac{\partial \phi}{\partial y} \\\frac{\partial \phi}{\partial z}\end{bmatrix} 
+\end{equation}
+
+The different schemes analyzed are:
+\begin{itemize} 
+ \item {\ttfamily Gauss linear}: Gauss specify that the scheme used ,in these case the Gaussian integration, which requires the interpolation from cell center to face centres. Therefore second input specify the scheme used for interpolation, in these case linear interpolation or central differencing.
+ 
+ \item {\ttfamily leastSquares}: second order scheme which uses all neighbouring cells to calculate distance with least square scheme.
+ 
+ \item {\ttfamily Gauss cubic}: third-order schemes, typically used in very regular mesh.
+ \end{itemize} 
+ 
+\subsection{Divergence schemes}
+The divergence of a propriety $\bm{U}$ rappresent the rate at which that quantity is changing.
+\begin{equation}
+ \nabla \cdot \bm{U} = \frac{\partial U_x}{\partial x}+ \frac{\partial U_y}{\partial y} + \frac{\partial U_z}{\partial z} 
+\end{equation}
+
+
+Only in this case since divergent terms are very dissimilar, it is preferable not to use a default scheme, equal to all the terms but to specify a specific sceme for each term. In addition, considering that the scheme availble are a lot, and we have:
+\begin{itemize} 
+ \item divergence of velocity;
+ \item divergence of turbulent kinetic energy;
+ \item divergence of $\omega$ or $\epsilon$ depending on the turbulence model chosen;
+ \item divergence of shearstress;
+
+% \item $\nabla\cdot (\rhoUU)$
+% \item $\nabla\cdot k$
+% \item $\nabla\cdot espilon$ or $\nabla\cdot omega$
+ % cerca cos'è div((nuEff*dev2(T(grad(U))))) Gauss linear;
+% \item $\nabla\cdot nonlinearshearstress$
+\end{itemize} 
+So our choice is to concentrate our self, and so our time machine on the trial of different schemes for the divergence of the velocity field
+ $ \nabla \cdot ( \rho \, \bm{U} \bm{U} )$
+\\ an overview of all the scheme availble is reported below:
+
+
+% Please add the following required packages to your document preamble:
+% \usepackage{booktabs}
+\begin{table}[]
+\centering
+\begin{tabular}{ll}
+\toprule
+Scheme         & Numerical behaviour                                                               \\ \midrule
+linear         & second order, unbounded (good for LES calculations due to low dissipation) \\
+skewLinear     & Second order, (more) unbounded, skewness correction                               \\
+cubicCorrected & Fourth order, unbounded                                                           \\
+upwind         & First order, bounded                                                              \\
+linearUpwind   & First/second order, bounded                                                       \\
+QUICK          & First/second order, bounded                                                       \\
+TVD schemes    & First/second order, bounded                                                       \\
+SFCD           & Second order, bounded                                                             \\ \bottomrule
+\end{tabular}
+\caption{Divergence schemes}
+\label{table:divergence}
+\end{table}
+
+NVD and TVD provide a blend between low order schemes and higher order schemes based on the calculation of a limiter. boundness is assure only for 1D problem, while 2D and 3D boundness can be imporeved limiting the gradient.
+\\The possibility are many and below we list all what we tried.
+
+\begin{itemize} 
+
+ \item {\ttfamily Gauss upwind}: first order, bounded. The face value is set according to upstream value. It forces the cell value to be constant and equal to the mean value.
+ 
+ \item {\ttfamily Gauss linearUpwind limited}:
+ 
+ \item {\ttfamily Gauss linearUpwind grad(U)}: second order, unbounded, employs upwind interpolation weights, with a correction based on cell gradient.
+ 
+ \item {\ttfamily Gauss linearUpwindV grad(U)}: The same as previous but in "V" schemes a limiter is applied in the direction of a creater change.
+
+\end{itemize} 
+
+only this set of scheme is correclty run. Going further with the accurancy, we move to instability for following schemes:
+
+
+\begin{itemize} 
+
+ \item {\ttfamily Gauss linear}
+ \item {\ttfamily Gauss limited linear}
+ \item {\ttfamily Gauss cubic}
+ \item {\ttfamily Gauss LUST unlimitedGrad(U)}
+ \item {\ttfamily Gauss LUST grad(U)}
+ \item {\ttfamily Gauss bounded Gauss limitedLinear 0.2}
+ \item {\ttfamily Gauss linear}
+ \item {\ttfamily Gauss limitedLinearV 1}
+ \item {\ttfamily bounded Gauss upwind}
+ \item {\ttfamily bounded Gauss linearUpwind grad}
+ \item {\ttfamily bounded Gauss linearUpwind limited}
+ \item {\ttfamily bounded Gauss linearUpwind unlimited}
+ \item {\ttfamily bounded Gauss linearUpwindV grad(U)}
+ \item {\ttfamily Gauss vanLeerV}
+\end{itemize} 
+
+The "V" schemes improve stability, penalizing the accurancy, beacause they work in the direction where the gradient are changing more, limiting its variation
+The bounded version instead works on time derivative on the following way:
+\begin{equation}
+\frac{d \phi}{dt} = \frac{\partial \phi}{\partial t} + \bm{U} \cdot \nabla \phi = \frac{\partial \phi}{\partial t} + \nabla \cdot (\bm{U} \phi) - ( \nabla \cdot \bm{U} ) \phi
+\end{equation}
+\\ However for compressible flows $( \nabla \cdot \bm{U} ) = 0 $ at convergence, but before it this term may be different. In some cases it is preferable to consider it, to control better the boundness of the solution, and promote convergence.
+
+\subsection{Laplacian schemes}
+The laplacian operator act as follows:
+\begin{equation}
+\nabla^2 \bm{U} = \frac{\partial^2 U_x}{\partial x^2}+ \frac{\partial^2 U_y}{\partial y^2} + \frac{\partial^2 U_z}{\partial z^2}
+\end{equation}
+
+Typically it is associated to the diffusive term. Gauss scheme is the only one available and requires the interpolation scheme used and the normal gradient scheme, define in the propper subsection \textit{interpolationSchemes} and \textit{snGradSchemes}. Therefore the command would be:
+\\ {\ttfamily laplacian	Gauss	<interpolationSchemes>		<snGradSchemes>}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%	from:
+% https://www.openfoam.com/documentation/user-guide/fvSchemes.php#x23-870273
+% https://cfd.direct/openfoam/user-guide/fvschemes/
+% https://www.openfoam.com/documentation/cpp-guide/html/guide-schemes.html
+
+\section{Solver parameters}
+
+In OpenFoam the solver implemented to deal with incompressible transient problems with moving mesh is \foam{pimpleDyMFoam}.
+This command is quite flexible since it can behaves both as pimple and piso mode. 
+Actually it allows to specify:
+\begin{itemize}
+\item number of outer correctors, typical of the Pimple algorithm;
+\item number of inner correctors, typical of Piso algorithm;
+\item number of non orthogonal correctors, for highly non orthogonal meshes.
+\end{itemize}
+
+In general Pimple is preferred when large time steps are suitable and when the pressure and velocity transient behavior is not of interested;
+Piso instead is preferred when small time steps are imposed but the nature of the problem or when a precise transient analysis is required.
+
+\begin{lstlisting}[language=c++, caption={\foam{pimpleFoam} source code.}]
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+    Info<< "\nStarting time loop\n" << endl;
+
+    while (runTime.run())
+    {
+        #include "readTimeControls.H"
+        #include "CourantNo.H"
+        #include "setDeltaT.H"
+
+        runTime++;
+
+        Info<< "Time = " << runTime.timeName() << nl << endl;
+
+        // --- Pressure-velocity PIMPLE corrector loop
+        while (pimple.loop())
+        {
+            #include "UEqn.H"
+
+            // --- Pressure corrector loop
+            while (pimple.correct())
+            {
+                #include "pEqn.H"
+            }
+
+            if (pimple.turbCorr())
+            {
+                laminarTransport.correct();
+                turbulence->correct();
+            }
+        }
+
+        runTime.write();
+
+        Info<< "ExecutionTime = " << runTime.elapsedCpuTime() << " s"
+            << "  ClockTime = " << runTime.elapsedClockTime() << " s"
+            << nl << endl;
+    }
+
+    Info<< "End\n" << endl;
+\end{lstlisting}
+
+As we can appreciate in the source code of the algorithm, for each inner corrector the pressure equation is solved.
+For each outer corrector instead the momentum equation is solved once while the pressure equation is soved as many times as the inner corrector prescribes.
+
+The choice of the hybridization of the two iterators in our case is suggested by the analysis of the residuals.
+
+Comparing the residuals in figure \ref{fig:solver-residuals-bad} we immediatly notice that the critical quantity is, in terms of residuals, the pressure,
+while the two components of the velocity show a much better residual trends, of orders of magnitude.
+
+This explains why we have chosen to run the majority of our simulation with a modified version of the Piso algorithm. 
+In fact a great number of inner correctors, as we can see from the source code, implies just the solution of the pressure equation many times, 
+while the outer correctors also solve the velocity field.
+Finally since our aim is to try to reduce pressure residuals we prefer to increase the number of inner correctors respect to the outer ones.
+This brings us to choose 1 outer correctors and 20 inner correctors.
+ 
+\begin{figure}[htbp]
+\centering
+\subfigure[Pimple 50 outer 1 inner]{\includegraphics[width=8.5cm]{{images/solver/residuals50-1}.png}}
+\subfigure[Piso 1 outer 20 inner]{\includegraphics[width=8.5cm]{{images/solver/residuals1-20}.png}}
+\caption{Residuals comparison bewteen standard Pimple and our Piso.}
+\label{fig:solver-residuals-bad}
+\end{figure}
+
+Moreover a great advantage of this variant is that it allows us to increase the Courant number up to 50 which means that our timestep could be a lot bigger than that with default Piso condition. 
+
+A rough estimation of the improvement in computational effort is:
+\begin{itemize}
+\item 100 times faster due to higher Courant number from 0.5 to 50;
+\item 10 times slower due to 20 iterations instead of 2 of the inner loop;
+\end{itemize}
+This lead to approximately a net speed improvement of 10 times. 
 
 \section{Gravitational influence}
 
@@ -460,7 +835,7 @@ So we have now to options:
 In next section we will discuss the latter.
 
 Since in our aim there was also an analysis of gravity contribution in the momentum equation we mix the two cases.
-This is a smart choise since clearly a constant outlet pressure is not feasible at all with pressure gradient along y direction.
+This is a smart choice since clearly a constant outlet pressure is not feasible at all with pressure gradient along y direction.
 
 \subsection{Enhanced boundaries}
 
@@ -506,7 +881,25 @@ The last way is clearly the most straightforward in case the source type was alr
 
 We are interested in a way to introduce a constant additional source term inside momentum equation, and we have exploited this through the \emph{vectorSemiImplicitSource} type.
 
-\todo inserire codice da fvoption
+\begin{lstlisting}[language=c++, caption={fvOptions momentum source}]
+momentumSource
+{
+   type vectorSemiImplicitSource;
+   active on;
+   selectionMode all;
+
+   vectorSemiImplicitSourceCoeffs
+   {
+      volumeMode        specific;
+      selectionMode 	all;
+      injectionRateSuSp
+      {
+         U           ( (0 -9.8 0) 0);
+      }
+   }
+
+}
+\end{lstlisting}
 
 \todo inserire risultati confronto on off gravity effect con condizioni al contorno enhanced
 
