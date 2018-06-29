@@ -76,8 +76,9 @@ CAD-scaled
 log.*
 #times
 [0-9]*
-!0.org-kepsilon
-!0.org-komegasst
+!0.org-*
+#-kepsilon
+#!0.org-komegasst
 **/tests
 latex/*.log
 latex/*.idx
@@ -86,6 +87,6 @@ latex/*.dvi
 latex/*.aux
 latex/*.toc
 latex/*.gz
-!latex/images/*.png
+!latex/images/**
 !*.ods
 
