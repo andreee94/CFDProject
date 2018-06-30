@@ -82,7 +82,8 @@ log.*
 **/tests
 latex/*.log
 latex/*.idx
-latex/*.idx
+latex/*.ilg
+latex/*.ind
 latex/*.dvi
 latex/*.aux
 latex/*.toc

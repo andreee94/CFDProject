@@ -97,10 +97,75 @@ function runcase() # folder     cellsnumber   command    options  nOuterCorrecto
     fi
 }
 
+function pressuredrop()
+{
+    allsimulations=("mesh-120-g" "mesh-120-nog" "mesh-120-g-test")
+    
+    echo "inlet         oulet" >> totalpressure
+    
+    for i in "${allsimulations[@]}"
+    do
+        echo $i 
+        rm -r $i/main/postProcessing/patchAverage*
+        postProcess -func 'totalPressureIncompressible(U,p)' -case $i/main -time '0'
+        postProcess -func 'totalPressureIncompressible(U,p)' -case $i/main -latestTime
+        postProcess -func 'patchAverage(name=inlet,total(p))' -case $i/main -latestTime #-time '0'
+        postProcess -func 'patchAverage(name=outlet,total(p))' -case $i/main -latestTime
+        inlet=$(cat $i/main/postProcessing/patchAverage\(name\=inlet\,total\(p\)\)/0/surfaceFieldValue.dat | tail -n 1 | awk -F" " '{print $NF}')
+        outlet=$(cat $i/main/postProcessing/patchAverage\(name\=outlet\,total\(p\)\)/0/surfaceFieldValue.dat | tail -n 1 | awk -F" " '{print $NF}')
+        echo "$inlet       $outlet     || $i "  >> totalpressure
+    done
+    
+}
+
 
 function analysis()
 {
-    allsimulations=("mesh-20" "mesh-40" "mesh-60" "mesh-80" "mesh-120" "mesh-160" "mesh-200")
+    allsimulations=("mesh-120-g" "mesh-120-nog" "mesh-120-g-test")
+    
+    #echo "" > power
+    # print cell numbers
+    for i in "${allsimulations[@]}"
+    do
+        cells=$(checkMesh -case $i/main/ -latestTime | grep cells | head -n 1)
+        echo $cells >> power
+    done
+    
+    # print power
+    echo "######### POWER TOTAL ####################" >> power
+    for i in "${allsimulations[@]}"
+    do
+        power=$(cat $i/main/fig/meanpower | head -n 1)
+        echo $power >> power
+    done
+    
+    echo "######### POWER PRESSURE #################" >> power
+    for i in "${allsimulations[@]}"
+    do
+        power=$(cat $i/main/fig/meanpowerpressure | head -n 1)
+        echo $power >> power
+    done
+    
+    echo "######### POWER TAU ######################" >> power
+    for i in "${allsimulations[@]}"
+    do
+        power=$(cat $i/main/fig/meanpowertau | head -n 1)
+        echo $power >> power
+    done
+    echo "##########################################" >> power
+    
+    # print nut
+    for i in "${allsimulations[@]}"
+    do
+        nut=$(cat $i/main/fig/meannut | head -n 1)
+        echo $nut >> power
+    done
+    cat power
+}
+
+function analysis_old()
+{
+    allsimulations=("mesh-120-g", "mesh-120-nog", "mesh-120-g-test")
     
     echo "" > power
     # print cell numbers

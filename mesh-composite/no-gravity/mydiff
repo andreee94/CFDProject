@@ -1,0 +1,14 @@
+#!/bin/bash
+
+
+# find mesh-120-g/main/0 -type f -exec md5sum {} + | sort -k 2 > g.txt
+# find mesh-120-nog/main/0 -type f -exec md5sum {} + | sort -k 2 > nog.txt
+# find mesh-120-g-test/main/0 -type f -exec md5sum {} + | sort -k 2 > gtest.txt
+
+#find mesh-120-g/main/constant -type f -exec md5sum {} + | sort -k 2 > g.txt
+#find mesh-120-nog/main/constant -type f -exec md5sum {} + | sort -k 2 > nog.txt
+#find mesh-120-g-test/main/constant -type f -exec md5sum {} + | sort -k 2 > gtest.txt
+
+find mesh-120-g/main/controls -type f -exec md5sum {} + | sort -k 2 > g.txt
+find mesh-120-nog/main/controls -type f -exec md5sum {} + | sort -k 2 > nog.txt
+find mesh-120-g-test/main/controls -type f -exec md5sum {} + | sort -k 2 > gtest.txt

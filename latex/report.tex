@@ -466,6 +466,33 @@ The file which menage the numeric scheme is in \textit{fvSchemes}. Inside that f
 it is possible to define specific scheme for each term of the equation, however our decision was to use as much as we can the default scheme. In addition from a very large amount of scheme only those used in the tutorial cases of openFoam were tested. This research can be simply done by using the command \textit{foamSearch} 
 In the next sub paragraphs we present an overviwe of different schemes and their characteristics.
 
+Since the scheme are a lot and the combination between them will be huge, our decision was to focus only on the influence of one scheme, keeping fixed the other. The reference case to study the differences is the base case, used in class, which is the same used for the tutorial case:
+ %% inserisci tabella 1
+\begin{table}[H]
+\begin{tabular}{ll}
+\toprule
+Section          & \foam{Scheme used }                               \\ \midrule
+ddtSchemes       & \foam{default         Euler}                      \\
+gradSchemes      & \foam{default         Gauss linear}               \\
+divSchemes       & \foam{default         none}                       \\
+                 & \foam{div(phi,U)      Gauss upwind}               \\
+                 & \foam{div(phi,k)      Gauss upwind}              \\
+                 & \foam{div(phi,epsilon) Gauss upwind}              \\
+                 & \foam{div(phi,omega) bounded Gauss upwind}        \\
+                 & \foam{div((nuEff*dev2(T(grad(U))))) Gauss linear} \\
+                 & \foam{div(nonlinearStress) Gauss linear}          \\
+laplacianSchemes & \foam{default         Gauss linear corrected}     \\
+snGradSchemes    & \foam{default         corrected   }              \\ \bottomrule
+\end{tabular}
+\end{table}
+
+The comparison has been done looking at:
+\begin{itemize} 
+ \item power genrated by the turbine;
+ \item power genrated by pressure only;
+ \item power dissipated by the effect of the shear stress;
+ \end{itemize} 
+
 \subsection{Interpolation schemes}
 Specify the scheme for moving proprieties for cell center to face center. These operation is inluded in the calculation of gradient, divergence and laplacian terms. An overview of interpolation schemes are:
 
@@ -524,6 +551,7 @@ where $\hat{n}$ is the face unit normal. It controls the scheme for the calculat
  \item {\ttfamily fourth} : fourth order scheme.
 \end{itemize} 
 
+The use of different scheme will be discussed in laplacian section.
 
 \subsection{Time schemes}
 Time schemes define the way in which a propriety is integrated in time. Depending on the choise of the user, an old $\phi^0$ or old-old $\phi^{00}$ solution will be required
@@ -531,7 +559,7 @@ The different schemes analyzed are:
 \begin{itemize} 
  \item {\ttfamily steadyState}: used for steady state simulation where there's no time derivative, so to analize a steady problem.
  
- \item {\ttfamily localEuler}:first order,implicit, psuedotransient used for accelerating the convergency to a steady state problem,.
+ \item {\ttfamily localEuler}: first order,implicit, psuedotransient used for accelerating the convergency to a steady state problem,.
  
  \item {\ttfamily Euler}: implicit, first order, transient used for unsteady problem.
 \begin{equation}
@@ -554,6 +582,19 @@ To assure stability it is possible to adopt a blend with Euler system, with a co
  \end{itemize} 
  For second derivative scheme (not present in our equation) only Euler scheme is possible.
 
+\paragraph{Results} \mbox{}\\
+The different type of schemes are reported in the following figure, with the relative scheme used. The comparison is made considering the overall power produced by the turbine, the ideal power, related to the effect of the pressure only and the power loss associated to the shear stress action:
+\begin{figure}[H]
+\centering
+\includegraphics[height=6cm]{images/schemes/timeschems-results.pdf}
+\end{figure}
+
+CrankNicolson scheme with different blending coefficient has been tested, however it will cause instability which lead the residual to rise after 0.003s for CrankNicolson0.3 after 0.005s for CrankNicolson0.5 and 0.0045s for CrankNicolson0.9.
+Even if backward scheme is a purly second order scheme (so in theory more prone to instability), it works.
+No difference can be seen in the shear stress power loss, but a for ideal power (related to pressure), backward scheme will provide a different value, 1\% less. The time required for the calculation is 6\% higher and the values of the residual are of the same order of magnitude.
+
+
+
 \subsection{Gradient schemes}
 The gradient of a certain quantity $\phi$ rappresent the way in which that propriety is changon along a direction. For a scalar quantity $\phi$
 \\ 
@@ -563,13 +604,23 @@ The gradient of a certain quantity $\phi$ rappresent the way in which that propr
 
 The different schemes analyzed are:
 \begin{itemize} 
- \item {\ttfamily Gauss linear}: Gauss specify that the scheme used ,in these case the Gaussian integration, which requires the interpolation from cell center to face centres. Therefore second input specify the scheme used for interpolation, in these case linear interpolation or central differencing.
+ \item {\ttfamily Gauss linear}: Gauss specify that the scheme used, in these case the Gaussian integration, which requires the interpolation from cell center to face centres. Therefore second input specify the scheme used for interpolation, in these case linear interpolation or central differencing.
  
  \item {\ttfamily leastSquares}: second order scheme which uses all neighbouring cells to calculate distance with least square scheme.
  
  \item {\ttfamily Gauss cubic}: third-order schemes, typically used in very regular mesh.
  \end{itemize} 
  
+ 
+\paragraph{Results} \mbox{}\\
+The different type of schemes are reported in the following figure, with the relative scheme used. 
+\begin{figure}[H]
+\centering
+\includegraphics[height=6cm]{images/schemes/gradschems-results.pdf}
+\end{figure}
+Leastsquare scheme doesn't work, and simulation does not start. The gauss cubic scheme, instead works properly.
+As for time schemes, no difference can be seen in the shear stress power loss (arounf 0.6\%), while for pressure power, cubic schemed differs to linear for 1\%. The time required for the calculation is 18\% higher and the values of the residual are comparable.
+
 \subsection{Divergence schemes}
 The divergence of a propriety $\bm{U}$ rappresent the rate at which that quantity is changing.
 \begin{equation}
@@ -581,23 +632,16 @@ Only in this case since divergent terms are very dissimilar, it is preferable no
 \begin{itemize} 
  \item divergence of velocity;
  \item divergence of turbulent kinetic energy;
- \item divergence of $\omega$ or $\epsilon$ depending on the turbulence model chosen;
+ \item divergence of $\omega$ and/or $\epsilon$ depending on the turbulence model chosen;
  \item divergence of shearstress;
-
-% \item $\nabla\cdot (\rhoUU)$
-% \item $\nabla\cdot k$
-% \item $\nabla\cdot espilon$ or $\nabla\cdot omega$
- % cerca cos'è div((nuEff*dev2(T(grad(U))))) Gauss linear;
-% \item $\nabla\cdot nonlinearshearstress$
+  \item divergence of the effective viscous stress; %due to turbulence
 \end{itemize} 
 So our choice is to concentrate our self, and so our time machine on the trial of different schemes for the divergence of the velocity field
  $ \nabla \cdot ( \rho \, \bm{U} \bm{U} )$
 \\ an overview of all the scheme availble is reported below:
 
 
-% Please add the following required packages to your document preamble:
-% \usepackage{booktabs}
-\begin{table}[]
+\begin{table}[H]
 \centering
 \begin{tabular}{ll}
 \toprule
@@ -616,11 +660,10 @@ SFCD           & Second order, bounded                                          
 \end{table}
 
 NVD and TVD provide a blend between low order schemes and higher order schemes based on the calculation of a limiter. boundness is assure only for 1D problem, while 2D and 3D boundness can be imporeved limiting the gradient.
-\\The possibility are many and below we list all what we tried.
 
+From tutorial case we found many schemes, but only those reported below are working:
 \begin{itemize} 
-
- \item {\ttfamily Gauss upwind}: first order, bounded. The face value is set according to upstream value. It forces the cell value to be constant and equal to the mean value.
+\item {\ttfamily Gauss upwind}: first order, bounded. The face value is set according to upstream value. It forces the cell value to be constant and equal to the mean value.
  
  \item {\ttfamily Gauss linearUpwind limited}:
  
@@ -629,10 +672,7 @@ NVD and TVD provide a blend between low order schemes and higher order schemes b
  \item {\ttfamily Gauss linearUpwindV grad(U)}: The same as previous but in "V" schemes a limiter is applied in the direction of a creater change.
 
 \end{itemize} 
-
-only this set of scheme is correclty run. Going further with the accurancy, we move to instability for following schemes:
-
-
+Instead all of the other trials are not working poperly
 \begin{itemize} 
 
  \item {\ttfamily Gauss linear}
@@ -658,6 +698,17 @@ The bounded version instead works on time derivative on the following way:
 \end{equation}
 \\ However for compressible flows $( \nabla \cdot \bm{U} ) = 0 $ at convergence, but before it this term may be different. In some cases it is preferable to consider it, to control better the boundness of the solution, and promote convergence.
 
+
+\paragraph{Results} \mbox{}\\
+The different type of schemes are reported in the following figure, with the quantities chosen for the comparison. 
+\begin{figure}[H]
+\centering
+\includegraphics[height=7cm]{images/schemes/divschems-results.pdf}
+\end{figure}
+In this case as introduced before large number of schemes don't work. Considering the schemes which work properly, more remarcable difference can be detected.
+The pressure power varies of 10\% in any case, and it is higher than simply upwind configuration. The power loss change for 20\% more and so overall power increases of 10\% reaching 5.5 W, symilar for all schemes. Calculation time increases of 5\% for Gauss linearUpwind grad(U) while for the other decreases of 10\%. However some warning during calculation suggest to not trust at all the last two scheme, and for that section the Gauss linearUpwind grad(U) seams to be the more promising one. Residual are of the same order for all the scheme. However the "V" scheme is characterized by smoother behaviour and less peack iteration after iteration. %immagine per comparare?
+
+
 \subsection{Laplacian schemes}
 The laplacian operator act as follows:
 \begin{equation}
@@ -665,8 +716,25 @@ The laplacian operator act as follows:
 \end{equation}
 
 Typically it is associated to the diffusive term. Gauss scheme is the only one available and requires the interpolation scheme used and the normal gradient scheme, define in the propper subsection \textit{interpolationSchemes} and \textit{snGradSchemes}. Therefore the command would be:
-\\ {\ttfamily laplacian	Gauss	<interpolationSchemes>		<snGradSchemes>}
 
+\begin{center}
+{\ttfamily laplacian	Gauss	<interpolationSchemes>		<snGradSchemes>}
+\end{center}
+
+Therefore as anticipated the effect of different gradient scheme, were tested in this section.
+
+\paragraph{Results} \mbox{}\\
+The different type of schemes are reported in the following figure.
+\begin{figure}[H]
+\centering
+\includegraphics[height=6cm]{images/schemes/laplacianschems-results.pdf}
+\end{figure}
+
+Laplacian schemes are the only one scheme in which all what we tried works properly without errors or warning. The reference case is the most advanced one, so our attention was focus into unsterstand which is the impact of the non orthogonality correction. For what concern calculation time, the limited correction penalize the machine time (of 1.\%), with no difference in the calculated quantities (less than 0.5\%). Instead uncorrected scheme save more or less 40.\% of time, giving the same results with the same deviation of previus schemes. This could be an evidence of the fact that our mesh is able to guarantee that non orthogonality remain bounded. Residual are not characterized by sensible differences
+
+\subsection{Conclusions}
+
+\todo{} SCRIVERE ALLA FINE CHE METODI NUMERICI UTILIZZIAMO
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %	from:
@@ -688,7 +756,7 @@ Actually it allows to specify:
 In general Pimple is preferred when large time steps are suitable and when the pressure and velocity transient behavior is not of interested;
 Piso instead is preferred when small time steps are imposed but the nature of the problem or when a precise transient analysis is required.
 
-\begin{lstlisting}[language=c++, caption={\foam{pimpleFoam} source code.}]
+\begin{lstlisting}[language=c++, caption={\foam{pimpleFoam} source code extract.}]
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
     Info<< "\nStarting time loop\n" << endl;
@@ -745,7 +813,7 @@ while the outer correctors also solve the velocity field.
 Finally since our aim is to try to reduce pressure residuals we prefer to increase the number of inner correctors respect to the outer ones.
 This brings us to choose 1 outer correctors and 20 inner correctors.
  
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \subfigure[Pimple 50 outer 1 inner]{\includegraphics[width=8.5cm]{{images/solver/residuals50-1}.png}}
 \subfigure[Piso 1 outer 20 inner]{\includegraphics[width=8.5cm]{{images/solver/residuals1-20}.png}}
@@ -818,6 +886,11 @@ The trend of the total pressure drop perfecly trace the same behaviour of the po
 Our analysis highlight the fact that changing intensity of order of magnitude (and turbolent kinetic energy even scales with the square of I) the power stay almost around the reference value with just a change of few percents.
 
 \section{The domain's sizes}
+Looking at our symulation we can clearly see that before and after the turbine, the flow has not reach yet an unperturbed motion. And since there's the possibility that boundary will affect our solution, we run the reference case with different domain lenght. Starting point is the case where the mesh il limited form -0.6 to 0.6. Then different meshes were tested inscreasing dimension in symmetric way, to take into account the pressure rise effect at the bottom of the channel as well as the wake and mixing downstream. The result is very interesting as we can see from the figure below:
+%%%%%%%%%%%%5 inserisci immagine
+And if we analyse the power predicion, this will depend on the domain, and so our result are not independent by the domain. This should be an evidece of the fact that our boundary condition strongly affect the results.
+%%%%% inserici tabella CASO CON MESH ALLUNGATA
+Convergency is not yet reached also with a domain larger than 2.4 %cosa? cm?/m?. %rilancio e provo a vedere se con mesh + grandi raggiungo convergenza? o provo una mesh asimmetrica? per vedere se l'effetto è dovuto alla pressione che risale o alla scia?
 
 
 \section{Gravity effect and enhanced boundary conditions}
@@ -862,11 +935,33 @@ We have kept the defaut boundary conditions for $\omega$.
 
 \paragraph{Results}\mbox{}\\
 Even if the total value of the power generated by the turbine is not changing too much, we have a quite good improvement in residuals, in particular for the pressure.
-\\Moreover we highlight the fact that not only the absolute value is improved but also we completely remove the bad ripple behaviour the previously was present in all residuals.
+\\Moreover we highlight the fact that not only the absolute value is improved but also we reduce the ripple behaviour that previously was present.
 
-\todo inserire potenza prima e dopo
-\\
-\todo Inserire immagine dei residui prima e dopo
+The fact that the new boundary conditions are better even without gravitational field, can be see in the following fields.
+
+\begin{figure}[H]
+\centering
+\subfigure[Pressure]{\includegraphics[height=6cm]{{images/gravity/boundaries-p}.png}}
+\quad
+\subfigure[Turbolent Kinetic energy]{\includegraphics[height=6cm]{{images/gravity/boundaries-k}.png}}
+\caption{Pressure and Turbolent kinetic energy fields at time 2.4 seconds}
+\label{fig:gravity-trends}
+\end{figure}
+
+For what that concern the power, we have a small but not negligible difference. Due to the previous considerations we are forced to believe that the enhanced boundary conditions guarantees more reliable results.
+\begin{table}[H]
+\centering
+\begin{tabular}{lrr}
+\toprule
+								   & Default boundaries        & Enhanced boundaries       \\ \midrule
+Power [W]                          & $\round{4.94689061527}$   & $\round{5.02917144498}$   \\
+Power (pressure) [W]               & $\round{5.10506073361}$   & $\round{5.18583998598}$   \\
+Power(Shear stress)  [W]           & $\round{-0.158170118337}$ & $\round{-0.156668541001}$ \\
+Total pressure inlet (2.4 s) [Pa]  & $\round{0.6503034*1000}$  & $\round{0.6320083*1000}$  \\
+Total pressure outlet (2.4 s) [Pa] & $\round{0.4826165*1000}$  & $\round{0.4425995*1000}$  \\
+Total pressure drop (2.4 s) [Pa]   & $\round{167.6869}$        & $\round{189.4088}$        \\ \bottomrule
+\end{tabular}
+\end{table}
 
 \subsection{Gravitational influence}
 
@@ -901,14 +996,50 @@ momentumSource
 }
 \end{lstlisting}
 
-\todo inserire risultati confronto on off gravity effect con condizioni al contorno enhanced
+\begin{table}[H]
+\centering
+\begin{tabular}{lrr}
+\toprule
+                                   & Gravity enabled           & Gravity disabled          \\ \midrule
+Power [W]                          & $\round{5.02801934555}$   & $\round{5.02917144498}$   \\
+Power (pressure) [W]               & $\round{5.18466414042}$   & $\round{5.18583998598}$   \\
+Power(Shear stress) [W]            & $\round{-0.156644794865}$ & $\round{-0.156668541001}$ \\
+Total pressure inlet (2.4 s) [Pa]  & $\round{3059.583}$        & $\round{632.0083}$        \\
+Total pressure outlet (2.4 s) [Pa] & $\round{2870.286}$        & $\round{442.5995}$        \\
+Total pressure drop (2.4 s) [Pa]   & $\round{189.297}$         & $\round{189.4088}$        \\ \bottomrule
+\end{tabular}
+\caption{Comparison with and without gravity}
+\label{table:gravity-comparison}
+\end{table}
 
+\begin{figure}[H]
+\centering
+\subfigure{\includegraphics[height=6cm]{{images/gravity/U-2.4}.png}}
+\quad
+\subfigure{\includegraphics[height=6cm]{{images/gravity/p-2.4}.png}}
+\caption{Pressure and Velocity fields at time 2.4 seconds}
+\label{fig:gravity-fields}
+\end{figure}
 
+\begin{figure}[H]
+\centering
+\subfigure{\includegraphics[width=8.5cm]{{images/gravity/u-comparison}.pdf}}
+\subfigure{\includegraphics[width=8.5cm]{{images/gravity/p-comparison}.pdf}}
+\caption{Pressure and Speed trends at outlet at time 2.4 seconds}
+\label{fig:gravity-trends}
+\end{figure}
 
+As we can immediatly see in figures \ref{fig:gravity-fields} and \ref{fig:gravity-trends} and in table \ref{table:gravity-comparison},
+the difference in terms of relative pressure is quite respectable, since we have a constant gradient pressure field in addition to the default pressure field.
+Howether this increase in pressure doens't influence at all the power generation nor in terms of positive power or in terms of power loss.
 
+The residuals of the simulation with gravitational fields were better. Since there is no impact on computational cost, even if the difference is quite negligible we will enable gravitational field in the final simulation.
 
-
-
+\begin{figure}[H]
+\centering
+\includegraphics[width=10cm]{images/gravity/residuals.png}
+\caption{Residuals of gravity simulation.}
+\end{figure}
 
 
 \section{Results}
@@ -966,7 +1097,7 @@ t & 0.22 \m \text{ is blade thickness}
 
 The results plotted in figure \ref{fig:bsr-comparison-80-120} are then shown in table \ref{table:bsr80}
 
-\begin{table}[]
+\begin{table}[H]
 \centering
 \caption{Blade speed ratio results with mesh 80.}
 \label{table:bsr80}

@@ -1,0 +1,351 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[margin=0.7in]{geometry}
+\usepackage[latin1]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{cases}
+\usepackage[makeroom]{cancel}
+\usepackage{amsmath,tabu}
+\usepackage[fleqn]{mathtools}
+\usepackage[fleqn]{amsmath}
+\usepackage{bm}
+\usepackage{tikz}
+\usepackage{enumitem}
+\usepackage{wrapfig}
+\usepackage{graphicx}
+\usepackage{siunitx}
+\usepackage{microtype}
+\usepackage{array,tabularx}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{import}
+\usepackage{cases}
+\usepackage{graphicx,subfigure}
+\usepackage{myUnitOfMeasure}
+%\usepackage{myThermodynamics}
+\usepackage{myMath}
+\usepackage{mathtools}
+\usepackage{gensymb}
+\usepackage{xcolor}
+\usepackage{url}
+\usepackage{tabularx}
+\usepackage{ltablex}
+
+\title{
+\includegraphics[scale=0.4]{images/logo.png}
+\\[1cm]
+FINAL REPORT ON THE  MRL TURBINE SIMULATION
+COURSE OF MODELING TECHNIQUES FOR FLUID MACHINES 
+A.Y. 2017/2018}
+\author{
+Andrea Rossi \and Marco Bonasegale
+\and Marco Belloli \and Alberto Casali 
+}
+\date{}
+
+% usefull for ltablex to split long tables in many pages
+\keepXColumns
+
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}%
+
+%\newcommand{\Fy}[1]{\text{F}_{y_{#1}}}
+
+%\newcommand{\diameter}{\oslash}
+
+%\newcommand{\todo}{\colorbox{cyan!60}{TODO}}
+
+\renewcommand{\thesubsection}{\thesection.\arabic{subsection}}
+
+\renewcommand{\arraystretch}{1.4}
+
+\newcommand{\variable}[1]{\textcolor{blue}{#1}}
+
+\newcommand{\paramtext}[1]{\textcolor{black!30!green}{#1}}
+
+\newcommand{\terminal}[1]{\textcolor{black!30!cyan}{#1}}
+
+\newcommand{\todo}{\colorbox{cyan!60}{TODO}}
+
+\makeindex
+
+\begin{document}
+
+%\maketitle
+
+\newpage
+
+\tableofcontents
+
+\newpage
+
+%Per il grassetto scriviamo:
+%%\textbf{testo in grassetto}
+%Per il corsivo:
+%\textit{testo in corsivo}
+%E per la sottolineatura:
+%\underline{testo sottolineato}
+
+%Altri comandi utili sono \textsl{qualcosa} per il testo “slanted shape”, simile al corsivo, e
+%\textsc{qualcosa} per il maiuscoletto.
+
+
+\section{Numerical Schemes}
+The file which menage the numeric scheme is in \textit{fvSchemes}. Inside that file it is possible to define the scheme used for the calculation of many terms, specified in the following section. All of them are necessary to be able to discretize all the terms inside the continuity and momentum equation:
+\begin{itemize} 
+ \item time derivative terms inside \textit{timeSchemes};
+ \item gradient terms $\nabla$ inside \textit{gradScheme};
+ \item divergence terms $\nabla\cdot $ inside \textit{divSchemes};
+ \item laplacian terms $\nabla^2$ inside \textit{lapSchemes};
+ \item cell to face interpolation schemes  inside \textit{interpolationSchemes};
+ \item component of gradient normal to a cell face  inside \textit{snGradSchemes}.
+ \end{itemize} 
+It is possible to define specific scheme for each term of the equation, however our decision was to use as much as we can the default scheme. In addition from a very large amount of scheme only those used in the tutorial cases of openFoam were tested. This research can be simply done by using the command \textit{foamSearch} 
+In the next sub paragraphs we present an overviwe of different schemes and their characteristics.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% NEW PART
+\\ Since the scheme are a lot and the combination between them will be huge, our decision was to focus only on the influence of one scheme, keeping fixed the other. The reference case to study the differences is the base case, used in class, which is the same used for the tutorial case:
+ %% inserisci tabella 1
+
+The comparison has been done looking at:
+\begin{itemize} 
+ \item power genrated by the turbine;
+ \item power genrated by pressure only;
+ \item power dissipated by the effect of the shear stress;
+ \end{itemize} 
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% end new part
+\subsection{\textit{interpolationSchemes}}
+Specify the scheme for moving proprieties for cell center to face center. These operation is inluded in the calculation of gradient, divergence and laplacian terms. An overview of interpolation schemes are:
+
+\begin{tabular}{ |p{6cm}|p{10cm}|  }
+ \multicolumn{2}{|c|}{General schemes} \\
+ \hline
+ \hline
+ Scheme & Numerical behaviour \\ [0.5ex] 
+ \hline\hline
+ linear & linear interpolation (central differencing) \\ 
+ \hline
+ cubicCorrection & Cubic scheme  \\
+ \hline
+ midPoint & Linear interpolation with symmetric weighting  \\
+ \hline
+  \multicolumn{2}{|c|}{linked to Gaussian discretization of convection} \\
+ \hline
+ \hline
+ upwind (upwind convection group) & Upwind differencing   \\
+ \hline
+ linearUpwind (upwind convection group) & Linear upwind differencing   \\
+ \hline
+ skewLinear (upwind convection group) & Linear with skewness correction   \\
+ \hline
+ filteredLinear2 (upwind convection group) & Linear with filtering for high-frequency ringing   \\
+ \hline
+ limitedLinear (TVD schemes) & limited linear differencing    \\
+ \hline
+ vanLeer (TVD schemes)  & van Leer limiter  \\
+ \hline
+ MUSCL (TVD schemes)  & MUSCL limiter   \\
+ \hline
+ limitedCubic (TVD schemes)  & Cubic limiter   \\
+ \hline
+ SFCD (NVD schemes)  & Self-filtered central differencing    \\
+ \hline
+ Gamma $\psi$  (NVD schemes) & Gamma differencing \\
+ \hline
+\end{tabular}
+
+
+For our calculation, only linear scheme has been adopted. Second group of schemes interpolate on the basis of the flux of the flow velocity. For this reason they require the name of the flux field used for interpolation.
+
+\subsection{\textit{snGradSchemes}}
+The gradient is calculated from cell center, and then interpolated. The normal contribution will be: 
+$ \nabla_f Q = \hat{n} \cdot (\nabla Q )_f$
+
+where $\hat{n}$ is the face unit normal. It controls the scheme for the calculation on the gradient normal to cell face, in the middle of the face in between two cells. available schemes are : \\
+\begin{itemize} 
+
+ \item {\ttfamily corrected} : Central-difference snGrad scheme with non-orthogonal correction, explicit.
+  \item {\ttfamily uncorrected}: no correction of the orthogonality.
+ \item {\ttfamily limited $\psi$}: which requires another input, in between 1 and 0, where 1 correspond to correct scheme while 0 correspond to uncorrect sccheme. So it is a weighted bland between the two.
+ \item {\ttfamily bounded}: bounded correction for positive scalars
+ \item {\ttfamily fourth} : fourth order scheme.
+\end{itemize} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%% NEW PART
+The use of different scheme will be discussed in laplacian section.
+
+\subsection{\textit{timeSchemes}}
+Time schemes define the way in which a propriety is integrated in time. Depending on the choise of the user, an old $\phi^0$ or old-old $\phi^{00}$ solution will be required
+The different schemes analyzed are:
+\begin{itemize} 
+ \item {\ttfamily steadyState}: used for steady state simulation where there's no time derivative, so to analize a steady problem.
+ 
+ \item {\ttfamily localEuler}:first order,implicit, psuedotransient used for accelerating the convergency to a steady state problem,.
+ 
+ \item {\ttfamily Euler}: implicit, first order, transient used for unsteady problem.
+ \\$ \frac{d \phi}{dt} = \frac{\phi - \phi^0}{\Delta t}$
+ 
+ \item {\ttfamily backward}: implicit, second order, transient, conditionally stable and boundness is not guaranteed.
+ \\$ \frac{d \phi}{dt} = \frac{1}{\Delta t}(\frac{3}{2}\phi - 2\phi^0- \frac{1}{2}\phi^{00})$
+ 
+ \item {\ttfamily CrankNicolson}: second order, transient, bounded. \\for uniform time step the scheme is equal to:
+ \\$ \frac{d \phi}{dt} = \frac{\phi - \phi^{00}}{2\Delta t}$
+\\To assure stability it is possible to adopt a blend with Euler system, with a coefficient in between 0 and 1, where 0 rappresent pure Euler while 1 rapprensent pure CrankNicolson.
+ 
+ \end{itemize} 
+
+For second derivative scheme (not present in our equation) only Euler scheme is possible.
+
+\paragraph{Results} \mbox{}\\
+The different type of schemes are reported in the following figure, with the relative scheme used. The comparison is made considering the overall power produced by the turbine, the ideal power, related to the effect of the pressure only and the power loss associated to the shear stress action:
+%%%%%%%%%%% inscerisci istogramma DDT
+\\ CrankNicolson scheme with different blending coefficient has been tested however, it will cause instability which lead the residual to rise after 0.003s for CrankNicolson0.3 after 0.005s for CrankNicolson0.5 and 0.0045s for CrankNicolson0.9.
+Even if backward scheme is a purly second order scheme (so in theory more prone to instability), it works.
+No difference can be seen in the shear stress power loss, but a for ideal power (related to pressure), backward scheme will provide a different value, 1\% less. The time required for the calculation is 6\% higher and the values of the residual are of the same order of magnitude.
+
+
+
+\subsection{\textit{gradScheme}}
+The gradient of a certain quantity $\phi$ rappresent the way in which that propriety is changon along a direction. For a scalar quantity $\phi$
+\\ $\nabla \phi = \begin{bmatrix} \frac{\partial \phi}{\partial x} \\ \frac{\partial \phi}{\partial y} \\\frac{\partial \phi}{\partial z}\end{bmatrix} $
+
+The different schemes analyzed are:
+\begin{itemize} 
+ \item {\ttfamily Gauss linear}: Gauss specify that the scheme used ,in these case the Gaussian integration, which requires the interpolation from cell center to face centres. Therefore second input specify the scheme used for interpolation, in these case linear interpolation or central differencing.
+ 
+ \item {\ttfamily leastSquares}: second order scheme which uses all neighbouring cells to calculate distance with least square scheme.
+ 
+ \item {\ttfamily Gauss cubic}: third-order schemes, typically used in very regular mesh.
+ \end{itemize} 
+
+
+\paragraph{Results} \mbox{}\\
+The different type of schemes are reported in the following figure, with the relative scheme used. 
+%%%%%%%%%%% inscerisci istogramma DDT
+Leastsquare scheme doesn't work, and simulation does not start. The gauss cubic scheme, instead works properly.
+As for time schemes ,no difference can be seen in the shear stress power loss (arounf 0.6\%), while for pressure power, cubic schemed differs to linear for 1\%. The time required for the calculation is 18\% higher and the values of the residual are comparable.
+
+
+
+
+\subsection{\textit{divSchemes}}
+The divergence of a propriety $U$ rappresent the rate at which that quantity is changing.
+\\ $ \nabla \cdot U = \frac{\partial U_x}{\partial x}+ \frac{\partial U_y}{\partial y} + \frac{\partial U_z}{\partial z} $
+
+Only in this case since divergent terms are very dissimilar, it is preferable not to use a default scheme, equal to all the terms but to specify a specific sceme for each term. In addition, considering that the scheme availble are a lot, and we have:
+%%%%%%%%%%%%%%%%%% CHANGED %%%%%%%%%%%%%%%%%%%%%%%
+\begin{itemize} 
+ \item divergence of velocity;
+ \item divergence of turbulent kinetic energy;
+ \item divergence of $\omega$ and/or $\epsilon$ depending on the turbulence model chosen;
+ \item divergence of shearstress;
+  \item divergence of the effective viscous stress; %due to turbulence
+\end{itemize} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+So our choice is to concentrate our self, and so our time machine on the trial of different schemes for the divergence of the velocity field
+ $ \nabla \cdot ( \rho UU )$
+\\ an overview of all the scheme availble is reported below:
+
+\begin{tabular}{ |p{6cm}|p{10cm}|  }
+ \hline
+ Scheme & Numerical behaviour \\ [0.5ex] 
+ \hline\hline
+ linear & second order, unbounded (good choice for LES calculations due to low dissipation) \\ 
+ \hline
+ skewLinear & Second order, (more) unbounded, skewness correction  \\
+ \hline
+ cubicCorrected & Fourth order, unbounded  \\
+ \hline
+ upwind & First order, bounded  \\
+ \hline
+ linearUpwind & First/second order, bounded  \\
+ \hline
+ QUICK (Quadratic Upstream Interpolation for Convective Kinematics) & First/second order, bounded   \\
+ \hline
+ TVD schemes (Total Vairation Diminishing) & First/second order, bounded   \\
+ \hline
+ SFCD & Second order, bounded   \\
+ \hline
+% NVD schemes (Normalized Variable Diminishing)  & First/second order, bounded  \\
+ \hline
+
+\end{tabular}
+\\ NVD and TVD provide a blend between low order schemes and higher order schemes based on the calculation of a limiter. boundness is assure only for 1D problem, while 2D and 3D boundness can be imporeved limiting the gradient.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% changed
+Form tutorial case we found many schemes, but only those reported below are woriking:
+\begin{itemize} 
+\item {\ttfamily Gauss upwind}: first order, bounded. The face value is set according to upstream value. It forces the cell value to be constant and equal to the mean value.
+ 
+ \item {\ttfamily Gauss linearUpwind limited}:
+ 
+ \item {\ttfamily Gauss linearUpwind grad(U)}: second order, unbounded, employs upwind interpolation weights, with a correction based on cell gradient.
+ 
+ \item {\ttfamily Gauss linearUpwindV grad(U)}: The same as previous but in "V" schemes a limiter is applied in the direction of a creater change.
+
+\end{itemize} 
+Instead all of the other trials are not working poperly
+\begin{itemize} 
+
+ \item {\ttfamily Gauss linear}
+ \item {\ttfamily Gauss limited linear}
+ \item {\ttfamily Gauss cubic}
+ \item {\ttfamily Gauss LUST unlimitedGrad(U)}
+ \item {\ttfamily Gauss LUST grad(U)}
+ \item {\ttfamily Gauss bounded Gauss limitedLinear 0.2}
+ \item {\ttfamily Gauss linear}
+ \item {\ttfamily Gauss limitedLinearV 1}
+ \item {\ttfamily bounded Gauss upwind}
+ \item {\ttfamily bounded Gauss linearUpwind grad}
+ \item {\ttfamily bounded Gauss linearUpwind limited}
+ \item {\ttfamily bounded Gauss linearUpwind unlimited}
+ \item {\ttfamily bounded Gauss linearUpwindV grad(U)}
+ \item {\ttfamily Gauss vanLeerV}
+\end{itemize} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+The "V" schemes improve stability, penalizing the accurancy, beacause they work in the direction where the gradient are changing more, limiting its variation
+The bounded version instead works on time derivative on the following way:
+\\$ \frac{d \phi}{dt} = \frac{\partial \phi}{\partial t} + U \cdot \nabla \phi = \frac{\partial \phi}{\partial t} + \nabla \cdot (U \phi) - ( \nabla \cdot U ) \phi $
+\\ However for compressible flows $( \nabla \cdot U ) = 0 $ at convergence, but before it this term may be different. In some cases it is preferable to consider it, to control better the boundness of the solution, and promote convergence.
+
+
+
+\paragraph{Results} \mbox{}\\
+The different type of schemes are reported in the following figure, with the quantities chosen for the comparison. 
+
+%%%%%%%%%%% inscerisci istogramma DDT
+In this case as introduced before large number of schemes don't work. Considering the schemes which work properly, more remarcable difference can be detected.
+The pressure power varies of 10\% in any case, and it is higher than simply upwind configuration. The power loss change for 20\% more and so overall power increases of 10\% reaching 5.5 W, symilar for all schemes. Calculation time increases of 5\% for Gauss linearUpwind grad(U) while for the other decreases of 10\%. However some warning during calculation suggest to not trust at all the last two scheme, and for that section the Gauss linearUpwind grad(U) seams to be the more promising one. Residual are of the same order for all the scheme. However the "V" scheme is characterized by smoother behaviour and less peack iteration after iteration. %immagine per comparare?
+
+
+\subsection{\textit{laplacianSchemes}}
+The laplacian operator act as follows:
+\\ $ \nabla^2 \phi = \frac{\partial^2 U_x}{\partial x^2}+ \frac{\partial^2 U_y}{\partial y^2} + \frac{\partial^2 U_z}{\partial z^2} $
+\\ Typically it is associated to the diffusive term. Gauss scheme is the only one available and requires the interpolation scheme used and the normal gradient scheme, define in the propper subsection \textit{interpolationSchemes} and \textit{snGradSchemes}. Therefore the command would be:
+\\ {\ttfamily laplacian	Gauss	<interpolationSchemes>		<snGradSchemes>}
+%%%%%%%%%%%%%%%%%%%%%%%%% CHANGE
+\\ Therefore as anticipated the effect of different gradient scheme, were tested in this section.
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\paragraph{Results} \mbox{}\\
+The different type of schemes are reported in the following figure, with the quantities chosen for the comparison. 
+%%%%%%%%%%% inscerisci istogramma DDT
+\\Laplacian schemes are the only one scheme in which all what we tried works properly without errors or warning. The reference case is the most advanced one, so our attention was focus into unsterstand which is the impact of the non orthogonality correction. For what concern calculation time, the limited correction penalize the machine time (of 1.\%), with no difference in the calculated quantities (less than 0.5\%). Instead uncorrected scheme save more or less 40.\% of time, giving the same results with the same deviation of previus schemes. This could be an evidence of the fact that our mesh is able to guarantee that non orthogonality remain bounded. Residual are not characterized by sensible differences
+
+
+%%%%%%%%%%%%%%%%% NEW %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{\textit{MESH ALLUNGATA}}
+Looking at our symulation we can clearly see that before and after the turbine, the flow has not reach yet an unperturbed motion. And since there's the possibility that boundary will affect our solution, we run the reference case with different domain lenght. Starting point is the case where the mesh il limited form -0.6 to 0.6. Then different meshes were tested inscreasing dimension in symmetric way, to take into account the pressure rise effect at the bottom of the channel as well as the wake and mixing downstream. The result is very interesting as we can see from the figure below:
+%%%%%%%%%%%%5 inserisci immagine
+And if we analyse the power predicion, this will depend on the domain, and so our result are not independent by the domain. This should be an evidece of the fact that our boundary condition strongly affect the results.
+%%%%% inserici tabella CASO CON MESH ALLUNGATA
+Convergency is not yet reached also with a domain larger than 2.4 %cosa? cm?/m?. %rilancio e provo a vedere se con mesh + grandi raggiungo convergenza? o provo una mesh asimmetrica? per vedere se l'effetto è dovuto alla pressione che risale o alla scia?
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%	from:
+% https://www.openfoam.com/documentation/user-guide/fvSchemes.php#x23-870273
+
+% https://cfd.direct/openfoam/user-guide/fvschemes/
+
+% https://www.openfoam.com/documentation/cpp-guide/html/guide-schemes.html
+
+% https://www.cfdsupport.com/OpenFOAM-Training-by-CFD-Support/node81.html
+
+\end{document}
