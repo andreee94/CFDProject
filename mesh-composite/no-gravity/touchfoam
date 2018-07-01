@@ -1,0 +1,12 @@
+#!/bin/bash
+
+allsimulations=("mesh-120-g" "mesh-120-nog"  "mesh-120-g-test" "mesh-120-g-longer" "mesh-120-g-longerfront" "mesh-120-g-longerback" "mesh-120-g-longest")
+
+for i in "${allsimulations[@]}"
+do
+    touch $i/main/$i.foam
+done
+
+
+
+

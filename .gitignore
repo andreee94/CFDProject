@@ -61,6 +61,10 @@ mesh-composite/turbolent-intensity/mesh*
 mesh-composite/turbolent-intensity/turb*
 !mesh-composite/turbolent-intensity/My*
 !mesh-composite/turbolent-intensity/runcase
+mesh-composite/final/final*
+!mesh-composite/final/My*
+!mesh-composite/final/runcase
+!mesh-composite/final/state*
 # maybe add also files that contains old in the name
 ## MESH
 # mesh/constant/polyMesh

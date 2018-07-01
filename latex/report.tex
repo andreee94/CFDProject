@@ -858,7 +858,7 @@ We have tested in a sensitivity analysis values from $1\%$ which is very moderat
 
 The power results compare both the total power produced, and decompose in the two components of pressure and tangential stress (Figure \ref{fig:turbintensity-power}(a) and \ref{fig:turbintensity-power}(b))
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \caption{Power comparison}
 \subfigure[Total power.]{\includegraphics[width=8.5cm]{{images/turbolentsensitivity/power}.pdf}}
@@ -885,18 +885,28 @@ The trend of the total pressure drop perfecly trace the same behaviour of the po
 
 Our analysis highlight the fact that changing intensity of order of magnitude (and turbolent kinetic energy even scales with the square of I) the power stay almost around the reference value with just a change of few percents.
 
-\section{The domain's sizes}
-Looking at our symulation we can clearly see that before and after the turbine, the flow has not reach yet an unperturbed motion. And since there's the possibility that boundary will affect our solution, we run the reference case with different domain lenght. Starting point is the case where the mesh il limited form -0.6 to 0.6. Then different meshes were tested inscreasing dimension in symmetric way, to take into account the pressure rise effect at the bottom of the channel as well as the wake and mixing downstream. The result is very interesting as we can see from the figure below:
-%%%%%%%%%%%%5 inserisci immagine
+\section{Extended domain}
+Looking at our symulation we can clearly see that before and after the turbine, the flow has not reach yet an unperturbed motion. And since there's the possibility that boundary will affect our solution, we run the reference case with different domain lenght. 
+
+Starting point is the case where the mesh il limited form -0.6 to 0.6. 
+Then different meshes were tested inscreasing dimension in symmetric way, to take into account the pressure rise effect at the bottom of the channel as well as the wake and mixing downstream. 
+
+The result is very interesting as we can see from the figure below:
+\begin{figure}[H]
+\centering
+\includegraphics[width=10cm]{images/longmesh/power.pdf}
+\caption{Residuals of gravity simulation.}
+\end{figure}
 And if we analyse the power predicion, this will depend on the domain, and so our result are not independent by the domain. This should be an evidece of the fact that our boundary condition strongly affect the results.
+Moreover differenly from many other cases here the difference can be quite significant.
 %%%%% inserici tabella CASO CON MESH ALLUNGATA
-Convergency is not yet reached also with a domain larger than 2.4 %cosa? cm?/m?. %rilancio e provo a vedere se con mesh + grandi raggiungo convergenza? o provo una mesh asimmetrica? per vedere se l'effetto è dovuto alla pressione che risale o alla scia?
+Convergency is not yet reached also with a domain larger than $2.4\m$, which is the double respect to the default case.%cosa? cm?/m?. %rilancio e provo a vedere se con mesh + grandi raggiungo convergenza? o provo una mesh asimmetrica? per vedere se l'effetto è dovuto alla pressione che risale o alla scia?
 
 
 \section{Gravity effect and enhanced boundary conditions}
 
 After the analysis of the extension of the domain we have had a clear idea that the boundary conditions that we have used up to now are ok, 
-but not the best possible. We have deduced this comparing the residuals of the previous simulation, which are clearly better with a longer domain. 
+but not the best possible.
 
 The first boundary that we have rediscuss is the outlet patch. We have in fact applied quite a strong boundary condition imposing that the relative pressure have to be constant along the y direction and equal to $0\Pa$. This is reasonably true if the outlet where we impose this constraint is far enough from the turbine. This in not completely true with the default domain, as highlighted in previous section.
 
@@ -1040,6 +1050,67 @@ The residuals of the simulation with gravitational fields were better. Since the
 \includegraphics[width=10cm]{images/gravity/residuals.png}
 \caption{Residuals of gravity simulation.}
 \end{figure}
+
+\subsection{Extended domain}
+
+To conclude the grativitational field analysis, we have performed few simulations with extended domain.
+We have tried to both extends upstream, downstream and in a symmetric way the total domain.
+
+The representation of the cases analyzed is available in figure \ref{fig:gravity-extendeddomain}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=13cm]{images/gravity/{U-extended}.png}
+\caption{Velocity field representation of all the domains.}
+\label{fig:gravity-extendeddomain}
+\end{figure}
+
+The results in terms of power are highlighted in table \ref{table:gravity-extended} and in figure \ref{fig:gravity-extended-power}.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lrrr}
+\toprule
+                           & Power [W]               & Power (pressure) [W]    & Power(Shear stress) [W]   \\ \midrule
+Gravity enabled            & $\round{5.02801934555}$ & $\round{5.18466414042}$ & $\round{-0.156644794865}$ \\
+Gravity disabled           & $\round{5.02917144498}$ & $\round{5.18583998598}$ & $\round{-0.156668541001}$ \\
+Gravity (2.4 m symmetric)  & $\round{4.64901900925}$ & $\round{4.80320537572}$ & $\round{-0.154186366469}$  \\
+Gravity (2.4 m downstream) & $\round{5.03340003987}$ & $\round{5.19009079263}$ & $\round{-0.156690752765}$ \\
+Gravity (2.4 m upstream)   & $\round{4.61611451955}$ & $\round{4.76833335025}$ & $\round{-0.152218830708}$ \\
+Gravity (3.6 m symmetric)  & $\round{4.6274730287}$  & $\round{4.77976509963}$ & $\round{-0.152292070926}$ \\ \bottomrule
+\end{tabular}
+\caption{Extended domain comparison}
+\label{table:gravity-extended}
+\end{table}
+\vspace{-0.75cm}
+\begin{figure}[H]
+\centering
+\includegraphics[width=10cm]{images/gravity/{power-extended}.pdf}
+\caption{Power evolution with symmetric domains.}
+\label{fig:gravity-extended-power}
+\end{figure}
+
+As we can appreciate in figure \ref{fig:gravity-extended-power}, differently from the extended domain analysis where with a symmetric domain size of $3.6\m$ we have not probably reached convergecy, in this case with enhanced boundary conditions, the situation is quite different.
+Actually even in this case, the standard domain size is not enough, but it is interesting to notice that at around size $2.4m$
+the power starts showing a convergent behavior.
+
+Is interesting to notice that the extension downstream has a really limited impact on performances, 
+while the extension upstream decreases predicted power of a quite significant amount.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=10cm]{images/gravity/{U-0.6m-extended}.pdf}
+\caption{Velocity distribution along y direction at x coordinate $0.6 \m$.}
+\label{fig:gravity-U0.6-extended}
+\end{figure}
+
+
+To go deeper we have analyzed velocity trend at coordinate $x=0.6\m$ along y direction, for all 5 cases. 
+The sketch is reported in figure \ref{fig:gravity-U0.6-extended}.
+
+Even in this case is evident that the difference between the reference case and the extended downstream domain is negligible.
+Moreover we can notice that the difference in terms of velocity is greater below the blades.
+
 
 
 \section{Results}
