@@ -115,15 +115,15 @@ Andrea Rossi \and Marco Bonasegale
 \subsection{MRL Tidal Turbine Description}
 The MRL Turbine is a hydraulic machine which is able to exploit the upcoming  water flow that is passing through the cross sectional area of the inlet of the machine. Momentum Reversal and Lift Tidal Turbine is a cross-flow tidal-stream device which converts the energy of the water
 flow into mechanical power. So the most advantageous locations in order to place this device are whatever kind of regular river with a smooth river bed or any sea/ocean areas which are subjected to relevant tidal phenomena.
-The turbine is made up of three rotating blades and each blade is subjected to the combination of two rotating motions. A rotation $\omega_0$ along the machine axis  and a rotation $\omega_1$ around the blade individual axis with counter-rotating $\omega_0$ and $\omega_1$.
+The turbine is made up of three rotating blades and each blade is subjected to the combination of two rotating motions. A rotation $\omega_0$ along the machine axis  and a rotation omega1 around the blade individual axis with counter-rotating $\omega_0$ and $\omega_1$.
 
 \begin{center}
 \includegraphics[width=0.8\textwidth]{images/flow.png} 
 \end{center}
 
 The flow-blade interaction leads to a drag force that is coming out while the blade is placed in the upper part of the circumferential path and a lift force on each blade located in the lower part of the path.
-The resulting torque multiplied by the rotating speed will give the generated power of the turbine which, in the end, is our final useful effect. The generated power per turbine is not really high (a few Watts) and this is the reason why the \emph{farm layout}  that Prof. Gavin Tabor showed us at the beginning of the course is used. Many little turbines are placed in a schematic and regular disposition in order to extract a higher power from the tidal stream.
-Since from the first raw presentation of the machine we can realise that the mesh will have a relevant importance in the representation and validation of this complex rotating movement. We will deal with a rotating mesh which is progressivly refined close to the blades, ending with the boundary layers when we are approaching the solid walls of the blades.
+The resulting torque multplied by the rotating speed will give the generated power of the turbine which, in the end, is our final useful effect. The generated power per turbine is not really high (a few Watts) and this is the reason why the \emph{farm layout}  that Prof. Gavin Tabor showed us at the beginning of the course is used. Many little turbines are placed in a schematic and regular disposition in order to extract a higher power from the tidal stream.
+Since from the first raw presentation of the machine we can realise that the mesh will have a relevant importance in the representation and validation of this complex rotating movement. We will deal with a rotating mesh which is progressivly refined closeto the blades, ending with the boundary layers when we are approaching the solid walls of the blades.
 
 
 \subsection{The data}
@@ -131,11 +131,11 @@ The turbine is surrounded by an upcoming water flow set at 1 m/s constant along 
 CAD files were provided by our professor and all the geometry parameters were known.
 The in-class workflow has been divided into four little sub-tasks. 
 
-The sub-tasks allowed us to start to get more familiar with the project work and understand the main issues met along the path with the help of the professors.
+The sub-tasks allowed us to start to get more familiar with the project work and understand the main issues met along the path with the help of the professors. The in-class project started with the raw mesh generation (blockMesh, snappyHexMesh), continued with the preparation of the rotating mesh(AMI files, baffles creation, merge and split procedure), movement of the mesh with the provided motion laws  (real turbine rotation, gif rendering) and finally the set up, running and post processing of the simulation.
 
 \section{In-class work}
 \paragraph{In-class workflow}\mbox{}\\
- The in-class project started with the raw mesh generation (blockMesh, snappyHexMesh), continued with the preparation of the rotating mesh(AMI files, baffles creation, merge and split procedure), movement of the mesh with the provided motion laws  (real turbine rotation, gif rendering) and finally the set up, running and post processing of the simulation.
+The in-class workflow has been divided into four little sub-tasks. The sub-tasks allowed us to start to get more familiar with the project work and understand the main issues met along the path with the help of the professors. The in-class project started with the raw mesh generation (blockMesh, snappyHexMesh), continued with the preparation of the rotating mesh(AMI files, baffles creation, merge and split procedure), movement of the mesh with the provided motion laws  (real turbine rotation, gif rendering) and finally the set up, running and post processing of the simulation.
 
 \paragraph{Mesh generation}\mbox{}\\
 One of the most challenging section of the in-class project was the generation of the raw turbine domain mesh. We have used many different openFoam comands in order to build a complete and exhaustive mesh that must be suitable for the hydraulic problem characteristics.
@@ -143,11 +143,11 @@ One of the most challenging section of the in-class project was the generation o
 Let's start to present the overall mesh work-flow with all the brief steps evaluation.
 \\
 \begin{itemize}
-\item The scaling of the dimensions and geometry parameters coming from the stl files from millimiters to meters in order to perform correct calculations in the openFoam environment;
+\item The scaling of the dimensions and geometry parameters coming from the stl files from millimiters to meters in order to perform correst calculations in the openFoam environment;
 
 \item BlockMesh and SnappyHexMesh for each of the three blades. At this point castellated, snapped and layered mesh have been realized for each blade and we have to join all together;
 
-\item Merging procedure in order to have one complete mesh and the copy of the mesh inside our main environment of the project. We have decided to oparate in this way in order to have a better comunication level in terms of interpolation values among mesh sub-domains. In this way the neighboring cells of different sub-domains are well oriented and aligned. The result is an improvement on the mesh quality controls as non-orthogonality index and skewness coefficient  because we have parallel disposition of cells and they appear as concentric refined layers;
+\item Merging procedure in order to have one complete mesh and the copy of the mesh inside our main environment of the project. We have decided to oparate in this way in order to have a better comunication level in terms of interpolation values among mesh sub-domains. In this way the neighboring cells of different sub-domain are well oriented and aligned. The result is an improvement on the mesh quality controls as non-orthogonality index and skewness coefficient  because we have parallel disposition of cells and they appear as concentric refined layers;
 
 \item Mesh extrusion with the thickness of the 2D domain already given as a geometry parameter equal to the blade width;
 
@@ -162,7 +162,7 @@ Since we deal quite often with different mesh size, in particular during the mes
 In the final part of the in-class project we performed the set up and run of the first raw simulation.
 To do so, we have to manage with the boundary conditions of the problem, the turbolence modeling and the numeric schemes. All thease macro-section of the simulation were assigned a priori and the last part of our work is to play with all these parameters and try to understand the influence of each singular changing in the set up on the final result that the turbine must provide.
 
-For the first setup we use the simpler $k\!-\!\varepsilon$ turbolence model respect to a more appropriate $k\!-\!\omega \, \text{SST}$.
+For the first setup we use the simpler $k\!-\!\varepsilon$ turbolence model respect to more appropriate $k\!-\!\omega \, \text{SST}$.
 
 Analysing $y^+$ from table \ref{table:inclass-yplus} we can notice that even with a quite coarse mesh we have $y^+$ much smaller that 30 which is the
 minimum threshold under which $k\!-\!\varepsilon$ is not suitable; this is the reason why in the next part of this report we will always adopt $k\!-\!\omega \, \text{SST}$ except when differently specified.
@@ -220,9 +220,9 @@ Power (Total) [W]        & $\round{4.59221434676}$   \\ \bottomrule
 
 
 \subsection{Boundary conditions}
-Boundary conditions are referred to the water stream velocity that is investing the machine, the pressure of the water in the stream channel, $k$ , $\omega$ and $\nu_T$ values.
+Boundary conditions are referred to the water stream velocity that is investing the machine, the pressure of the water in the stream channel, k, w and nut values.
 
-Our main interest is to focus onto the first two boundary conditions so velocity and pressure, since the other are mainly taken as default conditions for the respective turbolence model.
+Our main interest is to focus the first two boundary conditions so velocity and pressure, since the other are maily taken as the default condition for the respective turbolence model.
 
 \paragraph{Patches}\mbox{}\\
 Boundary condition are defied over patches so it is important to define that.
@@ -230,7 +230,7 @@ Boundary condition are defied over patches so it is important to define that.
 \item \emph{Inlet Section} is that from which water comes into the domain moving towards the x direction;
 \item \emph{Outlet Section} is where water comes out from the domain;
 \item \emph{Front and back faces} are always set to empty since we are dealing with a 2D problem;
-\item \emph{Lower wall} is a physical wall that limit the flow (think about river bed!);
+\item \emph{Lower wall} is a physical wall that limit the flow;
 \item \emph{Upper wall} is a free surface where the flow can slip;
 \item \emph{Blades} are physical surfaces that moves inside the domain;
 \item \emph{Ami interfaces} are internal patches that allow the communication between moving adiacent cells. All the quantities are set as CyclicAmi.
@@ -239,7 +239,7 @@ Boundary condition are defied over patches so it is important to define that.
 
 \paragraph{Velocity U}
 \begin{itemize}
-\item \textbf{Internal field} is uniform at the beginning and it is set to $1\ms$ in the x direction even if in class we have set inlet velocity to $1\ms$ and internal field uniformly set to $0\ms$. We take this decision to make the transition phase faster to limit the simulation time. We are actually interested only in staeady state power so limiting the transition let us to reduce computational time;
+\item \textbf{Internal field} is uniform at the beginning and it is set to $1\ms$ in the x direction even if in class we have set inlet velocity to $1\ms$ and internal field inited to $0\ms$. We take this decision to make the transition phase faster to limit the simulation time. We are actually interested only in staeady state power so limit the transition let to reduce computational time;
 \item \emph{Inlet Section} velocity is fixed to $1\ms$ during all the simulation; 
 \item \emph{Outlet Section} velocity is unknown so we have to set it to ZeroGradient boundary condition;
 \item \emph{Upper wall} velocity is set to Slip since the fluid can flow in the free stream;
@@ -254,15 +254,15 @@ OpenFoam for incompressible cases works with pressure normalized respect to dens
 Moreover it can manage relative pressures. 
 So the value that we set is relative $0 \,\text{bar} \cdot \text{m}^3 / \kg = \m / \s^2$.
 \item \emph{Inlet Section} pressure distribution unknown so we set to ZeroGradient; 
-\item \emph{Outlet Section} is set to atmospheric ($0 \m / \s^2$) since we assume to be sufficiently far from the blades so that pressure can be evalueted constant;
+\item \emph{Outlet Section} is set to atmospheric ($0 \m / \s^2$) since we assume to be sufficiently far from the blades that pressure is constant;
 \item \emph{Upper wall} pressure is set to atmospheric since it is free stream;
 \item \emph{Lower wall} pressure is set to ZeroGradient since boundary layer are isobar;
 \item \emph{Blades} pressure is set to ZeroGradient since boundary layer are isobar;
 \end{itemize}
 
 \paragraph{Turbolent quantities $k$, $\varepsilon$, $\omega$, $\nu_T$}\mbox{}\\
-For what that concern the boundary conditions of the turbolence quantities we apply default settings.
-We will discuss instead a modification of the value of initialization of that quantities to speed up as much as possible the convergence to a steady state condition.
+For what that concern the boundary conditions of the turbolence quantity we apply default settings.
+We will discuss instead a modification of the value of initialization of that quantity to speed up as much as possible the convergence to a steady state condition.
 
 \paragraph{Solver}\mbox{}\\
 The solver applied in the class session is pimpleDyMFoam in PISO mode with one outer corrector, two inner correctors and no non orthogonal correctors. This solver is responsible not only for the solution of the system of differential equation, but also for the movement of the mesh at each time step. 
@@ -276,9 +276,9 @@ The aim is to find a tradeoff between \emph{accuracy} and \emph{computational co
 
 The expected improvement into the quantities of interest decreases with the increase of the number of cells.
 
-There is a point beyond which the improvement becomes really negligible and we encounter a plateau; beyond that it does not worth the increase in computational time. 
+There is a point beyond which the improvement becomes really negligible and we encounter a plateau; beyond that it does not worth the increate in computational time. 
 
-Our sensitivity analysis includes 6 different simulations:
+Our sensitivity analysis includes 6 different simulation:
 \begin{itemize}
 \item mesh 20
 \item mesh 40
@@ -293,9 +293,9 @@ The ratio four explains the necessity to double the cells number in each of the 
 
 Despite the fact that the power generated is not the best indicator possible for highliting sensitivity behaviour it is instead the most relevant output parameter of our simulation.
 Beside that we put also the total pressure drop that is a measure of the losses due to the turbine.
-To compute the drop we consider the average of the total pressure at the inlet and at the outlet both calculated at the end of the simulation.
+To compute the drop we consider the averate of the total pressure at the inlet and at the outlet both calculated at the end of the simulation.
 
-During the choice of the mesh we have exploited two different possibilities:
+During the choice of the mesh we have expoited two different possibilities:
 \begin{itemize}
 \item with a refinement region around the blades;
 \item without a refinement region.
@@ -348,19 +348,19 @@ Mesh 160 & 156791         & 160547      \\ \bottomrule
 \paragraph{Power:} for the power we have make the simulations run for 4 periods from 0 to 2.4 seconds and then we have taken the average of the power over the last turn, between 1.8 and 2.4 seconds.
 We have done this since we have assumed that the last revolution was the best indicator of the steady state behavior of the turbine.
 
-\begin{figure}[H]
+
+\begin{figure}[htbp]
 \centering
-\subfigure[Mesh without refinement region]{\includegraphics[width=8.5cm]{images/meshsensitivity/power-noregion}}
-\subfigure[Mesh with refinement region]{\includegraphics[width=8.5cm]{images/meshsensitivity/power-region}}
+\includegraphics[width=8.5cm]{images/meshsensitivity/power-noregion} 
+\includegraphics[width=8.5cm]{images/meshsensitivity/power-region} 
 \caption{Average power in time between 1.8 and 2.4 seconds}
 \label{fig:meshsensityvity-power}
 \end{figure}
 
-
-\begin{figure}[H]
+\begin{figure}[htbp]
 \centering
-\subfigure[Mesh without refinement region]{\includegraphics[width=8.5cm]{images/meshsensitivity/power-ptau-noregion}}
-\subfigure[Mesh with refinement region]{\includegraphics[width=8.5cm]{images/meshsensitivity/power-ptau-region}}
+\includegraphics[width=8.5cm]{images/meshsensitivity/power-ptau-noregion} 
+\includegraphics[width=8.5cm]{images/meshsensitivity/power-ptau-region} 
 \caption{Average power in time between 1.8 and 2.4 seconds}
 \label{fig:meshsensityvity-power-ptau}
 \end{figure}
@@ -403,7 +403,7 @@ So in the next sections we will design a mesh which best fits the 120 cells alon
 \label{fig:meshsensityvity-totalpressure-case3}
 \end{figure}
 
-Some cases show a great convergence at mesh 120, some others highlight the fact that probably the best possibility is to go towards mesh 160, even though the difference is in general small.
+Some cases shows a great convergence at mesh 120, some others highlight the fact that probably the best possibility is to go towards mesh 160, even though the difference is in general small.
 
 Due to limitation in computational time we stay in the middle between mesh 80 which seems good from the point of view of the power and mesh 160 which seems the best even in any case.
 
@@ -412,14 +412,14 @@ To let us perform more analysis in next chapter and balancing the fact that powe
 \section{Final mesh}
 
 As we have said before we will design a proper mesh that fits with 120 cells in y direction.
-Up to now we have applied one layer with snappyHexMesh around the blades and then we have splitted it with refineWallLayer four times.
-Now the aim is to create the biggest layer as possible with snappyHexMesh, divide that region with a proper number of layer with snappy, and then divide once more the last layer with refineWallLayer utility.
+Up to now we have applyed one layer with snappyHexMesh around the blades and then we have splitted it with refineWallLayer four times.
+Now the aim is to create the biggest layer as possible with snappy hex mesh, divide that region with a proper number of layer with snappy, and then divide again the last layer with refineWallLayer utility.
 \\
 We manage to obtain 4 layer with snappyHexMesh and then we apply refineWallLayer 3 further times.
 
-Then we add a refinement region of 3 levels around each blade with an extension of $4 \mm$
+Then we add a refinement region of 3 lever around each blade with an extension of $4 \mm$
 
-We keep 2 layers per region where we have contact between moving surfaces. The total number of layer around Ami patches so will be equal to 4, two per side.
+We keep 2 layer per region where we have contact between moving surfaces. The total number of layer around Ami patches so will be equal to 4, two per side.
 
 \begin{figure}[hbtp]
 \centering
@@ -456,21 +456,17 @@ Max aspect ratio      & $16.1092$    & OK \\ \bottomrule
 \section{Numerical Schemes}
 The file which menage the numeric scheme is in \textit{fvSchemes}. Inside that file it is possible to define the scheme used for the calculation of many terms, specified in the following section. All of them are necessary to be able to discretize all the terms inside the continuity and momentum equation:
 \begin{itemize} 
- \item time derivative terms inside \textit{timeSchemes};
- \item gradient terms $\nabla$ inside \textit{gradScheme};
- \item divergence terms $\nabla\cdot $ inside \textit{divSchemes};
- \item laplacian terms $\nabla^2$ inside \textit{lapSchemes};
- \item cell to face interpolation schemes  inside \textit{interpolationSchemes};
- \item component of gradient normal to a cell face  inside \textit{snGradSchemes}.
+ \item time derivative terms inside \textit{timeSchemes}
+ \item gradient terms $\nabla$ inside \textit{gradScheme}
+ \item divergence terms $\nabla\cdot $ inside \textit{divSchemes}
+ \item laplacian terms $\nabla^2$ inside \textit{lapSchemes}
+ \item cell to face interpolation schemes  inside \textit{interpolationSchemes}
+ \item component of gradient normal to a cell face  inside \textit{snGradSchemes}
  \end{itemize} 
-It is possible to define specific scheme for each term of the equation, however our decision was to use as much as we can the default scheme. 
-In addition from a very large amount of scheme only those used in the tutorial cases of openFoam were tested. This research can be simply done by using the command \foam{foamSearch}.
+it is possible to define specific scheme for each term of the equation, however our decision was to use as much as we can the default scheme. In addition from a very large amount of scheme only those used in the tutorial cases of openFoam were tested. This research can be simply done by using the command \textit{foamSearch} 
+In the next sub paragraphs we present an overviwe of different schemes and their characteristics.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-In the next sub paragraphs we present an overviwe of different schemes and their characteristics \footnote{https://www.openfoam.com/documentation/user-guide/fvSchemes.php} \footnote{https://cfd.direct/openfoam/user-guide/fvschemes/} \footnote{https://www.openfoam.com/documentation/cpp-guide/html/guide-schemes.html}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-Since the scheme are a lot and the combination between them will be huge, our decision was to focus only on the influence of one scheme, keeping fixed all the others. The reference case to study the differences is the base case, used in class, which is the same used for the tutorial case:
+Since the scheme are a lot and the combination between them will be huge, our decision was to focus only on the influence of one scheme, keeping fixed the other. The reference case to study the differences is the base case, used in class, which is the same used for the tutorial case:
  %% inserisci tabella 1
 \begin{table}[H]
 \begin{tabular}{ll}
@@ -492,13 +488,13 @@ snGradSchemes    & \foam{default         corrected   }              \\ \bottomru
 
 The comparison has been done looking at:
 \begin{itemize} 
- \item power generated by the turbine;
- \item power generated by pressure only;
+ \item power genrated by the turbine;
+ \item power genrated by pressure only;
  \item power dissipated by the effect of the shear stress;
  \end{itemize} 
 
 \subsection{Interpolation schemes}
-Specify the scheme for moving proprieties for cell center to face center. These operation is included in the calculation of gradient, divergence and laplacian terms. An overview of interpolation schemes are:
+Specify the scheme for moving proprieties for cell center to face center. These operation is inluded in the calculation of gradient, divergence and laplacian terms. An overview of interpolation schemes are:
 
 \begin{table}[H]
 \centering
@@ -550,7 +546,7 @@ where $\hat{n}$ is the face unit normal. It controls the scheme for the calculat
 
  \item {\ttfamily corrected} : Central-difference snGrad scheme with non-orthogonal correction, explicit.
   \item {\ttfamily uncorrected}: no correction of the orthogonality.
- \item {\ttfamily limited $\psi$}: which requires another input, in between 1 and 0, where 1 correspond to correct scheme while 0 correspond to uncorrect scheme. So it is a weighted bland between the two.
+ \item {\ttfamily limited $\psi$}: which requires another input, in between 1 and 0, where 1 correspond to correct scheme while 0 correspond to uncorrect sccheme. So it is a weighted bland between the two.
  \item {\ttfamily bounded}: bounded correction for positive scalars
  \item {\ttfamily fourth} : fourth order scheme.
 \end{itemize} 
@@ -558,10 +554,10 @@ where $\hat{n}$ is the face unit normal. It controls the scheme for the calculat
 The use of different scheme will be discussed in laplacian section.
 
 \subsection{Time schemes}
-Time schemes define the way in which a propriety is integrated in time. Depending on the choice of the user, an old $\phi^0$ or old-old $\phi^{00}$ solution will be required.
+Time schemes define the way in which a propriety is integrated in time. Depending on the choise of the user, an old $\phi^0$ or old-old $\phi^{00}$ solution will be required
 The different schemes analyzed are:
 \begin{itemize} 
- \item {\ttfamily steadyState}: used for steady state simulation where there's no time derivative, so to analyze a steady problem.
+ \item {\ttfamily steadyState}: used for steady state simulation where there's no time derivative, so to analize a steady problem.
  
  \item {\ttfamily localEuler}: first order,implicit, psuedotransient used for accelerating the convergency to a steady state problem,.
  
@@ -595,13 +591,13 @@ The different type of schemes are reported in the following figure, with the rel
 
 CrankNicolson scheme with different blending coefficient has been tested, however it will cause instability which lead the residual to rise after 0.003s for CrankNicolson0.3 after 0.005s for CrankNicolson0.5 and 0.0045s for CrankNicolson0.9.
 Even if backward scheme is a purly second order scheme (so in theory more prone to instability), it works.
-No difference can be seen in the shear stress power loss, but for ideal power (related to pressure) backward scheme will provide a different value, 1\% less. The time required for the calculation is 6\% higher and the values of the residual are of the same order of magnitude.
+No difference can be seen in the shear stress power loss, but a for ideal power (related to pressure), backward scheme will provide a different value, 1\% less. The time required for the calculation is 6\% higher and the values of the residual are of the same order of magnitude.
 
 
 
 \subsection{Gradient schemes}
-The gradient of a certain quantity $\phi$ rappresent the way in which that propriety is changing along a direction. For a scalar quantity $\phi$
- 
+The gradient of a certain quantity $\phi$ rappresent the way in which that propriety is changon along a direction. For a scalar quantity $\phi$
+\\ 
 \begin{equation}
 \nabla \phi = \begin{bmatrix} \frac{\partial \phi}{\partial x} \\ \frac{\partial \phi}{\partial y} \\\frac{\partial \phi}{\partial z}\end{bmatrix} 
 \end{equation}
@@ -637,12 +633,12 @@ Only in this case since divergent terms are very dissimilar, it is preferable no
  \item divergence of velocity;
  \item divergence of turbulent kinetic energy;
  \item divergence of $\omega$ and/or $\epsilon$ depending on the turbulence model chosen;
- \item divergence of shear stress;
+ \item divergence of shearstress;
   \item divergence of the effective viscous stress; %due to turbulence
 \end{itemize} 
-So our choice is to concentrate ourself on the trial of different schemes for the divergence of the velocity field.
+So our choice is to concentrate our self, and so our time machine on the trial of different schemes for the divergence of the velocity field
  $ \nabla \cdot ( \rho \, \bm{U} \bm{U} )$
-\\ An overview of all the scheme availble is reported below:
+\\ an overview of all the scheme availble is reported below:
 
 
 \begin{table}[H]
@@ -663,7 +659,7 @@ SFCD           & Second order, bounded                                          
 \label{table:divergence}
 \end{table}
 
-NVD and TVD provide a blend between low order schemes and higher order schemes based on the calculation of a limiter. Boundness is ensured only for 1D problem, while 2D and 3D boundness can be imporeved limiting the gradient.
+NVD and TVD provide a blend between low order schemes and higher order schemes based on the calculation of a limiter. boundness is assure only for 1D problem, while 2D and 3D boundness can be imporeved limiting the gradient.
 
 From tutorial case we found many schemes, but only those reported below are working:
 \begin{itemize} 
@@ -710,7 +706,7 @@ The different type of schemes are reported in the following figure, with the qua
 \includegraphics[height=7cm]{images/schemes/divschems-results.pdf}
 \end{figure}
 In this case as introduced before large number of schemes don't work. Considering the schemes which work properly, more remarcable difference can be detected.
-The pressure power varies of 10\% in any case, and it is higher than simply upwind configuration. The power loss change for 20\% more and so overall power increases of 10\% reaching 5.5 W, similar for all schemes. Calculation time increases of 5\% for Gauss linearUpwind grad(U) while for the other decreases of 10\%. However some warning during calculation suggest to not trust at all the last two scheme, and for that section the Gauss linearUpwind grad(U) seems to be the more promising one. Residual are of the same order for all the scheme. However the "V" scheme is characterized by smoother behavior and less residual peacks iteration after iteration. %immagine per comparare?
+The pressure power varies of 10\% in any case, and it is higher than simply upwind configuration. The power loss change for 20\% more and so overall power increases of 10\% reaching 5.5 W, symilar for all schemes. Calculation time increases of 5\% for Gauss linearUpwind grad(U) while for the other decreases of 10\%. However some warning during calculation suggest to not trust at all the last two scheme, and for that section the Gauss linearUpwind grad(U) seams to be the more promising one. Residual are of the same order for all the scheme. However the "V" scheme is characterized by smoother behaviour and less peack iteration after iteration. %immagine per comparare?
 
 
 \subsection{Laplacian schemes}
@@ -719,7 +715,7 @@ The laplacian operator act as follows:
 \nabla^2 \bm{U} = \frac{\partial^2 U_x}{\partial x^2}+ \frac{\partial^2 U_y}{\partial y^2} + \frac{\partial^2 U_z}{\partial z^2}
 \end{equation}
 
-Typically it is associated to the diffusive term. Gauss scheme is the only one available and requires the interpolation scheme used and the normal gradient scheme, define in the proper subsection \textit{interpolationSchemes} and \textit{snGradSchemes}. Therefore the command would be:
+Typically it is associated to the diffusive term. Gauss scheme is the only one available and requires the interpolation scheme used and the normal gradient scheme, define in the propper subsection \textit{interpolationSchemes} and \textit{snGradSchemes}. Therefore the command would be:
 
 \begin{center}
 {\ttfamily laplacian	Gauss	<interpolationSchemes>		<snGradSchemes>}
@@ -734,51 +730,11 @@ The different type of schemes are reported in the following figure.
 \includegraphics[height=6cm]{images/schemes/laplacianschems-results.pdf}
 \end{figure}
 
-Laplacian schemes are the only one scheme in which all what we tried works properly without errors or warning. The reference case is the most advanced one, so our attention was focus into unsterstand which is the impact of the non orthogonality correction. For what concern calculation time, the limited correction penalize the machine time (of 1.\%), with no difference in the calculated quantities (less than 0.5\%). Instead uncorrected scheme save more or less 40.\% of time, giving the same results with the same deviation of previous schemes. This could be an evidence of the fact that our mesh is able to guarantee that non orthogonality remain bounded. Residual are not characterized by sensible differences
+Laplacian schemes are the only one scheme in which all what we tried works properly without errors or warning. The reference case is the most advanced one, so our attention was focus into unsterstand which is the impact of the non orthogonality correction. For what concern calculation time, the limited correction penalize the machine time (of 1.\%), with no difference in the calculated quantities (less than 0.5\%). Instead uncorrected scheme save more or less 40.\% of time, giving the same results with the same deviation of previus schemes. This could be an evidence of the fact that our mesh is able to guarantee that non orthogonality remain bounded. Residual are not characterized by sensible differences
 
 \subsection{Conclusions}
-Up to now, comparison has been made considering the integral mean power in the last turn.
-However high order schemes can introduce numerical instability, no more dumped by the numerical diffusion of the lower order schemes. 
-Therefore to judge the stability we have decided to look at the instant power. 
-What is interesting is that, for gradient scheme as for laplacian scheme there is no difference. 
-Since the time for the calculation is almost independent by the scheme, we move to the higher order:
 
-
-\begin{tabular}{lcl}
-\foam{laplacian} & \quad \quad &\foam{Gauss linear corrected} \\ 
-\foam{grad}  & \quad \quad & \foam{Gauss cubic}
-\end{tabular}
-
-\begin{figure}[H]
-\centering
-\subfigure[Reference case]{\includegraphics[width=5.5cm]{{images/schemes/InstantPower_casobase}.png}}
-\subfigure[Backward]{\includegraphics[width=5.5cm]{{images/schemes/InstantPower_backward}.png}}
-\subfigure[Linear upwind]{\includegraphics[width=5.5cm]{{images/schemes/InstantPower_linearupwind}.png}}
-\caption{Instantaneous power with difference schemes.}
-\label{fig:schemes-instant-power}
-\end{figure}
-
-For what concern instant power there are some differences between backward and linear upwind compared to default settings.
-\\
-Some differences can be highlighted, as we can see in figure \ref{fig:schemes-instant-power}.
-
-
-%%% inserisci immagini delle potenze istantanee
-
-The fluctuation using backward scheme seems to be related to some turbulence phenomena, or lower frequency unstedy effects, like flow detachment. 
-Instead for linear upwind schemes, the fluctuation is very high. 
-
-From our point of view such fluctuation in power, for a 3 bladed machine seems strange. 
-Power drops and rises suddently, therefore we consider that behavior as a result of numeric instability. 
-In the end we have selected:
-
-
-\begin{tabular}{lcl}
-\foam{time} & \quad \quad & \foam{backward} \\ 
-\foam{divergence} & \quad \quad & \foam{Gauss upwind}
-\end{tabular}
-
-
+\todo{} SCRIVERE ALLA FINE CHE METODI NUMERICI UTILIZZIAMO
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %	from:
@@ -789,7 +745,7 @@ In the end we have selected:
 \section{Solver parameters}
 
 In OpenFoam the solver implemented to deal with incompressible transient problems with moving mesh is \foam{pimpleDyMFoam}.
-This command is quite flexible since it can behave both as pimple and piso mode. 
+This command is quite flexible since it can behaves both as pimple and piso mode. 
 Actually it allows to specify:
 \begin{itemize}
 \item number of outer correctors, typical of the Pimple algorithm;
@@ -797,7 +753,7 @@ Actually it allows to specify:
 \item number of non orthogonal correctors, for highly non orthogonal meshes.
 \end{itemize}
 
-In general Pimple is preferred when large time steps are suitable and when the pressure and velocity transient behavior is not of interest;
+In general Pimple is preferred when large time steps are suitable and when the pressure and velocity transient behavior is not of interested;
 Piso instead is preferred when small time steps are imposed but the nature of the problem or when a precise transient analysis is required.
 
 \begin{lstlisting}[language=c++, caption={\foam{pimpleFoam} source code extract.}]
@@ -844,7 +800,7 @@ Piso instead is preferred when small time steps are imposed but the nature of th
 \end{lstlisting}
 
 As we can appreciate in the source code of the algorithm, for each inner corrector the pressure equation is solved.
-For each outer corrector instead the momentum equation is solved once while the pressure equation is solved as many times as the inner corrector prescribes.
+For each outer corrector instead the momentum equation is solved once while the pressure equation is soved as many times as the inner corrector prescribes.
 
 The choice of the hybridization of the two iterators in our case is suggested by the analysis of the residuals.
 
@@ -865,7 +821,7 @@ This brings us to choose 1 outer correctors and 20 inner correctors.
 \label{fig:solver-residuals-bad}
 \end{figure}
 
-Moreover a great advantage of this variant is that it allows us to increase the Courant number up to 50 which means that our timestep could be a lot bigger than the one with default Piso condition. 
+Moreover a great advantage of this variant is that it allows us to increase the Courant number up to 50 which means that our timestep could be a lot bigger than that with default Piso condition. 
 
 A rough estimation of the improvement in computational effort is:
 \begin{itemize}
@@ -965,7 +921,7 @@ The turbolence intensity up to now is a parameter that was simple set to reasona
 \label{eq:turbolent_k}
 \end{equation}
 
-Since this value is obtained by common sense, we have tried to see how results would have changed with different turbolent intensities.
+Since this value is obtain by common sense, we have tried to see how results would have changed with different turbolent intensity.
 We have tested in a sensitivity analysis values from $1\%$ which is very moderate turbolence to $15\%$ which is instead medium-intense turbolence.
 
 The power results compare both the total power produced, and decompose in the two components of pressure and tangential stress (Figure \ref{fig:turbintensity-power}(a) and \ref{fig:turbintensity-power}(b))
@@ -978,10 +934,10 @@ The power results compare both the total power produced, and decompose in the tw
 \label{fig:turbintensity-power}
 \end{figure}
 
-Mainly two things can be highlighted from the previous figures:
+Mainly to things can be highlighted from the previous figures:
 \begin{itemize}
-\item as expected, increasing turbolent intensity at the inlet, the dissipation power from shear stress linearly increases;
-\item power from pressure hexibit a strage behaviour, presenting a minimum intensity around $4\%$
+\item as expected, increasing turbolent intensity at the inlet, the dissipation power from shear stress, linearly increases;
+\item power from pressure hexibit a strage behaviour, presenting a minimum around intensity around $4\%$
 \end{itemize}
 
 \begin{figure}[H]
@@ -993,10 +949,9 @@ Mainly two things can be highlighted from the previous figures:
 \end{figure}
 
 Then in figure \ref{fig:turbintensity-pressuredrop} we have compared respect to the pressure drop, in terms of difference between the mean value at inlet and outlet and in terms of difference along y direction.
-The trend of the total pressure drop perfectly trace the same behavior of the power generated.
+The trend of the total pressure drop perfecly trace the same behaviour of the power generated.
 
-Our analysis highlights the fact that changing intensity of order of magnitude (and turbolent kinetic energy even scales with the square of I) the power stays almost around the reference value with just a change of few percentage.
-
+Our analysis highlight the fact that changing intensity of order of magnitude (and turbolent kinetic energy even scales with the square of I) the power stay almost around the reference value with just a change of few percents.
 
 \section{Extended domain}
 Looking at our symulation we can clearly see that before and after the turbine, the flow has not reach yet an unperturbed motion. And since there's the possibility that boundary will affect our solution, we run the reference case with different domain lenght. 
@@ -1015,21 +970,21 @@ The result is very interesting as we can see from the figure below:
 \centering
 \includegraphics[width=10cm]{images/longmesh/power.pdf}
 \caption{Residuals of gravity simulation.}
-\label{fig:domainlong-power}
 \end{figure}
 If we analyse the power predicion, this will depend on the domain, and so our result are not independent by the domain. This should be an evidece of the fact that our boundary condition strongly affect the results.
 Moreover differenly from many other cases here the difference can be quite significant.
 %%%%% inserici tabella CASO CON MESH ALLUNGATA
 Convergency is not yet reached also with a domain larger than $2.4\m$, which is the double respect to the default case.%cosa? cm?/m?. %rilancio e provo a vedere se con mesh + grandi raggiungo convergenza? o provo una mesh asimmetrica? per vedere se l'effetto è dovuto alla pressione che risale o alla scia?
 
+
 \section{Gravity effect and enhanced boundary conditions}
 
 After the analysis of the extension of the domain we have had a clear idea that the boundary conditions that we have used up to now are ok, 
 but not the best possible.
 
-The first boundary that we have rediscussed is the outlet patch. We have in fact applied quite a strong boundary condition imposing that the relative pressure have to be constant along the y direction and equal to $0\Pa$. This is reasonably true if the outlet where we impose this constrain is far enough from the turbine. This in not completely true with the default domain, as highlighted in previous section.
+The first boundary that we have rediscuss is the outlet patch. We have in fact applied quite a strong boundary condition imposing that the relative pressure have to be constant along the y direction and equal to $0\Pa$. This is reasonably true if the outlet where we impose this constraint is far enough from the turbine. This in not completely true with the default domain, as highlighted in previous section.
 
-So we have now two options:
+So we have now to options:
 \begin{itemize}
 \item increase the domain size;
 \item improve boundary conditions.
@@ -1064,7 +1019,7 @@ We have kept the defaut boundary conditions for $\omega$.
 
 \paragraph{Results}\mbox{}\\
 Even if the total value of the power generated by the turbine is not changing too much, we have a quite good improvement in residuals, in particular for the pressure.
-\\Moreover we highlight the fact that not only the absolute value is improved but also we reduce the ripple behavior that previously was present.
+\\Moreover we highlight the fact that not only the absolute value is improved but also we reduce the ripple behaviour that previously was present.
 
 The fact that the new boundary conditions are better even without gravitational field, can be see in the following fields.
 
@@ -1077,7 +1032,7 @@ The fact that the new boundary conditions are better even without gravitational 
 \label{fig:gravity-trends}
 \end{figure}
 
-For what concern the power, we have a small but not negligible difference. Due to the previous considerations we are forced to believe that the enhanced boundary conditions guarantees more reliable results.
+For what that concern the power, we have a small but not negligible difference. Due to the previous considerations we are forced to believe that the enhanced boundary conditions guarantees more reliable results.
 \begin{table}[H]
 \centering
 \begin{tabular}{lrr}
@@ -1209,7 +1164,9 @@ Gravity (3.6 m symmetric)  & $\round{4.6274730287}$  & $\round{4.77976509963}$ &
 \label{fig:gravity-extended-power}
 \end{figure}
 
-As we can appreciate in figure \ref{fig:gravity-extended-power} even in this case, at around $2.4\m$ we have a convergent behaviour almost the same as we have seen in figure \ref{fig:domainlong-power}.
+As we can appreciate in figure \ref{fig:gravity-extended-power}, differently from the extended domain analysis where with a symmetric domain size of $3.6\m$ we have not probably reached convergecy, in this case with enhanced boundary conditions, the situation is quite different.
+Actually even in this case, the standard domain size is not enough, but it is interesting to notice that at around size $2.4m$
+the power starts showing a convergent behavior.
 
 Is interesting to notice that the extension downstream has a really limited impact on performances, 
 while the extension upstream decreases predicted power of a quite significant amount.
@@ -1217,7 +1174,7 @@ while the extension upstream decreases predicted power of a quite significant am
 \begin{figure}[H]
 \centering
 \includegraphics[width=10cm]{images/gravity/{U-0.6m-extended}.pdf}
-\caption{Velocity distribution along y direction at x coordinate $0.6\m$.}
+\caption{Velocity distribution along y direction at x coordinate $0.6 \m$.}
 \label{fig:gravity-U0.6-extended}
 \end{figure}
 
@@ -1232,15 +1189,6 @@ Moreover we can notice that the difference in terms of velocity is greater below
 
 \section{Results}
 
-In the last part of the work we have decided to optimize the simulation. The trade off between computational effort and results reliability suggests us to adopt mesh 120. Moreover,since this is the final part of the simulations section and we have almost finished the task, we can use a lower Courant number in order to slow down the process and get a higher precision level so the Courant number is decreased to \todo{} xxx. 
-
-Regarding numeric schemes we have decided not to use higher order methods that lead to spurious oscillations so we kept upwind scheme for velocity divergence while backword scheme for time discretization and Gauss cubic scheme for the gradient scheme which have not shown unexpected oscillations.
-
-For the sake of completeness we have decided to include the gravitational effect even if its contribution is almost meaningless. We decided to enhance the boundary conditions and initialize some turbolent quantities in order to speed up the achievement of regime condition. One of the most remarkable considerations is the need of the inlet domain extension which is evalueted in the final analysis.
-
-
-
-
 \section{Blade speed ratio Analysis}
 
 From what we have seen in mesh sensitivity analysis, the power is quite accurately computed even for a mesh size smaller that that we consider mesh independent.
@@ -1248,7 +1196,7 @@ From what we have seen in mesh sensitivity analysis, the power is quite accurate
 To obtain a larger number of points from the blade speed ratio analysis we have decided to run most of the simulation with a mesh with 80 cells in the y direction instead of 120. This reduces the number of cells to around 60000 instead of 110000. 
 \\Computational time is in this way reduced, but we risk to have errors with a mesh coarser,
 
-so our idea is to validate just the most significant points with the finer mesh and then compare with the results of the coarser.
+So our idea is to validate just the most significant points with the finer mesh and then compare with the results of the coarser.
 
 We consider that this operating procedure is a proper balance between accuracy and computational cost.
 
@@ -1318,28 +1266,29 @@ Finally we are able to compare the results to the real experiments.
 \\
 The results are shown in figure \ref{fig:bsr-comparison-exp}
 
-\begin{figure}[H]
+\begin{figure}[hbtp]
 \centering
 \includegraphics[width=15cm]{images/bsr/bsr-exp.pdf}
 \caption{Comparison between mesh 80 mesh 120 and experimental results}
 \label{fig:bsr-comparison-exp}
 \end{figure}
 
-As we immediatly see, the trend is quite well described, but the calculate absolute value is around half of the value obtainerd through experiments.
+As we immediatly see, the trend it quite well described, but the calculate absolute value is around half of the value obtainerd through experiments.
 
 It seems like we have considered a different reference area respect to the experiments.
 
-However we will show an adimensionalized comparison to reveal at least the trend (ratio of calculated power at two different blade speed ratio is coherent).
+Howether we will show an adimensionalized comparison to at least reveal is the trend (radio of calculated power at two different blade speed ratio is coherent).
 In figure \ref{fig:bsr-comparison-exp-relative} we can see the two data set normalized respect to their maximum value.
-In this case the compliance with experimental results is much better, and it seems to have a physical meaning, in particular for values of $c_\text{P}$ greter than 0.5.
+In this case the complice with experimental results is much better, and it seems to have a physical meaning, in particular for values of $c_\text{P}$ greter than 0.5.
 
-\begin{figure}[H]
+\begin{figure}[hbtp]
 \centering
 \includegraphics[width=15cm]{images/bsr/bsr-exp-relative.pdf}
 \caption{Relative comparison between mesh 80 and experimental results}
 \label{fig:bsr-comparison-exp-relative}
 \end{figure}
 
+\section{Conclusion}
 
 
 
