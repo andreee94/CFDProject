@@ -14,6 +14,6 @@ source ./runcase
 # echo $endTime
 # echo $initialU
 # echo $nNonOrthogonalCorrectors
-runcase final "(540 120 1)" "clean mesh run post" "komegasst" 1 20 30 3 3.6 1 0
+runcase final "(540 120 1)" "clean mesh run post" "komegasst" 1 20 50 3 2.4 1 0
 
 #############################################

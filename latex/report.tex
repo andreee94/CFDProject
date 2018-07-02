@@ -830,17 +830,85 @@ A rough estimation of the improvement in computational effort is:
 \end{itemize}
 This lead to approximately a net speed improvement of 10 times. 
 
-\section{Gravitational influence}
+\section{Turbulence}
+In order to further improve the model also the turbulence model has been investigated.
+Different turbulence models have been used in calculation:
 
-\section{Turbolence}
+\begin{enumerate}
+\item Laminar model
+\item $k-\varepsilon$ model
+\item $k-\omega $ SST model
+\end{enumerate}
 
-\subsection{Turbolence model}
+\paragraph{Remark on the used mesh}
+The mesh which has been used is that outcoming from the mesh-sensitivity analisys.
 
-\paragraph{Laminar}
+\paragraph{Comparison criterion}
+It is worth noting that the assestment on the turbulence model is carried out via the evaluation of the $y^+ $ parameter which is directly related on the mesh size near the walls and on the wall shear stress.
+The mesh features are mantained fixed while turbulence models have ben investigated, i.e. the mesh clustering is not a parameter in the turbulence model assestment.
 
-\paragraph{$k-\varepsilon$ model}
 
-\paragraph{$k-\omega $ SST model}
+\subsection{Turbulence model}
+
+\paragraph{Laminar} \mbox{}\\
+As first option the laminar model has been used in order to have a comparison tool.
+It must be clarified that the physical situation that is expected is that of a turbulent motion, since the flow in evolving within a rotating blade domain; moreover the flow develops around aerodynamic profile on a wide range of angles of attach; at the end of the day what is expected is a vortical/turbulent-induced flow.
+
+
+\begin{figure}[H]
+%\includegraphics[width=\textwidth]{images/turbulence/laminar_pressureDrop.png} 
+\caption{Total pressure at t = 2.4[s] in a laminar simulation}
+\centering
+\end{figure}
+
+\todo{} CERCA DETTAGLI DI DISTACCO
+
+
+\paragraph{$\bm{k}-\bm{\varepsilon}$ model}  \mbox{}\\
+As first attempt for turbulence model the $k-\varepsilon$ model has been used.
+The result has been assessed in term of the $y^+ $ which is computed by OpenFoam on the patch of type \foam{wall}, namely \foam{lowerwall}, \foam{blade0}, \foam{blade1} and \foam{blade2}.
+If the values of $y^+ $ would satisfy the condition 
+
+\begin{equation}
+y^+ > 30
+\end{equation}
+
+Then the turbulence model would be validated; this would mean that the solver is going to solve the $k-equation $ and $\varepsilon-equation $ in the far wake region without problems of singularity and, then, take advantage ofthe wall-functions at the wall to calculate the flow field.\\
+The results are presented in the following table in terms of minimum and maximum $y^+ $ for each wall at the last timestep $t = 2.4[s]$.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{rcc}
+\toprule
+           & $min(y^+) $          & $max(y^+) $  \\ \midrule
+lower wall & 6.793848e-01         & 4.095234e+00 \\
+blade0     & $\round{5.503802e-02}$ & 7.997351e-01 \\
+blade1     & 4.869300e-02         & 1.742530e-01 \\
+blade2     & 7.257931e-02         & 7.748824e-01 \\ \bottomrule
+\end{tabular}
+\end{table}
+
+As can be seen from the table the $y^+$ values do not allows us the choice of the $k-\varepsilon$ turbulence model.\\
+
+\paragraph{$\bm{k}-\bm{\omega} $ SST model}  \mbox{}\\
+Given the $y^+$ values, is evident that the mesh clustering near the walls of the blades is suitable for the $k-\omega-SST$ model which avoids problems of singularity of the equations and can solve directly the boundary layers of the blades.\\
+Particular attention has been paid for the mesh clustering in the O-grid near the wall of the blade, it has been set properly in order to guarantee the smooth variation of flow property from the BL to the free stream.
+
+\subsubsection{Turbulence models, a comparison}
+A brief qualitative comparative study of the performance of the machine, given different turbulence models has been carried out.
+\paragraph{Mean power}
+the mean power has been compared at t=1.8[s] for all the three turbulence setups. 
+\todo{} MANCA GRAFICO
+\paragraph{Pressure power}
+\todo{} MANCA OUTPUT
+\paragraph{Shearing power}
+\todo{} MANCA OUTPUT
+\paragraph{Velocity profiles}
+The velocity profiles outcoming from different turbulence simulations have been compared in the wake regions, i.e. where the effect of the turbulence is expected to play its major role.\\
+The plotted regions are the following:\\
+\todo{} INSERIRE SCREENSHOTS DELLE LOCATIONS
+
+\todo{} INSERIRE GRAFICI
 
 \subsection{Turbolence intensity}
 The turbolence intensity up to now is a parameter that was simple set to reasonable value. We have taken $5\%$ as turbolence intensity at the inlet and then we have evaluated the turbolent kinetic energy from that returning us the value for the initial value and the value at boundaries.
@@ -888,6 +956,12 @@ Our analysis highlight the fact that changing intensity of order of magnitude (a
 \section{Extended domain}
 Looking at our symulation we can clearly see that before and after the turbine, the flow has not reach yet an unperturbed motion. And since there's the possibility that boundary will affect our solution, we run the reference case with different domain lenght. 
 
+\begin{figure}[H]
+\centering
+\includegraphics[width=10cm]{images/longmesh/confronto_mesh_long.png}
+\caption{Representation of different meshes tested.}
+\end{figure}
+
 Starting point is the case where the mesh il limited form -0.6 to 0.6. 
 Then different meshes were tested inscreasing dimension in symmetric way, to take into account the pressure rise effect at the bottom of the channel as well as the wake and mixing downstream. 
 
@@ -897,7 +971,7 @@ The result is very interesting as we can see from the figure below:
 \includegraphics[width=10cm]{images/longmesh/power.pdf}
 \caption{Residuals of gravity simulation.}
 \end{figure}
-And if we analyse the power predicion, this will depend on the domain, and so our result are not independent by the domain. This should be an evidece of the fact that our boundary condition strongly affect the results.
+If we analyse the power predicion, this will depend on the domain, and so our result are not independent by the domain. This should be an evidece of the fact that our boundary condition strongly affect the results.
 Moreover differenly from many other cases here the difference can be quite significant.
 %%%%% inserici tabella CASO CON MESH ALLUNGATA
 Convergency is not yet reached also with a domain larger than $2.4\m$, which is the double respect to the default case.%cosa? cm?/m?. %rilancio e provo a vedere se con mesh + grandi raggiungo convergenza? o provo una mesh asimmetrica? per vedere se l'effetto è dovuto alla pressione che risale o alla scia?
