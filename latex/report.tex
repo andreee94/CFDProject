@@ -38,8 +38,10 @@
 \title{
 \includegraphics[scale=0.4]{images/logo.png}
 \\[1cm]
-FINAL REPORT ON THE  MRL TURBINE SIMULATION
-COURSE OF MODELING TECHNIQUES FOR FLUID MACHINES 
+FINAL REPORT - THE MRL TURBINE SIMULATION
+\\
+MODELING TECHNIQUES FOR FLUID MACHINES 
+\\
 A.Y. 2017/2018}
 \author{
 Andrea Rossi \and Marco Bonasegale
@@ -74,6 +76,11 @@ Andrea Rossi \and Marco Bonasegale
 \newcommand{\nut}{\nu_\text{T}}
 
 \newcommand{\foam}[1]{{\ttfamily #1}}
+
+\newcommand{\kepsilon}[1]{$k\!-\!\varepsilon $ } 
+
+\newcommand{\komegasst}[1]{$k\!-\!\omega \, \text{SST} $ } 
+
 
 
 \lstset{
@@ -186,7 +193,7 @@ The final results of the first raw simulation are provided in following figure.
 \subfigure[Pressure at 2.4]{\includegraphics[width=8.5cm]{images/inclass/{pfield2.4sec}.png}}
 \hfill
 \subfigure[Velocity at 2.4]{\includegraphics[width=8.5cm]{images/inclass/{velocityfield2.4sec}.png}}
-\caption{Comparison between meshes with and without refinement.}
+\caption{In class work results.}
 \end{figure}
 
 \begin{figure}[H]
@@ -880,8 +887,8 @@ Different turbulence models have been used in calculation:
 
 \begin{enumerate}
 \item Laminar model
-\item $k-\varepsilon$ model
-\item $k-\omega $ SST model
+\item \kepsilon model
+\item \komegasst model
 \end{enumerate}
 
 \paragraph{Remark on the used mesh}
@@ -894,32 +901,29 @@ The mesh features are mantained fixed while turbulence models have ben investiga
 
 \subsection{Turbulence model}
 
-\paragraph{Laminar} \mbox{}\\
+
+\paragraph{Laminar}\mbox{}\\
 As first option the laminar model has been used in order to have a comparison tool.
 It must be clarified that the physical situation that is expected is that of a turbulent motion, since the flow in evolving within a rotating blade domain; moreover the flow develops around aerodynamic profile on a wide range of angles of attach; at the end of the day what is expected is a vortical/turbulent-induced flow.
-
+ 
 
 \begin{figure}[H]
-%\includegraphics[width=\textwidth]{images/turbulence/laminar_pressureDrop.png} 
-\caption{Total pressure at t = 2.4[s] in a laminar simulation}
 \centering
+\subfigure[Total pressure]{\includegraphics[width=8.5cm]{images/turbulence/laminar_pressureDrop.png}}
+\subfigure[Drag wake zone]{\includegraphics[width=8.5cm]{images/turbulence/recirculation_scalarScaledGOODresolution.png}}
 \end{figure}
-
-\todo{} CERCA DETTAGLI DI DISTACCO
 
 
 \paragraph{$\bm{k}-\bm{\varepsilon}$ model}  \mbox{}\\
-As first attempt for turbulence model the $k-\varepsilon$ model has been used.
+As first attempt for turbulence model the \kepsilon model has been used.
 The result has been assessed in term of the $y^+ $ which is computed by OpenFoam on the patch of type \foam{wall}, namely \foam{lowerwall}, \foam{blade0}, \foam{blade1} and \foam{blade2}.
-If the values of $y^+ $ would satisfy the condition 
-
+If the values of $y^+ $ would satisfy the condition:
 \begin{equation}
 y^+ > 30
 \end{equation}
 
 Then the turbulence model would be validated; this would mean that the solver is going to solve the $k-equation $ and $\varepsilon-equation $ in the far wake region without problems of singularity and, then, take advantage ofthe wall-functions at the wall to calculate the flow field.\\
 The results are presented in the following table in terms of minimum and maximum $y^+ $ for each wall at the last timestep $t = 2.4[s]$.
-
 \begin{table}[H]
 \centering
 \begin{tabular}{rcc}
@@ -930,29 +934,154 @@ blade0     & $\round{5.503802e-02}$ & 7.997351e-01 \\
 blade1     & 4.869300e-02         & 1.742530e-01 \\
 blade2     & 7.257931e-02         & 7.748824e-01 \\ \bottomrule
 \end{tabular}
+\caption{Min and max $y^+$ values on the walls}
+\label{table:turbolence-yplus}
 \end{table}
-
-As can be seen from the table the $y^+$ values do not allows us the choice of the $k-\varepsilon$ turbulence model.\\
+As can be seen in table \ref{table:turbolence-yplus} the $y^+$ values do not allows us the choice of the \kepsilon turbulence model.
 
 \paragraph{$\bm{k}-\bm{\omega} $ SST model}  \mbox{}\\
-Given the $y^+$ values, is evident that the mesh clustering near the walls of the blades is suitable for the $k-\omega-SST$ model which avoids problems of singularity of the equations and can solve directly the boundary layers of the blades.\\
+Given the $y^+$ values, is evident that the mesh clustering near the walls of the blades is suitable for the \komegasst model which avoids problems of singularity of the equations and can solve directly the boundary layers of the blades.\\
 Particular attention has been paid for the mesh clustering in the O-grid near the wall of the blade, it has been set properly in order to guarantee the smooth variation of flow property from the BL to the free stream.
 
-\subsubsection{Turbulence models, a comparison}
+\subsubsection{Turbulence models comparison}
 A brief qualitative comparative study of the performance of the machine, given different turbulence models has been carried out.
-\paragraph{Mean power}
-the mean power has been compared at t=1.8[s] for all the three turbulence setups. 
-\todo{} MANCA GRAFICO
-\paragraph{Pressure power}
-\todo{} MANCA OUTPUT
-\paragraph{Shearing power}
-\todo{} MANCA OUTPUT
-\paragraph{Velocity profiles}
-The velocity profiles outcoming from different turbulence simulations have been compared in the wake regions, i.e. where the effect of the turbulence is expected to play its major role.\\
-The plotted regions are the following:\\
-\todo{} INSERIRE SCREENSHOTS DELLE LOCATIONS
 
-\todo{} INSERIRE GRAFICI
+\paragraph{Mean power}
+the mean power has been compared in the last turn starting at $t=1.8\s$ for all the three turbulence setups. 
+As we can notice in figure \ref{fig:turbolence-powercomparison} the laminar model predict the highest power while the \kepsilon model prediction is the lowest.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=8cm]{images/turbulence/MeanPower_comparison.pdf} 
+\caption{Power comparison}
+\label{fig:turbolence-powercomparison}
+\centering
+\end{figure}
+
+
+
+\paragraph{Velocity profiles}
+As first, a qualitative velocity profiles comparison has been performed in the wake regions,
+where the effect of the turbulence is expected to play its major role.
+The inspected regions are the following:
+\begin{figure}[H]
+\centering
+\subfigure[First section zone: drag wake zone]{\includegraphics[width=8.5cm]{images/turbulence/VerticalBladeWake_screenshot.png}}
+\subfigure[Second section zone: mean wake zone]{\includegraphics[width=8.5cm]{images/turbulence/LargeWakeScreenshot.png}}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\subfigure[Velocity profile - drag-zone wake]{
+\label{fig:turbolence-bladewake-results}
+\includegraphics[width=8.5cm]{images/turbulence/UpperbladeWake.pdf}}
+\subfigure[Velocity profile - mean-zone wake]{
+\label{fig:turbolence-mainwake-results}
+\includegraphics[width=8.5cm]{images/turbulence/U_mag_MainWake.pdf}}
+\caption{Velocity profiles on different lines.}
+\end{figure}
+
+\subparagraph{Drag region wake}
+First of all, it has to be noted that, on the first velocity section, the \kepsilon profile results in a different velocity profile with respect to the profiles outcoming from the laminar and \komegasst models which, instead, have been observed to be quite similar.
+The \kepsilon profile appears to smear out the velocity gradients which are supposed to be magnified in the viscosity-dominated wake regions.
+Results are represented in figure \ref{fig:turbolence-bladewake-results}
+%\begin{figure}[H]
+%\centering
+%\includegraphics[width=10cm]{images/turbulence/UpperbladeWake.pdf} 
+%\caption{Velocity profile on the drag-zone wake of the blade}
+%\centering
+%\end{figure}
+
+\subparagraph{Large wake region}
+On the largest wake section it can be noted again that the difference between velocity profiles is not negligible, in this case it is worth noting that the laminar simulation is that featured by the largest flow deceleration with respect to the upstream profile; this fact could explain the largest mean power extraction that has been found before fo the laminar case.
+Results are represented in figure \ref{fig:turbolence-mainwake-results}
+
+%\begin{figure}[H]
+%\centering
+%\includegraphics[width=14cm]{images/turbulence/U_mag_MainWake.pdf} 
+%\caption{Velocity profile on the drag-zone wake of the blade}
+%\centering
+%\end{figure}
+
+\subparagraph{Remarks}
+From a qualitative point of view it is important to stress the fact that a great accordance has been found between the results of the laminar and the \komegasst simulation and instead the \kepsilon simulation does not follow the other velocity profiles neither qualitatively.
+
+\subparagraph{Boundary layer}
+In order to further clarify this situation, another inspection has been done: the boundary layer on a blade.
+The profile has been explored at the time $t=115\s$, in correspondance of a null angle of attack of the lower blade with respect to the incoming flow.
+Great attention has been paid on the extention of the plot stencil to end within the refinement region.
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=8cm]{images/turbulence/BL_LowerBlade_screenshot.png} 
+\caption{Velocity profile on the drag-zone wake of the blade}
+\centering
+\end{figure}
+
+The velocity profiles only for the \komegasst and \kepsilon have been compared.
+
+
+\begin{figure}[H]
+\centering
+\subfigure[Velocity profile - drag-zone wake]{
+\label{fig:turbolence-bladewake-results}
+\includegraphics[width=8.5cm]{images/turbulence/detailBL_kW_Keps.pdf}}
+\subfigure[Velocity profile - boundary layer.]{
+\label{fig:turbolence-mainwake-results}
+\includegraphics[width=8.5cm]{images/turbulence/kWsst_BL_sublayer.pdf}}
+\caption{Velocity profiles - $\text{U}^+$ respect to $y^+$.}
+\end{figure}
+
+%\begin{figure}[H]
+%\centering
+%\includegraphics[width=14cm]{images/turbulence/detailBL_kW_Keps.pdf} 
+%\caption{Velocity profile on the drag-zone wake of the blade}
+%\centering
+%\end{figure}
+
+The velocity profiles obtained remark the discrepancy between velocity profiles from the different models.
+
+Then a nondimensional analysis has been carried out on the boundary layer approximation of the \komegasst turbulence model.
+
+%\begin{figure}[H]
+%\centering
+%\includegraphics[width=14cm]{images/turbulence/kWsst_BL_sublayer.pdf} 
+%\caption{Velocity profile on the drag-zone wake of the blade}
+%\centering
+%\end{figure}
+
+From the previous results it can be observed that the BL velocity distribution in the linear region is quite different from that developed theoretically for simple shear flow under the assumption of large Reynolds number i.e. thin boundary layer on flat plate.
+This trend could probably be justified considering that this particular type of flow displays low Reynolds number which turns out into low turbulence effects.
+Only a comparison with experimental results could fully clarify this situation.
+The previous hypothesis found its root in the observation of the resemblance of laminar and \komegasst velocity profiles.\\
+\todo{} PROBABILE STRONZATA
+
+\subsection{flow detatchment}
+
+As previously mentioned, this kind of machine exploit an incompressible flow evolving within aerodynamic profiles with varying angles of attach.
+It is straightforward that a good capture of flow detatchment and recirculation are of primary importance.
+The \kepsilon turbulent model is not suited for capturing the flow detatchment.
+The $k-\omega sst$ turbulence model, coupled with a proper refinement strategy near the walls is capable of reproducing the flow detatchment and eventual subsequent recirculation
+\includegraphics[width=\textwidth]{images/turbulence/recirculation_scalarScaled.png}
+
+\includegraphics[width=\textwidth]{images/turbulence/recirculation_scalarScaledGOODresolution.png}  
+
+\includegraphics[width=\textwidth]{images/turbulence/recirculation_scalarScaledMESH.png} 
+
+\includegraphics[width=\textwidth]{images/turbulence/recirculation_vectorScaled.png} 
+
+\includegraphics[width=\textwidth]{images/turbulence/recirculation_vectorScaled2.png} 
+
+
+
+
+
+
+
+
+
+
 
 \subsection{Turbolence intensity}
 The turbolence intensity up to now is a parameter that was simple set to reasonable value. We have taken $5\%$ as turbolence intensity at the inlet and then we have evaluated the turbolent kinetic energy from that returning us the value for the initial value and the value at boundaries.

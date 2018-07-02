@@ -126,13 +126,14 @@ It must be clarified that the physical situation that is expected is that of a t
  
 
 \begin{figure}[H]
-
-\includegraphics[width=\textwidth]{images/turbulence/laminar_pressureDrop.png} 
-\caption{total pressure at t = 2.4[s] in a laminar simulation}
 \centering
+\subfigure[Second section zone: mean wake zone]{\includegraphics[width=8.5cm]{images/turbulence/laminar_pressureDrop.png}}
+\subfigure[First section zone: drag wake zone]{\includegraphics[width=8.5cm]{images/turbulence/recirculation_scalarScaledGOODresolution.png}}
+
+
 \end{figure}
 
-\todo{} CERCA DETTAGLI DI DISTACCO
+
 
 
 \paragraph{$k-\varepsilon$ model}
@@ -149,10 +150,10 @@ The results are presented in the following table in terms of minimum and maximum
 
 \begin{tabular}{r|c|c|}
 &$min(y^+) $&$max(y^+) $\\ \hline
-lower wall & 6.793848e-01 & 4.095234e+00\\ \hline
-blade0 & \round{5.503802e-02}	 & 7.997351e-01\\ \hline
-blade1 & 4.869300e-02	& 1.742530e-01\\ \hline
-blade2 & 7.257931e-02	&7.748824e-01\\ \hline
+lower wall & \round{6.793848e-01} & \round{4.095234e+00}\\ \hline
+blade0 & \round{5.503802e-02}	 & \round{7.997351e-01}\\ \hline
+blade1 & \round{4.869300e-02}	& \round{1.742530e-01}\\ \hline
+blade2 & \round{7.257931e-02}	&\round{7.748824e-01}\\ \hline
 \end{tabular}\\
 
 as can be seen from the table the $y^+ $ values do not validate the choice of $k-\varepsilon$ turbulence model.\\
@@ -165,21 +166,104 @@ Particular attention has been paid for the mesh clustering in the O-grid near th
 A brief qualitative comparative study of the performance of the machine, given different turbulence models has been carried out.
 \paragraph{Mean power}
 the mean power has been compared at t=1.8[s] for all the three turbulence setups. 
-\todo{} MANCA GRAFICO
-\paragraph{Pressure power}
-\todo{} MANCA OUTPUT
-\paragraph{Shearing power}
-\todo{} MANCA OUTPUT
-\paragraph{Velocity profiles}
-The velocity profiles outcoming from different turbulence simulations have been compared in the wake regions, i.e. where the effect of the turbulence is expected to play its major role.\\
-The plotted regions are the following:\\
-\todo{} INSERIRE SCREENSHOTS DELLE LOCATIONS
 
-\todo{} INSERIRE GRAFICI
+\begin{figure}[H]
+\centering
+\includegraphics[width=14cm]{images/turbulence/MeanPower_comparison.pdf} 
+\caption{total pressure at t = 2.4[s] in a laminar simulation}
+\centering
+\end{figure}
 
 
 
+\paragraph{VELOCITY PROFILES}
+As first qualitative reasoning the velocity profiles outcoming from different turbulence simulations have been compared in the wake regions, i.e. where the effect of the turbulence is expected to play its major role.\\
+The inspected regions are the following:\\
+\begin{figure}[H]
+\centering
+\subfigure[First section zone: drag wake zone]{\includegraphics[width=8.5cm]{images/turbulence/VerticalBladeWake_screenshot.png}}
+\subfigure[Second section zone: mean wake zone]{\includegraphics[width=8.5cm]{images/turbulence/LargeWakeScreenshot.png}}
 
+\end{figure}
+
+\subparagraph{Drag region wake}
+First of all it must be noted that on the first velocity section the $k-\varepsilon$ profile results in a different velocity profile with respect to the profiles outcoming from the laminar and $k-\omega SST$ model which, instead have been observed to be quite similar.
+The $k-\varepsilon$ profile appears to smear out the velocity gradients which are supposed to be magnified in the viscosity-dominated wake regions.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=14cm]{images/turbulence/UpperbladeWake.pdf} 
+\caption{Velocity profile on the drag-zone wake of the blade}
+\centering
+\end{figure}
+
+\subparagraph{Large wake region}
+On the largest wake section it can be noted again that the difference between velocity profiles is not negligible, in this case it is worth noting that the laminar simulation is that featured by the largest flow deceleration with respect to the upstream profile; this fact could explain the largest mean power extraction that has been found before fo the laminar case.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=14cm]{images/turbulence/U_mag_MainWake.pdf} 
+\caption{Velocity profile on the drag-zone wake of the blade}
+\centering
+\end{figure}
+
+\subparagraph{Remarks}
+From a qualitative point of view it is important to stress the fact that a great accordance has been found between the results of the laminar and the $k-\omega SST$ simulation and instead the $k-\varepsilon$ simulation does not follow the other velocity profiles neither qualitatively.
+
+\subparagraph{Boundary layer}
+In order to further clarify this situation, another inspection has been done: the boundary layer on a blade.
+The profile has been explored at the time t = 115[s], in correspondance of a null angle of attack of the lower blade with respect to the incoming blade.
+Great attention has been paid on the extention of the plot stencil to end within the refinement region.
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=14cm]{images/turbulence/BL_LowerBlade_screenshot.png} 
+\caption{Velocity profile on the drag-zone wake of the blade}
+\centering
+\end{figure}
+
+The velocity profiles only for the $k-\omega SST$ and $k-\varepsilon$ have been compared.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=14cm]{images/turbulence/detailBL_kW_Keps.pdf} 
+\caption{Velocity profile on the drag-zone wake of the blade}
+\centering
+\end{figure}
+
+The velocity profiles obtained remark the discrepancy between velocity profiles from the different models.
+
+Then a nondimensional analysis has been carried out on the boundary layer approximation of the $k-\omega SST$ turbulence model.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=14cm]{images/turbulence/kWsst_BL_sublayer.pdf} 
+\caption{Velocity profile on the drag-zone wake of the blade}
+\centering
+\end{figure}
+
+From the previous results it can be observed that the BL velocity distribution in the linear region is quite different from that developed theoretically for simple shear flow under the assumption of large Reynolds number i.e. thin boundary layer on flat plate.
+This trend could probably be justified considering that this particular type of flow displays low Reynolds number which turns out into low turbulence effects.
+Only a comparison with experimental results could fully clarify this situation.
+The previous hypothesis found its root in the observation of the resemblance of laminar and $k-\omega SST$ velocity profiles.\\
+\todo{} PROBABILE STRONZATA
+
+\subsection{flow detatchment}
+
+As previously mentioned, this kind of machine exploit an incompressible flow evolving within aerodynamic profiles with varying angles of attach.
+It is straightforward that a good capture of flow detatchment and recirculation are of primary importance.
+The $k-\varepsilon$ turbulent model is not suited for capturing the flow detatchment.
+The $k-\omega sst$ turbulence model, coupled with a proper refinement strategy near the walls is capable of reproducing the flow detatchment and eventual subsequent recirculation
+\includegraphics[width=\textwidth]{images/turbulence/recirculation_scalarScaled.png}
+
+\includegraphics[width=\textwidth]{images/turbulence/recirculation_scalarScaledGOODresolution.png}  
+
+\includegraphics[width=\textwidth]{images/turbulence/recirculation_scalarScaledMESH.png} 
+
+\includegraphics[width=\textwidth]{images/turbulence/recirculation_vectorScaled.png} 
+
+\includegraphics[width=\textwidth]{images/turbulence/recirculation_vectorScaled2.png} 
 
 
 
