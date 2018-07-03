@@ -93,5 +93,14 @@ latex/*.aux
 latex/*.toc
 latex/*.gz
 !latex/images/**
+beamer/*.log
+beamer/*.idx
+beamer/*.ilg
+beamer/*.ind
+beamer/*.dvi
+beamer/*.aux
+beamer/*.toc
+beamer/*.gz
+!beamer/images/**
 !*.ods
 

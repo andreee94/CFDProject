@@ -77,9 +77,9 @@ Andrea Rossi \and Marco Bonasegale
 
 \newcommand{\foam}[1]{{\ttfamily #1}}
 
-\newcommand{\kepsilon}[1]{$k\!-\!\varepsilon $ } 
+\newcommand{\kepsilon}{$k\!-\!\varepsilon $ } 
 
-\newcommand{\komegasst}[1]{$k\!-\!\omega \, \text{SST} $ } 
+\newcommand{\komegasst}{$k\!-\!\omega \, \text{SST} $ } 
 
 
 
@@ -144,7 +144,7 @@ The sub-tasks allowed us to start to get more familiar with the project work and
 \paragraph{In-class workflow}\mbox{}\\
  The in-class project started with the raw mesh generation (blockMesh, snappyHexMesh), continued with the preparation of the rotating mesh(AMI files, baffles creation, merge and split procedure), movement of the mesh with the provided motion laws  (real turbine rotation, gif rendering) and finally the set up, running and post processing of the simulation.
 
-\paragraph{Mesh generation}\mbox{}\\
+\subsection{Mesh generation}\mbox{}\\
 One of the most challenging section of the in-class project was the generation of the raw turbine domain mesh. We have used many different openFoam comands in order to build a complete and exhaustive mesh that must be suitable for the hydraulic problem characteristics.
 \\ 
 Let's start to present the overall mesh work-flow with all the brief steps evaluation.
@@ -165,9 +165,59 @@ Let's start to present the overall mesh work-flow with all the brief steps evalu
 
 Since we deal quite often with different mesh size, in particular during the mesh senitivity analysis, we will call mesh $i$ the mesh with $i$ cells in the y direction, and the cells in the x direction are such a number that let to have squared cells, in order to make the comparison easier and faster to understand.
 
-\paragraph{In-class simulation}\mbox{}\\
+
+\subsection{Boundary conditions}\mbox{}\\
+
+Boundary conditions are referred to the water stream velocity that is investing the machine, the pressure of the water in the stream channel, $k$ , $\omega$ and $\nu_T$ values.
+
+Our main interest is to focus onto the first two boundary conditions so velocity and pressure, since the other are mainly taken as default conditions for the respective turbolence model.
+
+\paragraph{Patches}\mbox{}\\
+Boundary condition are defied over patches so it is important to define that.
+\begin{itemize}
+\item \emph{Inlet Section} is that from which water comes into the domain moving towards the x direction;
+\item \emph{Outlet Section} is where water comes out from the domain;
+\item \emph{Front and back faces} are always set to empty since we are dealing with a 2D problem;
+\item \emph{Lower wall} is a physical wall that limit the flow (think about river bed!);
+\item \emph{Upper wall} is a free surface where the flow can slip;
+\item \emph{Blades} are physical surfaces that moves inside the domain;
+\item \emph{Ami interfaces} are internal patches that allow the communication between moving adiacent cells. All the quantities are set as CyclicAmi.
+\end{itemize}
+
+
+\paragraph{Velocity U}
+\begin{itemize}
+\item \textbf{Internal field} is uniform at the beginning and it is set to $1\ms$ in the x direction even if in class we have set inlet velocity to $1\ms$ and internal field uniformly set to $0\ms$. We take this decision to make the transition phase faster to limit the simulation time. We are actually interested only in staeady state power so limiting the transition let us to reduce computational time;
+\item \emph{Inlet Section} velocity is fixed to $1\ms$ during all the simulation; 
+\item \emph{Outlet Section} velocity is unknown so we have to set it to ZeroGradient boundary condition;
+\item \emph{Upper wall} velocity is set to Slip since the fluid can flow in the free stream;
+\item \emph{Lower wall} velocity is set to NoSlip which is equivalent to fix the value to zero;
+\item \emph{Blades} velocity is set to MovingWallVelocity which is equivalent to NoSlip for moving bodies;
+\end{itemize}
+
+\paragraph{Pressure $p$}
+\begin{itemize}
+\item \textbf{Internal field} is uniform at the beginning and it is set to $0$. 
+OpenFoam for incompressible cases works with pressure normalized respect to density. 
+Moreover it can manage relative pressures. 
+So the value that we set is relative $0 \,\text{bar} \cdot \text{m}^3 / \kg = \m / \s^2$.
+\item \emph{Inlet Section} pressure distribution unknown so we set to ZeroGradient; 
+\item \emph{Outlet Section} is set to atmospheric ($0 \m / \s^2$) since we assume to be sufficiently far from the blades so that pressure can be evalueted constant;
+\item \emph{Upper wall} pressure is set to atmospheric since it is free stream;
+\item \emph{Lower wall} pressure is set to ZeroGradient since boundary layer are isobar;
+\item \emph{Blades} pressure is set to ZeroGradient since boundary layer are isobar;
+\end{itemize}
+
+\paragraph{Turbolent quantities $k$, $\varepsilon$, $\omega$, $\nu_T$}\mbox{}\\
+For what that concern the boundary conditions of the turbolence quantities we apply default settings.
+We will discuss instead a modification of the value of initialization of that quantities to speed up as much as possible the convergence to a steady state condition.
+
+\paragraph{Solver}\mbox{}\\
+The solver applied in the class session is pimpleDyMFoam in PISO mode with one outer corrector, two inner correctors and no non orthogonal correctors. This solver is responsible not only for the solution of the system of differential equation, but also for the movement of the mesh at each time step. 
+
+\subsection{In-class results}\mbox{}\\
 In the final part of the in-class project we performed the set up and run of the first raw simulation.
-To do so, we have to manage with the boundary conditions of the problem, the turbolence modeling and the numeric schemes. All thease macro-section of the simulation were assigned a priori and the last part of our work is to play with all these parameters and try to understand the influence of each singular changing in the set up on the final result that the turbine must provide.
+To do so, we have to manage with the boundary conditions of the problem, the turbolence modeling and the numeric schemes. All these macro-section of the simulation were assigned a priori and the last part of our work is to play with all these parameters and try to understand the influence of each singular changing in the set up on the final result that the turbine must provide.
 
 For the first setup we use the simpler $k\!-\!\varepsilon$ turbolence model respect to a more appropriate $k\!-\!\omega \, \text{SST}$.
 
@@ -224,55 +274,6 @@ Power (Total) [W]        & $\round{4.59221434676}$   \\ \bottomrule
 \label{fig:inclass-instantpower}
 \end{figure}
 
-
-
-\subsection{Boundary conditions}
-Boundary conditions are referred to the water stream velocity that is investing the machine, the pressure of the water in the stream channel, $k$ , $\omega$ and $\nu_T$ values.
-
-Our main interest is to focus onto the first two boundary conditions so velocity and pressure, since the other are mainly taken as default conditions for the respective turbolence model.
-
-\paragraph{Patches}\mbox{}\\
-Boundary condition are defied over patches so it is important to define that.
-\begin{itemize}
-\item \emph{Inlet Section} is that from which water comes into the domain moving towards the x direction;
-\item \emph{Outlet Section} is where water comes out from the domain;
-\item \emph{Front and back faces} are always set to empty since we are dealing with a 2D problem;
-\item \emph{Lower wall} is a physical wall that limit the flow (think about river bed!);
-\item \emph{Upper wall} is a free surface where the flow can slip;
-\item \emph{Blades} are physical surfaces that moves inside the domain;
-\item \emph{Ami interfaces} are internal patches that allow the communication between moving adiacent cells. All the quantities are set as CyclicAmi.
-\end{itemize}
-
-
-\paragraph{Velocity U}
-\begin{itemize}
-\item \textbf{Internal field} is uniform at the beginning and it is set to $1\ms$ in the x direction even if in class we have set inlet velocity to $1\ms$ and internal field uniformly set to $0\ms$. We take this decision to make the transition phase faster to limit the simulation time. We are actually interested only in staeady state power so limiting the transition let us to reduce computational time;
-\item \emph{Inlet Section} velocity is fixed to $1\ms$ during all the simulation; 
-\item \emph{Outlet Section} velocity is unknown so we have to set it to ZeroGradient boundary condition;
-\item \emph{Upper wall} velocity is set to Slip since the fluid can flow in the free stream;
-\item \emph{Lower wall} velocity is set to NoSlip which is equivalent to fix the value to zero;
-\item \emph{Blades} velocity is set to MovingWallVelocity which is equivalent to NoSlip for moving bodies;
-\end{itemize}
-
-\paragraph{Pressure $p$}
-\begin{itemize}
-\item \textbf{Internal field} is uniform at the beginning and it is set to $0$. 
-OpenFoam for incompressible cases works with pressure normalized respect to density. 
-Moreover it can manage relative pressures. 
-So the value that we set is relative $0 \,\text{bar} \cdot \text{m}^3 / \kg = \m / \s^2$.
-\item \emph{Inlet Section} pressure distribution unknown so we set to ZeroGradient; 
-\item \emph{Outlet Section} is set to atmospheric ($0 \m / \s^2$) since we assume to be sufficiently far from the blades so that pressure can be evalueted constant;
-\item \emph{Upper wall} pressure is set to atmospheric since it is free stream;
-\item \emph{Lower wall} pressure is set to ZeroGradient since boundary layer are isobar;
-\item \emph{Blades} pressure is set to ZeroGradient since boundary layer are isobar;
-\end{itemize}
-
-\paragraph{Turbolent quantities $k$, $\varepsilon$, $\omega$, $\nu_T$}\mbox{}\\
-For what that concern the boundary conditions of the turbolence quantities we apply default settings.
-We will discuss instead a modification of the value of initialization of that quantities to speed up as much as possible the convergence to a steady state condition.
-
-\paragraph{Solver}\mbox{}\\
-The solver applied in the class session is pimpleDyMFoam in PISO mode with one outer corrector, two inner correctors and no non orthogonal correctors. This solver is responsible not only for the solution of the system of differential equation, but also for the movement of the mesh at each time step. 
 
 \section{Mesh sensitivity Analysis}
 With the mesh sensitivity analysis second part of the report starts. Here we are interested to find the proper value of parameters that let to have the best simulation as possible.
@@ -1051,33 +1052,27 @@ Then a nondimensional analysis has been carried out on the boundary layer approx
 %\centering
 %\end{figure}
 
-From the previous results it can be observed that the BL velocity distribution in the linear region is quite different from that developed theoretically for simple shear flow under the assumption of large Reynolds number i.e. thin boundary layer on flat plate.
-This trend could probably be justified considering that this particular type of flow displays low Reynolds number which turns out into low turbulence effects.
-Only a comparison with experimental results could fully clarify this situation.
-The previous hypothesis found its root in the observation of the resemblance of laminar and \komegasst velocity profiles.\\
-\todo{} PROBABILE STRONZATA
+%From the previous results it can be observed that the BL velocity distribution in the linear region is quite different from that developed theoretically for simple shear flow under the assumption of large Reynolds number i.e. thin boundary layer on flat plate.
+%This trend could probably be justified considering that this particular type of flow displays low Reynolds number which turns out into low turbulence effects.
+%Only a comparison with experimental results could fully clarify this situation.
+%The previous hypothesis found its root in the observation of the resemblance of laminar and \komegasst velocity profiles.\\
+%\todo{} PROBABILE STRONZATA
 
-\subsection{flow detatchment}
+\subsection{Flow detatchment}
 
-As previously mentioned, this kind of machine exploit an incompressible flow evolving within aerodynamic profiles with varying angles of attach.
+As previously mentioned, this kind of machine exploit an incompressible flow, evolving within aerodynamic profiles with varying angles of attach.
 It is straightforward that a good capture of flow detatchment and recirculation are of primary importance.
 The \kepsilon turbulent model is not suited for capturing the flow detatchment.
-The $k-\omega sst$ turbulence model, coupled with a proper refinement strategy near the walls is capable of reproducing the flow detatchment and eventual subsequent recirculation
-\includegraphics[width=\textwidth]{images/turbulence/recirculation_scalarScaled.png}
+The \komegasst turbulence model, coupled with a proper refinement strategy near the walls is capable of reproducing the flow detatchment and eventual subsequent recirculation
+\begin{figure}
+\includegraphics[width=8.5cm]{images/turbulence/recirculation_scalarScaled.png}
+\includegraphics[width=8.5cm]{images/turbulence/recirculation_scalarScaledGOODresolution.png}  
+\end{figure}
 
-\includegraphics[width=\textwidth]{images/turbulence/recirculation_scalarScaledGOODresolution.png}  
-
-\includegraphics[width=\textwidth]{images/turbulence/recirculation_scalarScaledMESH.png} 
-
-\includegraphics[width=\textwidth]{images/turbulence/recirculation_vectorScaled.png} 
-
-\includegraphics[width=\textwidth]{images/turbulence/recirculation_vectorScaled2.png} 
-
-
-
-
-
-
+\begin{figure}
+\includegraphics[width=8.5cm]{images/turbulence/recirculation_scalarScaledMESH.png}
+\includegraphics[width=8.5cm]{images/turbulence/recirculation_vectorScaled.png}  
+\end{figure}
 
 
 
@@ -1358,18 +1353,6 @@ Even in this case is evident that the difference between the reference case and 
 Moreover we can notice that the difference in terms of velocity is greater below the blades.
 
 
-
-\section{Results}
-
-In the last part of the work we have decided to optimize the simulation. The trade off between computational effort and results reliability suggests us to adopt mesh 120. Moreover,since this is the final part of the simulations section and we have almost finished the task, we can use a lower Courant number in order to slow down the process and get a higher precision level so the Courant number is decreased to \todo{} xxx. 
-
-Regarding numeric schemes we have decided not to use higher order methods that lead to spurious oscillations so we kept upwind scheme for velocity divergence while backword scheme for time discretization and Gauss cubic scheme for the gradient scheme which have not shown unexpected oscillations.
-
-For the sake of completeness we have decided to include the gravitational effect even if its contribution is almost meaningless. We decided to enhance the boundary conditions and initialize some turbolent quantities in order to speed up the achievement of regime condition. One of the most remarkable considerations is the need of the inlet domain extension which is evalueted in the final analysis.
-
-
-
-
 \section{Blade speed ratio Analysis}
 
 From what we have seen in mesh sensitivity analysis, the power is quite accurately computed even for a mesh size smaller that that we consider mesh independent.
@@ -1449,7 +1432,7 @@ The results are shown in figure \ref{fig:bsr-comparison-exp}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=15cm]{images/bsr/bsr-exp.pdf}
+\includegraphics[width=14cm]{images/bsr/bsr-exp.pdf}
 \caption{Comparison between mesh 80 mesh 120 and experimental results}
 \label{fig:bsr-comparison-exp}
 \end{figure}
@@ -1464,10 +1447,101 @@ In this case the compliance with experimental results is much better, and it see
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=15cm]{images/bsr/bsr-exp-relative.pdf}
+\includegraphics[width=14cm]{images/bsr/bsr-exp-relative.pdf}
 \caption{Relative comparison between mesh 80 and experimental results}
 \label{fig:bsr-comparison-exp-relative}
 \end{figure}
+
+
+
+\section{Final results}
+
+In the last part of the work we have decided to optimize the simulation. The trade off between computational effort and results reliability suggests us to adopt mesh 120. 
+Moreover, since this is the final part of the simulations section and we have almost finished the task, 
+we can use a lower Courant number in order to slow down the process and get a higher precision level so the Courant number is decreased to 5 from 50. 
+
+
+Regarding numeric schemes we have decided to keep only higher order methods that does not lead to spurious oscillations so we kept upwind scheme for velocity divergence while backword scheme for time discretization and Gauss cubic scheme for the gradient scheme which have not shown unexpected oscillations.
+
+For the sake of completeness we have decided to include the gravitational effect even if its contribution is almost meaningless. 
+We decided to enhance the boundary conditions and initialize some turbolent quantities in order to speed up the achievement of regime condition. 
+One of the most remarkable considerations is the need of the inlet domain extension, which it has been shown previously that has a significant effect on the results.
+
+The final mesh is shown in figure \ref{fig:final-mesh}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{images/final/mesh120.png}
+\caption{Final mesh representation.}
+\label{fig:final-mesh}
+\end{figure}
+
+From the simulation we have extrapolated both the pressure and the velocity fieds, sketched in figures \ref{fig:final-U24} and \ref{fig:final-p24}
+
+In particulare we have also represented in figure \ref{fig:final-pnog24} the pressure field in which we have removed the gradient caused by the gravitational force field.
+
+\begin{equation}
+p_\text{Without g} = p - \dfrac{p_\text{bottom}}{2} + \dfrac{p_\text{bottom}}{0.4\m} \, y
+\end{equation}
+
+Where $p_\text{bottom}$ is the pressure difference between the atmospheric upper free surface and the bottom wall.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{images/final/{U2.4}.png}
+\caption{Relative comparison between mesh 80 and experimental results}
+\label{fig:final-U24}
+\end{figure}
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{images/final/{p2.4}.png}
+\caption{Relative comparison between mesh 80 and experimental results}
+\label{fig:final-p24}
+\end{figure}
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{images/final/{pnog2.4}.png}
+\caption{Relative comparison between mesh 80 and experimental results}
+\label{fig:final-pnog24}
+\end{figure}
+
+The residuals of the simulation are quite good and are almost always below $0.2\, \%$ for both the velocity components and the pressure, 
+as shown in figure \ref{fig:final-residuals}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=14cm]{images/final/{residuals}.png}
+\caption{Residuals of the final simulation.}
+\label{fig:final-pnog24}
+\end{figure}
+
+The most important parameter that we have to evaluate is the power produced by this machine.
+
+Differenctly from previous analysis we have run the simulation for 3.6 seconds respect to 2.4. This corresponds to a total of 6 round instead of 4.
+
+In figures \ref{fig:final-power} we have plotted the evolution of the mean power of each turn from the second to the last.
+We have excluded the first one since it contains the transient phase.
+
+\begin{figure}[H]
+\centering
+\subfigure{\includegraphics[width=8.5cm]{{images/final/power}.pdf}}
+\subfigure{\includegraphics[width=8.5cm]{{images/final/power-ptau}.pdf}}
+\caption{Total power and its components in terms of pressure and shear stress}
+\label{fig:gravity-trends}
+\end{figure}
+
+As we can see the machines has almost reached the regime condition even at the end of the second turn in terms of power generated.
+
+For the final value of the power of this report we have decided to take the last turn that we have simulated since we consider that 
+as the best approximation of the regime condition.
+\begin{center}
+\textbf{Power} = $\round{4.49272061057} \w$
+\end{center}
+
 
 
 

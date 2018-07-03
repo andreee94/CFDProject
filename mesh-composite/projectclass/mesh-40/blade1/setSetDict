@@ -1,5 +1,0 @@
-
-faceSet AMI-int1-faceSet new patchToFace AMI-int1
-faceZoneSet faceZone-int1 new setToFaceZone AMI-int1-faceSet
-
-cellZoneSet cellZone-int1 new boxToCell (-10 -10 -10)(10 10 10)

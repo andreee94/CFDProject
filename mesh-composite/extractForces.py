@@ -206,6 +206,8 @@ myplot(time, sumPower, save=params.save, show=False, filename='InstantPower', le
 
 fromtimes = [1.8, 1.2, 0.6, 0]
 
+fromtimes = [3.0, 2.4, 1.8, 1.2, 0.6, 0]
+
 for fromtime in fromtimes:
     # pressure power
     sumPowerTurn = [x for ii, x in enumerate(sumPowerPressure) if time[ii] >= fromtime]  # extract with delay

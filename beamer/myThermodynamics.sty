@@ -1,0 +1,30 @@
+\ProvidesPackage{myThermodynamics}
+
+\usepackage{graphicx}
+\usepackage{siunitx}
+\usepackage{microtype}
+\usepackage{array,tabularx}
+\usepackage{float}
+
+\newcommand{\gonkg}[0]{\,\frac{g_\hoo}{kg^{dry}_{air}}}
+\newcommand{\md}[0]{Mollier diagram }
+\newcommand{\hoo}[0]{{H_2O}}
+\newcommand{\apc}{ASHRAE Psychrometric Chart }
+
+\newcommand{\Qfuel}{\dot{Q}_{fuel}}
+\newcommand{\Qth}{\dot{Q}_{th}}
+\newcommand{\Wel}{\dot{W}_{el}}
+\newcommand{\IN}[0]{_{IN}}
+\newcommand{\OUT}[0]{_{OUT}}
+\newcommand{\Qdot}[1]{\dot{Q}_{#1}}
+\newcommand{\Wdot}[1]{\dot{W}_{#1}}
+\newcommand{\mdot}[1]{\dot{m}_{#1}}
+\newcommand{\mdoth}[2][\,]{\dot{m}^{#1}_{#2} \cdot h^{#1}_{#2}}
+\newcommand{\mdotdh}[3]{\dot{m}_{#1} \cdot \left( h_{#2} - h_{#3} \right)}
+
+\newcommand{\p}[1]{{p}_{#1}}
+\newcommand{\T}[1]{{T}_{#1}}
+\newcommand{\h}[1]{{h}_{#1}}
+\newcommand{\s}[1]{{s}_{#1}}
+\newcommand{\first}[0]{^{*}}
+\newcommand{\doublefirst}[0]{^{**}}
