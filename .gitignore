@@ -102,5 +102,6 @@ beamer/*.aux
 beamer/*.toc
 beamer/*.gz
 !beamer/images/**
+!beamer/**
 !*.ods
 
