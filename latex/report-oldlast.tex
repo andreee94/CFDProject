@@ -129,9 +129,7 @@ The turbine is made up of three rotating blades and each blade is subjected to t
 \end{center}
 
 The flow-blade interaction leads to a drag force that is coming out while the blade is placed in the upper part of the circumferential path and a lift force on each blade located in the lower part of the path.
-The resulting torque multiplied by the rotating speed will give the generated power of the turbine which, in the end, is our final useful effect.
- The generated power per turbine is not really high (few Watt) and this is the reason why the \emph{farm layout}  that Prof. Gavin Tabor showed us at the beginning of the course is used.
-  Many little turbines are placed in a schematic and regular disposition in order to extract a higher power from the tidal stream.
+The resulting torque multiplied by the rotating speed will give the generated power of the turbine which, in the end, is our final useful effect. The generated power per turbine is not really high (a few Watts) and this is the reason why the \emph{farm layout}  that Prof. Gavin Tabor showed us at the beginning of the course is used. Many little turbines are placed in a schematic and regular disposition in order to extract a higher power from the tidal stream.
 Since from the first raw presentation of the machine we can realise that the mesh will have a relevant importance in the representation and validation of this complex rotating movement. We will deal with a rotating mesh which is progressivly refined close to the blades, ending with the boundary layers when we are approaching the solid walls of the blades.
 
 
@@ -633,7 +631,7 @@ The different type of schemes are reported in the following figure, with the rel
 \includegraphics[height=6cm]{images/schemes/gradschems-results.pdf}
 \end{figure}
 Leastsquare scheme doesn't work, and simulation does not start. The gauss cubic scheme, instead works properly.
-As for time schemes, no difference can be seen in the shear stress power loss (around 0.6\%), while for pressure power, cubic schemed differs to linear for 1\%. The time required for the calculation is 18\% higher and the values of the residual are comparable.
+As for time schemes, no difference can be seen in the shear stress power loss (arounf 0.6\%), while for pressure power, cubic schemed differs to linear for 1\%. The time required for the calculation is 18\% higher and the values of the residual are comparable.
 
 \subsection{Divergence schemes}
 The divergence of a propriety $\bm{U}$ rappresent the rate at which that quantity is changing.
@@ -648,10 +646,10 @@ Only in this case since divergent terms are very dissimilar, it is preferable no
  \item divergence of turbulent kinetic energy;
  \item divergence of $\omega$ and/or $\epsilon$ depending on the turbulence model chosen;
  \item divergence of shear stress;
-  \item divergence of the effective viscous stress. %due to turbulence
+  \item divergence of the effective viscous stress; %due to turbulence
 \end{itemize} 
-So our choice is to concentrate ourself on the trial of different schemes for the divergence of the velocity field
- $ \nabla \cdot ( \rho \, \bm{U} \bm{U} )$.
+So our choice is to concentrate ourself on the trial of different schemes for the divergence of the velocity field.
+ $ \nabla \cdot ( \rho \, \bm{U} \bm{U} )$
 \\ An overview of all the scheme availble is reported below:
 
 
@@ -1491,7 +1489,7 @@ Where $p_\text{bottom}$ is the pressure difference between the atmospheric upper
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{images/final/{U2.4}.png}
-\caption{Velocity field at $2.4\s$}
+\caption{Relative comparison between mesh 80 and experimental results}
 \label{fig:final-U24}
 \end{figure}
 
@@ -1499,7 +1497,7 @@ Where $p_\text{bottom}$ is the pressure difference between the atmospheric upper
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{images/final/{p2.4}.png}
-\caption{Pressure field at $2.4\s$}
+\caption{Relative comparison between mesh 80 and experimental results}
 \label{fig:final-p24}
 \end{figure}
 
@@ -1507,7 +1505,7 @@ Where $p_\text{bottom}$ is the pressure difference between the atmospheric upper
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{images/final/{pnog2.4}.png}
-\caption{Pressure field (removed gravity gradient) at $2.4\s$}
+\caption{Relative comparison between mesh 80 and experimental results}
 \label{fig:final-pnog24}
 \end{figure}
 
@@ -1518,7 +1516,7 @@ as shown in figure \ref{fig:final-residuals}
 \centering
 \includegraphics[width=14cm]{images/final/{residuals}.png}
 \caption{Residuals of the final simulation.}
-\label{fig:final-residuals}
+\label{fig:final-pnog24}
 \end{figure}
 
 The most important parameter that we have to evaluate is the power produced by this machine.
@@ -1533,7 +1531,7 @@ We have excluded the first one since it contains the transient phase.
 \subfigure{\includegraphics[width=8.5cm]{{images/final/power}.pdf}}
 \subfigure{\includegraphics[width=8.5cm]{{images/final/power-ptau}.pdf}}
 \caption{Total power and its components in terms of pressure and shear stress}
-\label{fig:final-power}
+\label{fig:gravity-trends}
 \end{figure}
 
 As we can see the machines has almost reached the regime condition even at the end of the second turn in terms of power generated.
